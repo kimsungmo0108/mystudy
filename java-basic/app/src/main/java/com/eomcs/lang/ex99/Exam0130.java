@@ -1,7 +1,7 @@
 package com.eomcs.lang.ex99;
 
-//# 콘솔로 출력하기 III - 형식을 갖춰서 날짜 값 출력하기 
-// 
+// # 콘솔로 출력하기 III - 형식을 갖춰서 날짜 값 출력하기
+//
 public class Exam0130 {
   public static void main(String[] args) {
     // 현재 날짜 및 시각 정보를 생성한다.
