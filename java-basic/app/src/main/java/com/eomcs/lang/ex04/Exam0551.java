@@ -1,6 +1,6 @@
 package com.eomcs.lang.ex04;
 
-//# 배열 - 배열 레퍼런스와 null
+// # 배열 - 배열 레퍼런스와 null
 //
 public class Exam0551 {
   public static void main(String[] args) {
