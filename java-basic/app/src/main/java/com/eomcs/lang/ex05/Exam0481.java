@@ -1,13 +1,13 @@
 package com.eomcs.lang.ex05;
 
-//# 비트 연산자 : 응용 V - 사용자 권한 관리에 적용
+// # 비트 연산자 : 응용 V - 사용자 권한 관리에 적용
 //
 public class Exam0481 {
   public static void main(String[] args) {
     // 1) 사용자 권한을 값으로 정의
-    final int LOGOUT = 0x01;    // 00000001   - 로그아웃
-    final int GENERAL = 0x02;   // 00000010   - 일반 로그인
-    final int ADMIN = 0x04;     // 00000100   - 관리자 로그인
+    final int LOGOUT = 0x01; // 00000001 - 로그아웃
+    final int GENERAL = 0x02; // 00000010 - 일반 로그인
+    final int ADMIN = 0x04; // 00000100 - 관리자 로그인
 
     // 2) 메뉴의 접근 범위 설정
     int menu1 = LOGOUT; // 로그아웃 상태에서만 접근 가능한 메뉴
