@@ -1,0 +1,76 @@
+★ 로컬 변수와 클래스 변수 사용
+int a;
+static int b;
+
+MyClass obj1 = new MyClass();
+System.out.println(obj1.a);
+System.out.println(MyClass.b);
+
+double EPSILON = 0.00001;
+★ System.out.println(Math.abs((d1 + d2) - (x + y)) < EPSILON); → 비교할 두 실수를 빼서 절댓값을 구한 뒤 개발자가 정해둔 범위보다 작으면 무시하자 ★
+
+★ 연산자를 이용하여 짝수/홀수 알아내기 ★
+System.out.println(57 % 2 == 0 ? "짝수" : "홀수");
+System.out.println((57 & 0x1) == 0 ? "짝수" : "홀수");
+(a == b ? c : d); → a와 b를 비교해서 참이면 c, 거짓이면 d를 실행
+
+메모리 절약
+lang2 = lang2 | 0x80 → 비트 연산자를 이용해서 적은 메모리를 더 많은 true/false를 저장 할 수 있다
+touch Hello.txt
+chmod 755 Hello.txt
+final int CSS           = 0x01; // 0000 0001
+final int HTML          = 0x02; // 0000 0010
+final int PHP           = 0x04; // 0000 0100
+final int PYTHON        = 0x08; // 0000 1000
+final int JAVASCRIPT    = 0x10; // 0001 0000
+final int JAVA          = 0x20; // 0010 0000
+final int CPP           = 0x40; // 0100 0000
+final int C             = 0x80; // 1000 0000
+
+★ 문자열을 숫자로 변환
+String s = '12345';
+int a = Integer.valueOf(s);
+int b = Integer.parselnt(s);
+
+후위 연산자
+int a = 100;
+→ int temp(임시 변수) = a; → a = a + 1 → b = temp → b = 100, a = 101
+b = a; → a = a + 1
+→ 항상 r-value를 먼저 실행한 후에 할당(=) 연산을 수행한다
+int a = 100;
+a++;
+★ 추측 1 → 항상 r-value를 먼저 실행한다
+→ int temp = a; → a = a + 1 → a = temp → 100
+
+★ switch 문에서 변수 사용할 때 enum변수 사용
+enum Level {
+    GUEST, MEMBER, ADMIN
+}
+Level level = Level.MEMBER;           → enum 변수에는 그 타입에 정의된 값만 저장할 수 있다 → 안전한 코드 작성 가능
+
+★ 리스트
+ArrayList<String> list = new ArrayList<>();
+
+★ Hello를 파일에 출력하기
+OutputStream output = new FileoutputStream("test.txt");
+PrintStream output2 = new PrintStream(output);
+output2.pintln("Hello");
+output2.close();
+밥 a = new 밥(쌀);
+밥그릇 b = new 밥그릇(밥);
+밥그릇.먹자("달걀");
+
+★ 배열로 5명의 이름을 연속적으로 입력받기
+String[] names = new String[5];
+Scanner nameScan = new Scanner(System.in);
+for (int i = 0; i < 5; i++) {
+	System.out.println("5명의 이름을 적어주세요");
+	names[i] = nameScan.nextLine();
+      	// System.out.println("입력된 이름 : " + names[i]);
+    }
+for (String s : names) {
+      	System.out.println("입력된 이름 : " + s);
+    }
+nameScan.close();
+
+

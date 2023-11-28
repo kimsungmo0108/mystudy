@@ -1263,7 +1263,7 @@ int a = 100;
 --a; → a = a - 1 → 101
 --a; → a = a - 1 → 100
 
-후위 연산잔
+후위 연산자
 int a = 100;
 → int temp(임시 변수) = a; → a = a + 1 → b = temp → b = 100, a = 101
 b = a; → a = a + 1
@@ -1290,7 +1290,35 @@ enum Level {
 }
 Level level = Level.MEMBER;           → enum 변수에는 그 타입에 정의된 값만 저장할 수 있다 → 안전한 코드 작성 가능
 
+반복문
+while(조건, true) {} → 조건이 참이면 계속 반복한다, 무한반복 하고 싶으면 true를 넣으면 된다
+break → 자신이 소속된 가장 가까운 반복문을 나간다
+continue → 다음 문장을 실행하지 않고 즉시 조건 검사로 이동한다
 
+myloop: 반복문
+myloop: 반복문1{반복문2{}}
+break myloop; → myloop 라벨에 소속된 문장을 나간다
+
+do~while → 최소 한 번은 실행하고 다음에 조건을 확인하여 반복을 계속할지 결정하는 반복문이다
+do{ 
+  문장;
+}while(조건, true);
+
+for(초기화; 조건; 증감){
+  반복 실행 코드
+}
+for(int i = 0 ; ; ){
+}
+→ for 문 안에 선언된 변수는 for 문을 나가는 순간 제거된다
+
+리스트
+ArrayList<String> list = new ArrayList<>();
+
+키보드 입력 다루기 
+① read() 사용 → data를 읽을 때 사용하는 도구(메소드 = 수단, 방법)
+레퍼런스.read()
+레퍼런스 → 정보를 담고 있는 메모리의 주소
+정보 → data를 어디에서 읽어야 하는지에 대한 정보 → read()가 작업할 때 필요한 정보를 갖고 있는 메모리 → 인스턴스(Instence) → 객체(object)
 
 입력값 받기
 Scanner keyScan = new Scanner(System.in);
@@ -1298,6 +1326,37 @@ System.out.print("나이를 입력하세요? ");
 int age = keyScan.nextInt();
 char c = keyScan.nextLine();
 keyScan.close();
+
+★ Hello를 파일에 출력하기
+OutputStream output = new FileoutputStream("test.txt");
+PrintStream output2 = new PrintStream(output);
+output2.pintln("Hello");
+output2.close();
+밥 a = new 밥(쌀);
+밥그릇 b = new 밥그릇(밥);
+밥그릇.먹자("달걀");
+
+★ 배열로 5명의 이름을 연속적으로 입력받기
+String[] names = new String[5];
+Scanner nameScan = new Scanner(System.in);
+for (int i = 0; i < 5; i++) {
+	System.out.println("5명의 이름을 적어주세요");
+	names[i] = nameScan.nextLine();
+      	// System.out.println("입력된 이름 : " + names[i]);
+    }
+for (String s : names) {
+      	System.out.println("입력된 이름 : " + s);
+    }
+nameScan.close();
+
+★ 메소드와 레퍼런스(= 객체 = 인스턴스)
+System.out.println("Hello");
+println("Hello") → println = 연산자(method) = message, "Hello" = 피연산자(argument) = parameter → 실제 작업을 수행하는 명령 = 메소드 = 메시지 = 특별한 연산자
+System.out → 피연산자(argument) → JVM 기본 출력 장치의 정보가 들어있는 메모리의 주소 → 터미널(terminal)
+→ println()이 정보(System.out)를 사용해서 출력할 대상을 결정한다
+
+
+
 
 
 
