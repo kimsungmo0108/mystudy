@@ -1327,15 +1327,6 @@ int age = keyScan.nextInt();
 char c = keyScan.nextLine();
 keyScan.close();
 
-★ Hello를 파일에 출력하기
-OutputStream output = new FileoutputStream("test.txt");
-PrintStream output2 = new PrintStream(output);
-output2.pintln("Hello");
-output2.close();
-밥 a = new 밥(쌀);
-밥그릇 b = new 밥그릇(밥);
-밥그릇.먹자("달걀");
-
 ★ 배열로 5명의 이름을 연속적으로 입력받기
 String[] names = new String[5];
 Scanner nameScan = new Scanner(System.in);
@@ -1355,7 +1346,19 @@ println("Hello") → println = 연산자(method) = message, "Hello" = 피연산�
 System.out → 피연산자(argument) → JVM 기본 출력 장치의 정보가 들어있는 메모리의 주소 → 터미널(terminal)
 → println()이 정보(System.out)를 사용해서 출력할 대상을 결정한다
 
-
+★ Hello를 파일에 출력하기
+OutputStream output = new FileoutputStream("test.txt");
+PrintStream output2 = new PrintStream(output);
+output2.pintln("Hello");
+---------------------------------------------------------------------
+PrintStream output2 = System.out;
+output2.println("Hello");
+---------------------------------------------------------------------
+output2.close();
+---------------------------------------------------------------------
+밥 a = new 밥(쌀);
+밥그릇 b = new 밥그릇(밥);
+밥그릇.먹자("달걀");
 
 
 

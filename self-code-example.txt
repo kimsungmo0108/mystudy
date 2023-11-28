@@ -14,7 +14,7 @@ System.out.println(57 % 2 == 0 ? "짝수" : "홀수");
 System.out.println((57 & 0x1) == 0 ? "짝수" : "홀수");
 (a == b ? c : d); → a와 b를 비교해서 참이면 c, 거짓이면 d를 실행
 
-메모리 절약
+★ 메모리 절약
 lang2 = lang2 | 0x80 → 비트 연산자를 이용해서 적은 메모리를 더 많은 true/false를 저장 할 수 있다
 touch Hello.txt
 chmod 755 Hello.txt
