@@ -1,6 +1,6 @@
 package com.eomcs.lang.ex99;
 
-//# 키보드 입력 받기 - 여러 종류의 데이터를 섞어 입력 받기
+// # 키보드 입력 받기 - 여러 종류의 데이터를 섞어 입력 받기
 //
 public class Exam0240 {
   public static void main(String[] args) {

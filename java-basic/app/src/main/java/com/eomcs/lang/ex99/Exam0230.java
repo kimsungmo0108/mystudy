@@ -1,9 +1,9 @@
 package com.eomcs.lang.ex99;
 
-//# 키보드 입력 받기 - int, float, boolean 값 읽기
+// # 키보드 입력 받기 - int, float, boolean 값 읽기
 //
 public class Exam0230 {
-  public static void main(String[] args) { 
+  public static void main(String[] args) {
     java.util.Scanner keyScan = new java.util.Scanner(System.in);
 
     System.out.print("int: ");
@@ -14,7 +14,7 @@ public class Exam0230 {
     // => 토큰이란 공백으로 구분되는 단어를 뜻한다.
     // 공백(whitespace)?
     // => 스페이스(space), 탭, 줄바꿈 코드를 말한다.
-    // 예) aaa    bbb cc ==> aaa, bbb, cc
+    // 예) aaa bbb cc ==> aaa, bbb, cc
     // 중간에 여러 개의 공백이 들어가더라도 한 개의 공백으로 간주한다.
 
     System.out.print("float: ");
@@ -28,18 +28,5 @@ public class Exam0230 {
     System.out.printf("%d, %f, %b\n", i, f, b);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
