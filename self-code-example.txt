@@ -94,3 +94,28 @@ java.io.InputStream in = System.in;
 java.util.Scanner numScan = new Scanner(in);
 int num = numScan.nextInt();
 문자열=="abc"  ===>  if (num.equals("abc"));
+
+★ 메소드(method) = 함수(function)
+리턴값의타입 기능이름(값을 받을 변수 선언){
+    명령문
+}
+int plus(int a, int b){
+    int result;
+    result = a + b;
+    return result;
+}
+static void printMenu(){
+}
+
+★ 메소드 활용
+main() → main()과 printMenu() 기능을 분리 → main()에서 printMenu()를 호출 → printMenu()에서 출력
+printMenu() → 메뉴 목록 배열, ansi 명령, app 제목 → 공통 변수로 분리 
+
+로컬 변수와 클래스 변수(static 변수)
+class App{
+	static int a; → 클래스 변수(필드) = static field
+	void main(){
+		int b; → 로컬 변수(local variable) 메소드 안에 선언된 변수, 메소드 실행될 때 생성되고 메소드의 실행이 끝나면 제거된다
+	}
+}
+
