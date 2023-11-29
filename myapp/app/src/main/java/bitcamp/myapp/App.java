@@ -20,28 +20,37 @@ public class App {
     System.out.println(ANSI_RED + menu4 + ANSI_CLEAR);
 
     // 키보드로 입력받는 메소드 연습
-//    java.io.InputStream in = System.in;
-//    java.util.Scanner numScan = new Scanner(in);
-//    int num = numScan.nextInt();
+    //java.io.InputStream in = System.in;
+    //java.util.Scanner numScan = new Scanner(in);
+    //int num = numScan.nextInt();
+    // 문자열=="abc"  ===>  if (num.equals("abc"));
 
     Scanner numScan = new Scanner(System.in);
     menuloop:
     while (true) {
       System.out.print("> ");
-      int num = numScan.nextInt();
+      String num = numScan.next();
       switch (num) {
-        case 1:
+        case "1":
           System.out.println("과제입니다.");
-          continue;
-        case 2:
+          break;
+        case "2":
           System.out.println("게시글입니다.");
-          continue;
-        case 3:
+          break;
+        case "3":
           System.out.println("도움말입니다.");
-          continue;
-        case 4:
+          break;
+        case "4":
           System.out.println("종료합니다.");
           break menuloop;
+        case "menu":
+          System.out.println(ANSI_BOLD_RED + appTitle + ANSI_CLEAR);
+          System.out.println();
+          System.out.println(menu1);
+          System.out.println(menu2);
+          System.out.println(menu3);
+          System.out.println(ANSI_RED + menu4 + ANSI_CLEAR);
+          break;
         default:
           System.out.println("메뉴 번호가 옳지 않습니다.");
       }
