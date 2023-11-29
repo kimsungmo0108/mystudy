@@ -1,42 +1,54 @@
+import java.util.Scanner;
+
 public class Test4 {
+
+  static final String ANSI_CLEAR = "\033[0m";
+  static final String ANSI_BOLD_RED = "\033[1;31m";
+  static final String ANSI_RED = "\033[0;31m";
+  static final String APP_TITLE = "[과제관리 시스템]";
+  static final String[] MENU_ARR = {"\n" + ANSI_BOLD_RED + APP_TITLE + ANSI_CLEAR, "1. 과제",
+      "2. 게시글", "3. 도움말", ANSI_RED + "4. 종료" + ANSI_CLEAR};
+
+  static java.util.Scanner numScan = new java.util.Scanner(System.in);
 
   public static void main(String[] args) {
 
-    String ANSI_CLEAR = "\033[0m";
-    String ANSI_BOLD_RED = "\033[1;31m";
-    String ANSI_RED = "\033[0;31m";
-    String appTitle = "[과제관리 시스템]";
-    String menu1 = "1. 과제", menu2 = "2. 게시글", menu3 = "3. 도움말", menu4 = "4. 종료";
+    printMenu();
 
-    System.out.println(ANSI_BOLD_RED + appTitle + ANSI_CLEAR);
-    System.out.println();
-    System.out.println(menu1);
-    System.out.println(menu2);
-    System.out.println(menu3);
-    System.out.println(ANSI_RED + menu4 + ANSI_CLEAR);
-
-    java.util.Scanner numScan = new java.util.Scanner(System.in);
     menuloop: while (true) {
-      // java.util.Scanner numScan = new java.util.Scanner(System.in);
-      System.out.print("메뉴 번호를 눌러 주세요. : ");
-      int num = numScan.nextInt();
-      // System.out.println(num);
+      String num = prompt(numScan);
+
       switch (num) {
-        case 1:
-          System.out.println("1. 과제 메뉴를 선택하셨습니다.\n");
-          continue;
-        case 2:
-          System.out.println("2. 게시글 메뉴를 선택하셨습니다.\n");
-          continue;
-        case 3:
-          System.out.println("3. 도움말 메뉴를 선택하셨습니다.\n");
-          continue;
-        case 4:
-          System.out.println("4. 종료 메뉴를 선택하셨습니다.\n");
+        case "1":
+          System.out.println("1. 과제 메뉴를 선택하셨습니다.");
+          break;
+        case "2":
+          System.out.println("2. 게시글 메뉴를 선택하셨습니다.");
+          break;
+        case "3":
+          System.out.println("3. 도움말 메뉴를 선택하셨습니다.");
+          break;
+        case "4":
+          System.out.println("4. 종료 메뉴를 선택하셨습니다.");
           break menuloop;
+        case "menu":
+          printMenu();
+        default:
+          System.out.println("다른 번호를 입력해주세요.");
 
       }
-      numScan.close();
     }
+    numScan.close();
+  }
+
+  static void printMenu() {
+    for (String i : MENU_ARR) {
+      System.out.println(i);
+    }
+  }
+
+  static String prompt(Scanner n) {
+    System.out.println("> ");
+    return n.next();
   }
 }
