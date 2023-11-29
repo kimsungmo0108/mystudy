@@ -10,20 +10,18 @@ public class App {
     String ANSI_BOLD_RED = "\033[1;31m";
     String ANSI_RED = "\033[0;31m";
     String appTitle = "[과제관리 시스템]";
-    String menu1 = "1. 과제", menu2 = "2. 게시글", menu3 = "3. 도움말", menu4 = "4. 종료";
 
-    System.out.println(ANSI_BOLD_RED + appTitle + ANSI_CLEAR);
-    System.out.println();
-    System.out.println(menu1);
-    System.out.println(menu2);
-    System.out.println(menu3);
-    System.out.println(ANSI_RED + menu4 + ANSI_CLEAR);
+    String[] menuArr = new String[]{
+        ANSI_BOLD_RED + appTitle + ANSI_CLEAR + "\n",
+        "1. 과제",
+        "2. 게시글",
+        "3. 도움말",
+        ANSI_RED + "4. 종료" + ANSI_CLEAR
+    };
 
-    // 키보드로 입력받는 메소드 연습
-    //java.io.InputStream in = System.in;
-    //java.util.Scanner numScan = new Scanner(in);
-    //int num = numScan.nextInt();
-    // 문자열=="abc"  ===>  if (num.equals("abc"));
+    for (String item : menuArr) {
+      System.out.println(item);
+    }
 
     Scanner numScan = new Scanner(System.in);
     menuloop:
@@ -44,12 +42,9 @@ public class App {
           System.out.println("종료합니다.");
           break menuloop;
         case "menu":
-          System.out.println(ANSI_BOLD_RED + appTitle + ANSI_CLEAR);
-          System.out.println();
-          System.out.println(menu1);
-          System.out.println(menu2);
-          System.out.println(menu3);
-          System.out.println(ANSI_RED + menu4 + ANSI_CLEAR);
+          for (String item : menuArr) {
+            System.out.println(item);
+          }
           break;
         default:
           System.out.println("메뉴 번호가 옳지 않습니다.");

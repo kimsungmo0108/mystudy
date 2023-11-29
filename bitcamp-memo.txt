@@ -1421,6 +1421,11 @@ nextInt(), nextLine(), ....
 나이? 30(enter)
 nextInt() → 30까지 읽고 30(int)를 리턴 → nextLine() → 30 다음에 (enter)를 읽어서 빈문자열""을 출력
 
+★ 키보드로 입력받는 메소드 연습
+java.io.InputStream in = System.in;
+java.util.Scanner numScan = new Scanner(in);
+int num = numScan.nextInt();
+문자열=="abc"  ===>  if (num.equals("abc"));
 
 
 
@@ -1438,7 +1443,7 @@ nextInt() → 30까지 읽고 30(int)를 리턴 → nextLine() → 30 다음에 
 
 
 
-8.4
+
 
 
 

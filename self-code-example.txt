@@ -88,3 +88,9 @@ System.out.println(keyboardScanner.nextLine());
 System.out.print("재직여부? ");
 System.out.println(keyboardScanner.nextLine());
 keyboardScanner.close();
+
+★ 키보드로 입력받는 메소드 연습
+java.io.InputStream in = System.in;
+java.util.Scanner numScan = new Scanner(in);
+int num = numScan.nextInt();
+문자열=="abc"  ===>  if (num.equals("abc"));
