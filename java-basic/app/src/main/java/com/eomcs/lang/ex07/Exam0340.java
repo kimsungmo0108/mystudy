@@ -1,6 +1,6 @@
 package com.eomcs.lang.ex07;
 
-//# 메서드 : 레퍼런스를 리턴하기
+// # 메서드 : 레퍼런스를 리턴하기
 //
 public class Exam0340 {
 

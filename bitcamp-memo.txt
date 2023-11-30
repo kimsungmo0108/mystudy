@@ -1384,6 +1384,7 @@ String name = keyboardScanner.next(); → 한 개의 토큰을 읽을 때 유용
 
 2023.11.29(수)
 
+스트림(stream) → 실제의 입력이나 출력이 표현된 데이터의 이상화된 흐름
 System.in → 표준 입력 장치의 정보가 저장된 메모리의 주소를 보관하고 있는 레퍼런스
 주소 → 메모리(표준입력장치 정보(스트림 입구), keyboard 등) → 프로그램 외부에서 데이터가 들어올 수 있는 기본 입구
 표준입력, 출력스트림(흐름)
@@ -1442,6 +1443,7 @@ static void printMenu(){
 ★ 메소드 활용
 main() → main()과 printMenu() 기능을 분리 → main()에서 printMenu()를 호출 → printMenu()에서 출력
 printMenu() → 메뉴 목록 배열, ansi 명령, app 제목 → 공통 변수로 분리 
+prompte(Scanner numS
 
 로컬 변수와 클래스 변수(static 변수)
 class App{
@@ -1450,6 +1452,141 @@ class App{
 		int b; → 로컬 변수(local variable) 메소드 안에 선언된 변수, 메소드 실행될 때 생성되고 메소드의 실행이 끝나면 제거된다
 	}
 }
+
+★ $ wc (enter) → abc def (enter) → 줄, 공백, 공백+단어개수 출력 
+$ cat test.ok | wc → 파일에 대한 개수를 wc를 연결해서 출력
+
+
+
+2023.11.30(목)
+
+메소드 구조
+int plus (int a, int b)  → method signature → a, b = parameter → 맨 앞 int = return type
+{                 
+	int r = a + b  → method body
+	return r;
+}
+
+method argument와 parameter
+void hello(String name, int age){ → nema, age → 아규먼트를 받는 로컬 변수 파라미터(parameter)
+	System.out.printf("이름은 %s이고, 나이는 %d입니다.", name, age);	
+}
+hello("홍길동", 20); → "홍길동", 20 → 메소드에 넘겨주는 값 아규먼트(argument)
+
+가변 파라미터와 배열 파라미터
+가변 파라미터
+여러 개의 가변 파라미터로 메소드를 호출할 때는 아규먼트를 배열로 만들어서 전달하고 사용한다
+m2("김성모", "김성모", "김성모");
+static void m2(itn a, String... names){} → 가변 파라미터는 무조건 맨 뒤에 와야한다 → 복잡한 사용을 막기 위해 맨 뒤에 둔다
+배열 파라미터
+가변 파라미터와 달리 낱개의 값을 여러 개 줄 수 없다, 오직 배열에 담아서 전달해야 한다
+String[] m2 = ("김성모", "김성모", "김성모");
+static void m2(itn a, String[] names){}
+static void m2(String[] names, int a){}
+
+call by value
+→ 메소드를 호출할 때 값을 넘긴다
+
+call by reference Ⅰ
+→ 메소드를 호출할 때 객체 주소를 넘긴다
+stack → 메소드의 로컬 변수를 만드는 메모리
+main() {
+	int[] arr = new int{100, 200};
+	swap(arr);
+}
+swap(int[] arr) {
+	int temp = arr[0];
+	arr[0] = arr[1];
+	arr[1] = temp;
+}
+stack → main() > arr[] 
+        → swap() > arr[] (3721번지가 들어간다), temp
+heap → new 명령으로 만드는 메모리 → new int{100, 200}; (3721번지로 가정) → 배열 인스턴스의 주소가 main() arr[]에 들어간다
+
+call by reference Ⅱ
+class MyObject{
+	int a;
+	int b;
+}
+swap(MyObject ref){  → ref 변수에 있는 MyObject의 인스턴스(= object라고도 부른다) 주소를 받는다
+	int temp = ref.a;
+	ref.a = ref.b;
+	ref.b = temp;
+}
+main(String[] args){
+	MyObject ref = new MyObject();  → 힙에 있는 a에 주소가 리턴
+	ref.a = 100;  → 레퍼런스.변수 → ref 레퍼런스에 주소로 가서 a에 100을 넣는다
+	ref.b = 200;
+	swap(ref);  → ref 레퍼런스에 주소를 넘겨준다
+}
+stack → main() > args, ref
+        → swap() > ref, temp → 로컬 변수 생성 → return하면 사라진다
+heap → MyObject() > a, b(배열처럼 연속적으로 만들어짐, 클래스 메모리 설계도에 정의된 변수를 만든다 "MyObject의 인스턴스")
+Method Area → 코드는 여기 있다
+garbage collector는 heap을 관리한다
+
+★ JVM 메모리
+Method Area → class byte code를 두는 곳 → static 변수(클래스 필드) 두는 곳
+Stack → (쓰레드당 하나per Thread) → 호출된 메소드의 로컬 변수 두는 곳 → Thread가 생성되면서 같이 생성된다
+Heap → new 명령으로 만든 변수 두는 곳 → JVM이 실행되면서 만들어지고 모든 Thread가 공유한다, garbage collctor가 자원을 관리한다(reclaimed 해제, 회수)
+$ java Exam0410
+→ Exam0410 클래스를 Method Area에 보관한다(그대로 보관하는 것이 아니라 실행할 수 있는 구조로 바꿔서 바이트코드를 배치한다)
+→ Method Area에 로딩된(보관된) 바이트코드에서 main() 메소드를 찾아 호출(실행)한다 
+	→ main() 메소드의 로컬변수를 Stack 메모리에 만든다
+	→ new 명령문이 있다면 해당 변수를 Heap에 만든다
+
+★ JVM Stack과 Method 호출
+JVM Stack 
+main() 호출 > Stack에 Frame을 만들고 그 안에 [ args, r ] 로컬 변수를 연속적으로 만든다 
+m1(5) 호출 > Stack에 Frame을 만들고 그 안에 [ value=5, r1, r2 ] 로컬 변수를 연속적으로 만든다
+m2(value) 호출 > Stack에 Frame을 만들고 그 안에 [ value=5 ] 로컬 변수를 연속적으로 만든다
+→ 5 + 100 연산 → r1 = 105 리턴 → Stack에서 m2메소드 Frame 삭제
+m3(value) 호출 > Stack에 Frame을 만들고 그 안에 [ value=5 ] 로컬 변수를 연속적으로 만든다
+→ 5 + 200 연산 → r2 = 205 리턴 → Stack에서 m3 메소드 Frame 삭제
+→ m1메소드에서 r1+r2=310을 main메소드 r에 리턴 후 Stack에서 m1메소드 Frame 삭제
+→ r(301)출력 → main 메소드 종료되면 JVM이 모든 메모리 해제
+
+★ 재귀호출
+sum(n) = n+sum(n-1), n>0
+static int sum(int value){
+	if (value == 1)
+		return1;
+	return value + sum(value - 1);
+}
+main() => sum(5) → 15를 출력
+              => 5 + sum(4) = 4 + sum(3) 리턴 = 5 + 10
+                  => 4 + sum(3) = 3 + sum(2) 리턴 = 4 + 6
+                      => 3 + sum(2) = 2 + sum(1) 리턴 = 3 + 3
+                          => 2 + sum(1) = 1 리턴 = 2 + 1 
+                              => 1
+→ 호출을 계속하므로 Stack에 sum Frame에 value라는 변수를 계속 만든다(메모리를 계속 만든다, 다른 메소드를 호출한 것과 같다)
+→ value가 1이 되면 1 + sum(1-1)이므로 1만 리턴하게 한다
+→ 호출 되었던 Stack 메모리는 밑에서 하나씩 삭제된다
+→ 15를 출력, main 메소드가 종료되면 JVM도 종료되면서 모든 메모리가 삭제된다
+
+★ 스택 오버플로우(stack overflow)?
+→ JVM 스택 메모리가 꽉 차서 더이상 메서드 실행에 필요한 로컬 변수를 만들 수 없는 상태이다.(리턴을 안 했기 때문)
+→ 큰 수는 반복문을 사용하자!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

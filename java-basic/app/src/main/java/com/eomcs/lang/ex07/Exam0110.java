@@ -2,7 +2,7 @@ package com.eomcs.lang.ex07;
 
 import java.util.Scanner;
 
-//# 메서드 : 사용 전
+// # 메서드 : 사용 전
 //
 public class Exam0110 {
   public static void main(String[] args) {
