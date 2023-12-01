@@ -1605,6 +1605,24 @@ App <=>BoardMenu 쌍방향 참조
 App → BoardMenu.execute() → Prompt.prompt() 단방향 참조
 → prompt() 메소드는 다른 프로젝트에서도 쓰일 수 있는 일반적인 기능이기 때문에 별도의 클래스로 분리하는 것이 재사용성을 높이는 방법이다
 
+★ GRASP Patterns 
+Patterns → 특정 문제를 해결하기 위해 실무에서 널리 사용하는(검증된) 설계 기법
+GRASP (General Responsible Assignment Software Patterns) 
+→ 일반적인 책임할당 설계기법
+→ 클래스를 작성할 때 메소드와 필드(변수)를 두는 원칙
+Information Expert, Crerator, Controller, Low Coupling, High Cohesim, 등...
+Information Expert → 정보를 갖고 있는 클래스에서 그 정보를 다룬다 → Scanner를 사용하는 쪽에서 Scanner를 관리한다
+High Cohesim → 한 클래스가 하나의 역할 수행
+Low Coupling → 객체(클래스)간의 연결을 느슨하게 한다 → Prompt.input()
+
+
+
+
+
+
+
+
+
 
 
 

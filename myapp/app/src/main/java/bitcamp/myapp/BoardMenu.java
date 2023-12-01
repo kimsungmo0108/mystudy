@@ -1,7 +1,5 @@
 package bitcamp.myapp;
 
-import java.util.Scanner;
-
 public class BoardMenu {
 
   static final String ON_BOARD_TITLE = "\n[ \033[1;31m게시글\033[0m ]";
@@ -20,11 +18,11 @@ public class BoardMenu {
     }
   }
 
-  static void execute(Scanner numScan) {
+  static void execute() {
     printMenu();
     postloop:
     while (true) {
-      String num = Prompt.input(numScan, "메뉴/게시글");
+      String num = Prompt.input("메뉴/게시글");
       switch (num) {
         case "1":
           System.out.println("게시글 등록입니다.");

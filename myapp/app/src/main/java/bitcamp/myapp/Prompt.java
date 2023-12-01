@@ -4,8 +4,14 @@ import java.util.Scanner;
 
 public class Prompt {
 
-  static String input(Scanner numScan, String menu) {
+  static Scanner KEY_IN = new Scanner(System.in);
+
+  static String input(String menu) {
     System.out.printf("%s> ", menu);
-    return numScan.next();
+    return KEY_IN.next();
+  }
+
+  static void close() {
+    KEY_IN.close();
   }
 }

@@ -1,7 +1,5 @@
 package bitcamp.myapp;
 
-import java.util.Scanner;
-
 public class AssignmentMenu {
 
   static final String ON_ASSIGNMENT_TITLE = "\n[ \033[1;31m과제\033[0m ]";
@@ -20,11 +18,11 @@ public class AssignmentMenu {
     }
   }
 
-  static void execute(Scanner numScan) {
+  static void execute() {
     printMenu();
     assignmentloop:
     while (true) {
-      String num = Prompt.input(numScan, "메뉴/과제");
+      String num = Prompt.input("메뉴/과제");
       switch (num) {
         case "1":
           System.out.println("과제 등록입니다.");
