@@ -119,3 +119,23 @@ class App{
 	}
 }
 
+★ git bash에서 아규먼트 값 받아서 출력
+$ javac -d build/classes/java/main src/main/java/com/eomcs/lang/ex07/Exam0610.java
+$ java -classpath build/classes/java/main -Da=100 -Db=200 -Dc=300 com.eomcs.lang.ex07.Exam0610
+
+String name = System.getProperty("name");
+String s1 = System.getProperty("kor");
+String s2 = System.getProperty("eng");
+String s3 = System.getProperty("math");
+$ javac -d build/classes/java/main src/main/java/com/eomcs/lang/ex07/Exam0620.java 
+$ java -classpath build/classes/java/main -Dname=김성모 -Dkor=80 -Deng=50 -Dmath=10 com.eomcs.lang.ex07.Exam0620
+
+
+
+
+
+
+
+
+
+

@@ -1570,6 +1570,33 @@ main() => sum(5) → 15를 출력
 
 
 
+2023.12.01(금)
+
+프로그램 아규먼트
+main()
+$ java -classpath bin/main com.eomcs.lang.ex07.Exam.0520 aaa bbb ccc → aaa bbb ccc 가 프로그램 아규먼트
+[aaa]
+[bbb]
+[ccc]
+종료!
+→ JVM이 공백을 제거해서 "aaa", "bbb", "ccc" 문자열을 만들어 String[] 배열 생성
+→ JVM이 main()을 호출하면 String[] 배열을 전달한다
+
+JVM 아규먼트
+$ java -classpath bin/main -Da=aaa -Db=bbb -Dc=ccc com.eomcs.lang.ex07.Exam0610
+aaa
+bbb
+ccc
+→ -D이름=값 -D이름=값 -D이름=값 
+→ 이름=값을 Properties 객체에 저장
+→ System.getProperty(이름)메소드가 Properties 객체에서 값을 가져온다(리턴)
+
+
+
+
+
+
+
 
 
 

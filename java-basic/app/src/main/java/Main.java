@@ -1,16 +1,23 @@
 public class Main {
   public static void main(String[] args) {
     java.util.Scanner intScan = new java.util.Scanner(System.in);
-    short x = intScan.nextShort();
-    short y = intScan.nextShort();
-    if (x > 0 && y > 0) {
-      System.out.println('1');
-    } else if (x < 0 && y > 0) {
-      System.out.println('2');
-    } else if (x < 0 && y < 0) {
-      System.out.println('3');
+    byte a = intScan.nextByte();
+    byte b = intScan.nextByte();
+    byte c = intScan.nextByte();
+    byte d = a > b ? a : b;
+    byte e = d > c ? d : c;
+
+    if (a == b) {
+      if (a == c) {
+        System.out.println(10000 + a * 1000);
+      } else
+        System.out.println(1000 + a * 100);
+    } else if (b == c) {
+      System.out.println(1000 + b * 100);
+    } else if (c == a) {
+      System.out.println(1000 + c * 100);
     } else
-      System.out.println('4');
+      System.out.println(e * 100);
 
     intScan.close();
   }
