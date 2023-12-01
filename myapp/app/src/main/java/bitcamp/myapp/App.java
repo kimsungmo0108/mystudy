@@ -11,7 +11,7 @@ public class App {
     Scanner keyIn = new Scanner(System.in);
     menuloop:
     while (true) {
-      String num = prompt(keyIn, "메인");
+      String num = Prompt.input(keyIn, "메인");
       switch (num) {
         case "1":
           AssignmentMenu.execute(keyIn);
@@ -39,8 +39,4 @@ public class App {
     keyIn.close();
   }
 
-  static String prompt(Scanner numScan, String menu) {
-    System.out.printf("%s> ", menu);
-    return numScan.next();
-  }
 }

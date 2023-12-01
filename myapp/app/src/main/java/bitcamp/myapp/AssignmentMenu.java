@@ -24,7 +24,7 @@ public class AssignmentMenu {
     printMenu();
     assignmentloop:
     while (true) {
-      String num = App.prompt(numScan, "메뉴/과제");
+      String num = Prompt.input(numScan, "메뉴/과제");
       switch (num) {
         case "1":
           System.out.println("과제 등록입니다.");

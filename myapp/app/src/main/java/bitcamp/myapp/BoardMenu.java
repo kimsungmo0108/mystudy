@@ -24,7 +24,7 @@ public class BoardMenu {
     printMenu();
     postloop:
     while (true) {
-      String num = App.prompt(numScan, "메뉴/게시글");
+      String num = Prompt.input(numScan, "메뉴/게시글");
       switch (num) {
         case "1":
           System.out.println("게시글 등록입니다.");

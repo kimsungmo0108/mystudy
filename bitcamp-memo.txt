@@ -1596,24 +1596,14 @@ Context Menu(Popup Menu)
 
 ★ 클래스 ★
 ① 메소드 분류 → 메소드의 기능에 따라 서로 관련된 메소드를 별도로 분류해두면 유지보수하기 좋다
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ② 데이터 타입 정의 → 변수(field), 연산자(method)
 
+★ 쌍방 참조 해소
+→ 클래스가 상호 참조할 경우 강하게 연결되기 때문에 재사용하기가 불편하다
+bidirectional(쌍방향) → unidirectional(단방향)
+App <=>BoardMenu 쌍방향 참조
+App → BoardMenu.execute() → Prompt.prompt() 단방향 참조
+→ prompt() 메소드는 다른 프로젝트에서도 쓰일 수 있는 일반적인 기능이기 때문에 별도의 클래스로 분리하는 것이 재사용성을 높이는 방법이다
 
 
 
