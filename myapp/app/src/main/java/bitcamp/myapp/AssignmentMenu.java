@@ -20,7 +20,7 @@ public class AssignmentMenu {
     }
   }
 
-  static void onAssignment(Scanner numScan) {
+  static void execute(Scanner numScan) {
     printMenu();
     assignmentloop:
     while (true) {

@@ -20,7 +20,7 @@ public class BoardMenu {
     }
   }
 
-  static void onBoard(Scanner numScan) {
+  static void execute(Scanner numScan) {
     printMenu();
     postloop:
     while (true) {
