@@ -1,9 +1,11 @@
-package com.eomcs.oop.ex02;
+package com.eomcs.oop.ex02.step02;
+
 
 // # 관련된 기능(메서드)을 묶어 분류하기
 // 1) 분류 전
+// 2) 메서드를 클래스로 묶어 분류하기
 //
-public class Exam0210 {
+public class App {
 
   public static void main(String[] args) {
     // 다음 식을 연산자 우선 순위를 고려하지 않고 순서대로 계산하라!
@@ -12,30 +14,14 @@ public class Exam0210 {
     // 계산 결과를 담을 변수를 준비한다.
     int result = 0;
 
-    // 메서드를 호출하여 작업을 수행하고,
+    // 클래스 메서드를 호출하여 작업을 수행하고,
     // 리턴 결과는 로컬 변수에 저장한다.
-    result = plus(2, 3);
-    result = minus(result, 1);
-    result = multiple(result, 7);
-    result = divide(result, 3);
+    result = Calculator.plus(2, 3);
+    result = Calculator.minus(result, 1);
+    result = Calculator.multiple(result, 7);
+    result = Calculator.divide(result, 3);
 
     System.out.printf("result = %d\n", result);
-  }
-
-  static int plus(int a, int b) {
-    return a + b;
-  }
-
-  static int minus(int a, int b) {
-    return a - b;
-  }
-
-  static int multiple(int a, int b) {
-    return a * b;
-  }
-
-  static int divide(int a, int b) {
-    return a / b;
   }
 }
 // 클래스 문법의 용도?
