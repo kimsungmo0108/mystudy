@@ -33,10 +33,6 @@ import java.util.Scanner;
 public class Main {
   public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
-
-    System.out.println("무한히 숫자를 더합니다. 숫자를 입력하세요. 종료하려면 'exit'을 입력하세요.");
-
-    int sum = 0;
     loop: while (scanner.hasNext()) {
       if (scanner.hasNextInt()) {
         int a = scanner.nextInt();

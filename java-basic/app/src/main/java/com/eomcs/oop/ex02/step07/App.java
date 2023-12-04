@@ -1,9 +1,15 @@
-package com.eomcs.oop.ex02.step05;
+package com.eomcs.oop.ex02.step07;
+
+import com.eomcs.oop.ex02.step07.util.Calculator;
 
 // # 관련된 기능(메서드)을 묶어 분류하기
 // 1) 분류 전
 // 2) 메서드를 클래스로 묶어 분류하기
 // 3) 클래스 변수 도입
+// 4) 클래스 변수의 한계 확인
+// 5) 인스턴스 변수 도입
+// 6) 인스턴스 메서드 활용
+// 7) 클래스를 역할에 따라 패키지로 분류하기
 //
 public class App {
 
@@ -20,23 +26,23 @@ public class App {
     Calculator c1 = new Calculator();
     Calculator c2 = new Calculator();
 
-    Calculator.plus(c1, 2);
-    Calculator.plus(c2, 3); // + 3
+    c1.plus(2);
+    c2.plus(3); // + 3
 
-    Calculator.plus(c1, 3);
-    Calculator.multiple(c2, 2); // + 3 * 2
+    c1.plus(3);
+    c2.multiple(2); // + 3 * 2
 
-    Calculator.minus(c1, 1);
-    Calculator.plus(c2, 7); // + 3 * 2 + 7
+    c1.minus(1);
+    c2.plus(7); // + 3 * 2 + 7
 
-    Calculator.multiple(c1, 7);
-    Calculator.divide(c2, 4); // + 3 * 2 + 7 / 4
+    c1.multiple(7);
+    c2.divide(4); // + 3 * 2 + 7 / 4
 
-    Calculator.divide(c1, 3);
-    Calculator.minus(c2, 5); // + 3 * 2 + 7 / 4 - 5 = ?
+    c1.divide(3);
+    c2.minus(5); // + 3 * 2 + 7 / 4 - 5 = ?
 
     System.out.printf("result = %d\n", c1.result);
-    System.out.printf("result = %d\n", c2.result);
+    System.out.printf("result = %d\n", c1.result);
     // 식2 계산:
     // 다른 식을 계산하기 전에 기존의 계산 결과를 갖고 있는
     // result 변수를 0으로 초기화시켜야 한다.
