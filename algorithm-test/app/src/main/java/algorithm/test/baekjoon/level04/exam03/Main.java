@@ -1,3 +1,4 @@
+package algorithm.test.baekjoon.level04.exam03;
 import java.util.Scanner;
 
 public class Main {

@@ -1692,6 +1692,8 @@ name kor eng mat sum aver → name에 시작 주소를 s에 저장 → Score에 
 
 
 
+2023.12.05(화)
+
 
 
 
