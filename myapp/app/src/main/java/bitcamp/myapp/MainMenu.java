@@ -31,7 +31,7 @@ public class MainMenu {
   static void execute() {
     printMenu();
     while (true) {
-      String num = Prompt.input("메인");
+      String num = Prompt.input("메인> ");
       switch (num) {
         case "1":
           AssignmentMenu.execute();

@@ -1,7 +1,6 @@
-package com.eomcs.oop.ex02;
+package com.eomcs.oop.ex02.step16;
 
-class Score {
-
+public class Score {
   String name;
   int kor;
   int eng;

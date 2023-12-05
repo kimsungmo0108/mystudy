@@ -1694,7 +1694,43 @@ name kor eng mat sum aver → name에 시작 주소를 s에 저장 → Score에 
 
 2023.12.05(화)
 
+클래스 문법 적용 전 
+→ 클래스로 메소드 분류 (static 메소드)
+→ 스태틱 변수 (클래스 변수)
+→ 인스턴스 변수 (new → 레퍼런스 변수)
+→ 인스턴스 메소드 (this → 내장 변수)
 
+클래스 문법 적용 전(낱개 변수) 
+→ 인스턴스 필드(사용자 정의 데이터 타입) class Score{}
+→ 리팩토링(합계, 평균 계산, 출력 기능을 메소드로 분리) printScore()
+→ 리팩토링(합계, 평균 계산을 메소드로 분리) printScore(), compute()
+→ GRASP (Information Export) class Score{ compute() 이동}
+	→ Score 데이터 값을 다루는 메소드는 Score 데이터를 선언한 클래스에 가까이 두는 것이 유지보수에 좋다
+	→ compute() 메소드는 Score 데이터를 다루느 메소드이다
+	→ 사용자 정의 데이터 타입 입장에서는 그 데이터를 다루는 메소드가 연산자인 것이다 (사용자 정의 타입에 메소드 정의 = 연산자)
+→ Score.compute(s1) → Score.compute()(연산자), s1(피연산자) 
+	→ 계산을 수행할 때마다 인스턴스의 주소를 파라미터로 받아야 한다
+→ s1.compute() → s1(피연산자), compute()(연산자)
+	→ 메소드를 호출할 때 메소드 앞에 인스턴스 주소를 적어서 메소드에 내장된 this에 저장해서 사용한다
+	→ 마치 변수 뒤에 연산자를 놓는 i++의 예와 비슷하다
+→ 인스턴스 메소드 → 인스턴스의 연산자(this라는 내장 변수)
+→ ★ 클래스를 역할에 따라 패키지로 분류 → domain, vo(value object), dto(data transfer object)로 분류할 수 있다 → 데이터를 표현하는 클래스
+→ public : 모두 공개, protected : 서브 클래스와 같은 패키지의 멤버에게만 공개, private : 접근 불가! 내부에서만 접근 가능, (default) : 같은 패키지에 소속된 패키지만 접근 가능
+→ 생성자(default constructor) Score 설계도(클래스 정의)에 따라 인스턴스 변수를 Heap 영역에 만든다
+	→ ★ 생성자를 호출한다, 생성자에 넘겨주는 아규먼트의 타입과 개수, 순서에 따라 호출할 생성자를 결정한다
+	→ ★ 생성자 초기화 메소드를 만들고 클래스 이름하고 같게 하고 리턴 타입(void, int, String 등....)을 지운다
+	→ 클래스에 생성자가 없으면 컴파일러는 파라미터가 없는 기본 생성자를 만든다 → public Score(){} 
+	→ 만약 해당 아규먼트를 받을 수 있는 생성자가 없다면 컴파일 오류 발생
+	→ Score s1 = new Score("홍길동", 100, 90, 85);
+	→ public Score(String name, int kor, int eng, int math) {
+    		this.name = name;
+    		this.kor = kor;
+    		this.eng = eng;
+    		this.math = math;
+	    }
+
+과제 10. 과제의 CRUD(Create, Retrieve/Read, Update, Delete) 구현
+→ 과제 데이터를 입력, 조회, 변경, 삭제하는 기능 구현하기
 
 
 

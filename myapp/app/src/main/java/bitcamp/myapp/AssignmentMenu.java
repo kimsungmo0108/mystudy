@@ -12,6 +12,7 @@ public class AssignmentMenu {
       "0. 이전"
   };
 
+
   static void printMenu() {
     for (String i : ON_ASSIGNMENT_MENU_ARR) {
       System.out.println(i);
@@ -20,21 +21,22 @@ public class AssignmentMenu {
 
   static void execute() {
     printMenu();
+    AssignmentManagement a = new AssignmentManagement();
     assignmentloop:
     while (true) {
-      String num = Prompt.input("메뉴/과제");
+      String num = Prompt.input("메뉴/과제> ");
       switch (num) {
         case "1":
-          System.out.println("과제 등록입니다.");
+          a.add();
           break;
         case "2":
-          System.out.println("과제 조회입니다.");
+          a.view();
           break;
         case "3":
-          System.out.println("과제 변경입니다.");
+          a.modify();
           break;
         case "4":
-          System.out.println("과제 삭제입니다.");
+          a.delete();
           break;
         case "0":
           break assignmentloop;

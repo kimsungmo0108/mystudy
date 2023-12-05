@@ -130,7 +130,14 @@ String s3 = System.getProperty("math");
 $ javac -d build/classes/java/main src/main/java/com/eomcs/lang/ex07/Exam0620.java 
 $ java -classpath build/classes/java/main -Dname=김성모 -Dkor=80 -Deng=50 -Dmath=10 com.eomcs.lang.ex07.Exam0620
 
-
+★ 클래스 생성자 문법
+Score s1 = new Score("홍길동", 100, 90, 85);
+public Score(String name, int kor, int eng, int math) {
+    this.name = name;
+    this.kor = kor;
+    this.eng = eng;
+    this.math = math;
+}
 
 
 
