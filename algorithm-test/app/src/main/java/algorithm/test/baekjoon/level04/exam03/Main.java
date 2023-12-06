@@ -1,4 +1,5 @@
 package algorithm.test.baekjoon.level04.exam03;
+
 import java.util.Scanner;
 
 public class Main {
@@ -6,25 +7,20 @@ public class Main {
     Scanner scanner = new Scanner(System.in);
     int i = scanner.nextInt();
     // int x = scanner.nextInt();
-    int[] a = new int[i];
+    int[] numbers = new int[i];
     int max = 0;
     int min = 0;
     for (int j = 0; j < i; j++) {
-      a[j] = scanner.nextInt();
+      numbers[j] = scanner.nextInt();
     }
-
-    for (int j = 1; j < i; j++) {
-      max = a[0];
-      min = a[0];
-      if (a[j - 1] >= a[j]) {
-        if (a[j - 1] >= max) {
-          max = a[j - 1];
-        }
-      } else if (a[j - 1] <= min) {
-        min = a[j - 1];
-      }
+    max = numbers[0];
+    for (int x = 0; x < numbers.length; x++) {
+      max = max > numbers[x] ? max : numbers[x];
     }
-
+    min = numbers[0];
+    for (int x = 0; x < numbers.length; x++) {
+      min = min < numbers[x] ? min : numbers[x];
+    }
     System.out.print(min + " " + max);
     scanner.close();
   }

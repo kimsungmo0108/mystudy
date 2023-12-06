@@ -11,7 +11,7 @@ public class MemberMenu {
       "2. 조회",
       "3. 변경",
       "4. 삭제",
-      "5. 회원 목록",
+      "5. 목록",
       "0. 이전"
   };
   static Member[] members = new Member[3];
@@ -58,15 +58,19 @@ public class MemberMenu {
 
   static void add() {
     System.out.println("회원 입력? ");
+
     if (length == members.length) {
       int oldSize = members.length;
-      int newSize = oldSize + (oldSize / 2);
+      int newSize = oldSize + (oldSize >> 1);
       Member[] arr = new Member[newSize];
+
       for (int i = 0; i < oldSize; i++) {
         arr[i] = members[i];
       }
+
       members = arr;
     }
+
     Member member = new Member();
     member.email = Prompt.input("이메일? ");
     member.name = Prompt.input("이름? ");
@@ -79,10 +83,12 @@ public class MemberMenu {
   static void view() {
     System.out.println("회원 조회: ");
     int index = Integer.parseInt(Prompt.input("회원 번호: "));
+
     if (index < 0 || index >= length) {
       System.out.println("회원 번호가 유효하지 않습니다.");
       return;
     }
+
     Member member = members[index];
     System.out.printf("이메일: %s\n", member.email);
     System.out.printf("이름: %s\n", member.name);
@@ -93,10 +99,12 @@ public class MemberMenu {
   static void modify() {
     System.out.println("회원 변경: ");
     int index = Integer.parseInt(Prompt.input("회원 번호: "));
+
     if (index < 0 || index >= length) {
       System.out.println("회원 번호가 유효하지 않습니다.");
       return;
     }
+
     Member member = members[index];
     member.email = Prompt.input("이메일(%s): ", member.email);
     member.name = Prompt.input("이름(%s): ", member.name);
@@ -107,13 +115,16 @@ public class MemberMenu {
   static void delete() {
     System.out.println("회원 삭제: ");
     int index = Integer.parseInt(Prompt.input("회원 번호: "));
+
     if (index < 0 || index >= length) {
       System.out.println("회원 번호가 유효하지 않습니다.");
       return;
     }
+
     for (int i = index; i < (length - 1); i++) {
       members[i] = members[i + 1];
     }
+
     members[--length] = null;
     System.gc();
   }
@@ -121,6 +132,7 @@ public class MemberMenu {
   static void list() {
     System.out.println("회원 목록: ");
     System.out.printf("%-20s\t%-20s\t%s\n", "회원 번호", "이름", "가입일");
+
     for (int i = 0; i < length; i++) {
       Member member = members[i];
       System.out.printf("%-20d\t%-20s\t%s\n", i, member.name, member.date);

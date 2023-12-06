@@ -60,7 +60,7 @@ public class BoardMenu {
 
     if (length == boards.length) {
       int oldSize = boards.length;
-      int newSize = oldSize + (oldSize / 2);
+      int newSize = oldSize + (oldSize >> 1);
       Board[] arr = new Board[newSize];
 
       for (int i = 0; i < oldSize; i++) {

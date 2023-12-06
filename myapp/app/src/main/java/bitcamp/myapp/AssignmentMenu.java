@@ -104,9 +104,9 @@ public class AssignmentMenu {
     }
     Assignment assignment = assignments[index];
 
-    assignment.title = Prompt.input("과제명(%s)? ", assignment.title);
-    assignment.content = Prompt.input("내용(%s)? ", assignment.content);
-    assignment.deadline = Prompt.input("제출 마감일(%s)? ", assignment.deadline);
+    assignment.title = Prompt.input("과제명(%s): ", assignment.title);
+    assignment.content = Prompt.input("내용(%s):", assignment.content);
+    assignment.deadline = Prompt.input("제출 마감일(%s): ", assignment.deadline);
   }
 
   static void list() {
