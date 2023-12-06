@@ -11,9 +11,11 @@ public class BoardMenu {
       "2. 조회",
       "3. 변경",
       "4. 삭제",
+      "5. 목록",
       "0. 이전"
   };
-  static Board board = new Board();
+  static Board[] boards = new Board[3];
+  static int length = 0;
 
   static void printMenu() {
     for (String i : ON_BOARD_MENU_ARR) {
@@ -39,6 +41,9 @@ public class BoardMenu {
         case "4":
           delete();
           break;
+        case "5":
+          list();
+          break;
         case "0":
           break boardloop;
         case "menu":
@@ -52,33 +57,79 @@ public class BoardMenu {
 
   static void add() {
     System.out.println("게시글 등록: ");
+
+    if (length == boards.length) {
+      int oldSize = boards.length;
+      int newSize = oldSize + (oldSize / 2);
+      Board[] arr = new Board[newSize];
+
+      for (int i = 0; i < oldSize; i++) {
+        arr[i] = boards[i];
+      }
+      boards = arr;
+    }
+
+    Board board = new Board();
     board.title = Prompt.input("제목? ");
     board.content = Prompt.input("내용? ");
     board.writer = Prompt.input("작성자? ");
     board.createDate = Prompt.input("작성일? ");
+
+    boards[length] = board;
+    length++;
+
   }
 
   static void view() {
     System.out.println("게시글 조회: ");
-    System.out.printf("제목: %s\n", board.title);
-    System.out.printf("내용: %s\n", board.content);
-    System.out.printf("작성자: %s\n", board.writer);
-    System.out.printf("작성일: %s\n", board.createDate);
+    int index = Integer.parseInt(Prompt.input("번호: "));
+
+    if (index < 0 || index >= length) {
+      System.out.println("게시글 번호가 유효하지 않습니다.");
+      return;
+    }
+    Board board = boards[index];
+
+    System.out.println("제목: " + board.title);
+    System.out.println("내용: " + board.content);
+    System.out.println("작성자: " + board.writer);
+    System.out.println("작성일: " + board.createDate);
   }
 
   static void modify() {
     System.out.println("게시글 변경: ");
+    int index = Integer.parseInt(Prompt.input("번호: "));
+    if (index < 0 || index >= length) {
+      System.out.println("게시글 번호가 유효하지 않습니다.");
+      return;
+    }
+    Board board = boards[index];
+
     board.title = Prompt.input("제목(%s): ", board.title);
     board.content = Prompt.input("내용(%s): ", board.content);
     board.writer = Prompt.input("작성자(%s): ", board.writer);
     board.createDate = Prompt.input("작성일(%s): ", board.createDate);
   }
 
+
+  static void list() {
+    System.out.println("게시글 목록: ");
+    System.out.printf("%-20s\t%-20s\t%-20s\t%-20s\n", "번호", "제목", "작성자", "작성일");
+    for (int i = 0; i < length; i++) {
+      Board board = boards[i];
+      System.out.printf("%-20d\t%-20s\t%-20s\t%-20s\n", i, board.title, board.writer,
+          board.createDate);
+    }
+  }
+
   static void delete() {
     System.out.println("게시글 삭제: ");
-    board.title = "";
-    board.content = "";
-    board.writer = "";
-    board.createDate = "";
+    int index = Integer.parseInt(Prompt.input("번호: "));
+    for (int i = index; i < (length - 1); i++) {
+      boards[i] = boards[i + 1];
+    }
+    length--;
+    boards[length] = null;
+    System.gc();
   }
 }

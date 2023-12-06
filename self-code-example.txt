@@ -139,10 +139,48 @@ public Score(String name, int kor, int eng, int math) {
     this.math = math;
 }
 
+★ 레퍼런스 배열 생성
+static Assignment[] assignments = new Assignment[3];
 
+    Assignment assignment = new Assignment();
+    assignment.title = Prompt.input("과제명? ");
+    assignment.content = Prompt.input("내용? ");
+    assignment.deadline = Prompt.input("제출 마감일? ");
 
+    assignments[length] = assignment;
+    length++;
 
+★ 원하는 배열 삭제
+    int index = Integer.parseInt(Prompt.input("번호? "));
+    for (int i = index; i < (length - 1); i++) {
+      assignments[i] = assignments[i + 1];
+    }
+    length--;
+    assignments[length] = null;
+    System.gc();  // garbage collector 한테 요청
 
+★ 배열 인덱스 오류
+    if (index < 0 || index >= length) {
+      System.out.println("과제 번호가 유효하지 않습니다.");
+      return;
+    }
+
+★ 배열 크기 늘리고 새로 생성
+    if (length == assignments.length) {
+      int oldSize = assignments.length;
+      int newSize = oldSize + (oldSize / 2);
+
+      // 이전 배열에 들어 있는 값을 새 배열에 복사
+      Assignment[] arr = new Assignment[newSize];
+      for (int i = 0; i < oldSize; i++) {
+        arr[i] = assignments[i];
+      }
+      
+      // 새 배열을 가리키도록 배열 레퍼런스를 변경
+      assignments = arr;
+
+      return;
+    }
 
 
 
