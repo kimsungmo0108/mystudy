@@ -7,12 +7,13 @@ public class MainMenu {
   static final String ANSI_BOLD_RED = "\033[1;31m";
   static final String ANSI_RED = "\033[0;31m";
   static final String APP_TITLE = ANSI_BOLD_RED + "[과제관리 시스템]" + ANSI_CLEAR + "\n";
-  static final String MENU4 = ANSI_RED + "4. 종료" + ANSI_CLEAR;
+  static final String MENU4 = ANSI_RED + "0. 종료" + ANSI_CLEAR;
   static final String[] MENU_ARR = new String[]{
       APP_TITLE,
       "1. 과제",
       "2. 게시글",
-      "3. 도움말",
+      "3. 회원",
+      "4. 도움말",
       MENU4
   };
 
@@ -44,9 +45,14 @@ public class MainMenu {
           printMenu();
           break;
         case "3":
-          System.out.println("도움말입니다.");
+          MemberMenu.execute();
+          System.out.println();
+          printMenu();
           break;
         case "4":
+          System.out.println("도움말입니다.");
+          break;
+        case "0":
           System.out.println("종료합니다.");
           return;
         case "menu":

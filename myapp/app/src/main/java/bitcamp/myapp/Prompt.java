@@ -15,4 +15,5 @@ public class Prompt {
   static void close() {
     KEY_IN.close();
   }
+  
 }
