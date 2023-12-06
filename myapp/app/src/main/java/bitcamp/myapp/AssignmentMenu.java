@@ -1,5 +1,7 @@
 package bitcamp.myapp;
 
+import bitcamp.myapp.vo.Assignment;
+
 public class AssignmentMenu {
 
   static final String ON_ASSIGNMENT_TITLE = "\n[ \033[1;31m과제\033[0m ]";
@@ -11,7 +13,7 @@ public class AssignmentMenu {
       "4. 삭제",
       "0. 이전"
   };
-
+  static Assignment assignment = new Assignment();
 
   static void printMenu() {
     for (String i : ON_ASSIGNMENT_MENU_ARR) {
@@ -21,22 +23,21 @@ public class AssignmentMenu {
 
   static void execute() {
     printMenu();
-    AssignmentManagement a = new AssignmentManagement();
     assignmentloop:
     while (true) {
       String num = Prompt.input("메뉴/과제> ");
       switch (num) {
         case "1":
-          a.add();
+          assignment.add();
           break;
         case "2":
-          a.view();
+          assignment.view();
           break;
         case "3":
-          a.modify();
+          assignment.modify();
           break;
         case "4":
-          a.delete();
+          assignment.delete();
           break;
         case "0":
           break assignmentloop;

@@ -1,5 +1,7 @@
 package bitcamp.myapp;
 
+import bitcamp.myapp.vo.Board;
+
 public class BoardMenu {
 
   static final String ON_BOARD_TITLE = "\n[ \033[1;31m게시글\033[0m ]";
@@ -11,7 +13,7 @@ public class BoardMenu {
       "4. 삭제",
       "0. 이전"
   };
-  static String title, content, createDate, writer;
+  static Board board = new Board();
 
   static void printMenu() {
     for (String i : ON_BOARD_MENU_ARR) {
@@ -50,33 +52,33 @@ public class BoardMenu {
 
   static void add() {
     System.out.println("게시글 등록: ");
-    title = Prompt.input("제목? ");
-    content = Prompt.input("내용? ");
-    writer = Prompt.input("작성자? ");
-    createDate = Prompt.input("작성일? ");
+    board.title = Prompt.input("제목? ");
+    board.content = Prompt.input("내용? ");
+    board.writer = Prompt.input("작성자? ");
+    board.createDate = Prompt.input("작성일? ");
   }
 
   static void view() {
     System.out.println("게시글 조회: ");
-    System.out.printf("제목: %s\n", title);
-    System.out.printf("내용: %s\n", content);
-    System.out.printf("작성자: %s\n", writer);
-    System.out.printf("작성일: %s\n", createDate);
+    System.out.printf("제목: %s\n", board.title);
+    System.out.printf("내용: %s\n", board.content);
+    System.out.printf("작성자: %s\n", board.writer);
+    System.out.printf("작성일: %s\n", board.createDate);
   }
 
   static void modify() {
     System.out.println("게시글 변경: ");
-    title = Prompt.input("제목(%s): ", title);
-    content = Prompt.input("내용(%s): ", content);
-    writer = Prompt.input("작성자(%s): ", writer);
-    createDate = Prompt.input("작성일(%s): ", createDate);
+    board.title = Prompt.input("제목(%s): ", board.title);
+    board.content = Prompt.input("내용(%s): ", board.content);
+    board.writer = Prompt.input("작성자(%s): ", board.writer);
+    board.createDate = Prompt.input("작성일(%s): ", board.createDate);
   }
 
   static void delete() {
     System.out.println("게시글 삭제: ");
-    title = "";
-    content = "";
-    writer = "";
-    createDate = "";
+    board.title = "";
+    board.content = "";
+    board.writer = "";
+    board.createDate = "";
   }
 }
