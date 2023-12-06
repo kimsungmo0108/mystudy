@@ -75,9 +75,7 @@ public class BoardMenu {
     board.writer = Prompt.input("작성자? ");
     board.createDate = Prompt.input("작성일? ");
 
-    boards[length] = board;
-    length++;
-
+    boards[length++] = board;
   }
 
   static void view() {
@@ -114,10 +112,10 @@ public class BoardMenu {
 
   static void list() {
     System.out.println("게시글 목록: ");
-    System.out.printf("%-20s\t%-20s\t%-20s\t%-20s\n", "번호", "제목", "작성자", "작성일");
+    System.out.printf("%-20s\t%-20s\t%-20s\t%s\n", "번호", "제목", "작성자", "작성일");
     for (int i = 0; i < length; i++) {
       Board board = boards[i];
-      System.out.printf("%-20d\t%-20s\t%-20s\t%-20s\n", i, board.title, board.writer,
+      System.out.printf("%-20d\t%-20s\t%-20s\t%s\n", i, board.title, board.writer,
           board.createDate);
     }
   }
@@ -128,8 +126,7 @@ public class BoardMenu {
     for (int i = index; i < (length - 1); i++) {
       boards[i] = boards[i + 1];
     }
-    length--;
-    boards[length] = null;
+    boards[--length] = null;
     System.gc();
   }
 }

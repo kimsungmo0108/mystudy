@@ -77,8 +77,7 @@ public class AssignmentMenu {
     assignment.content = Prompt.input("내용? ");
     assignment.deadline = Prompt.input("제출 마감일? ");
 
-    assignments[length] = assignment;
-    length++;
+    assignments[length++] = assignment;
   }
 
   static void view() {
@@ -112,10 +111,10 @@ public class AssignmentMenu {
 
   static void list() {
     System.out.println("과제 목록: ");
-    System.out.printf("%-20s\t%-20s\t%-20s\n", "번호", "과제", "제출마감일");
+    System.out.printf("%-20s\t%-20s\t%s\n", "번호", "과제", "제출마감일");
     for (int i = 0; i < length; i++) {
       Assignment assignment = assignments[i];
-      System.out.printf("%-20d\t%-20s\t%-20s\n", i, assignment.title, assignment.deadline);
+      System.out.printf("%-20d\t%-20s\t%s\n", i, assignment.title, assignment.deadline);
     }
   }
 
@@ -129,8 +128,7 @@ public class AssignmentMenu {
     for (int i = index; i < (length - 1); i++) {
       assignments[i] = assignments[i + 1];
     }
-    length--;
-    assignments[length] = null;  // 레퍼런스 주소를 초기화
+    assignments[--length] = null;  // 레퍼런스 주소를 초기화
     System.gc();  // garbage collector 한테 요청, 없앨려고 노력한다
   }
 }

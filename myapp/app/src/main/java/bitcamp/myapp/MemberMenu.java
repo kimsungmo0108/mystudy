@@ -73,8 +73,7 @@ public class MemberMenu {
     member.pw = Prompt.input("암호? ");
     member.date = Prompt.input("가입일? ");
 
-    members[length] = member;
-    length++;
+    members[length++] = member;
   }
 
   static void view() {
@@ -115,17 +114,16 @@ public class MemberMenu {
     for (int i = index; i < (length - 1); i++) {
       members[i] = members[i + 1];
     }
-    length--;
-    members[length] = null;
+    members[--length] = null;
     System.gc();
   }
 
   static void list() {
     System.out.println("회원 목록: ");
-    System.out.printf("%-20s\t%-20s\t%-20s\n", "회원 번호", "이름", "가입일");
+    System.out.printf("%-20s\t%-20s\t%s\n", "회원 번호", "이름", "가입일");
     for (int i = 0; i < length; i++) {
       Member member = members[i];
-      System.out.printf("%-20d\t%-20s\t%-20s\n", i, member.name, member.date);
+      System.out.printf("%-20d\t%-20s\t%s\n", i, member.name, member.date);
     }
   }
 }
