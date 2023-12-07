@@ -2,6 +2,6 @@ package bitcamp.myapp.vo;
 
 public class Member {
 
-  public String email, name, pw, date;
+  public String email, name, password, createDate;
 
 }

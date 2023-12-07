@@ -1,21 +1,26 @@
-package bitcamp.myapp;
+package bitcamp.myapp.menu;
+
+import bitcamp.util.AnsiEscape;
+import bitcamp.util.Prompt;
 
 public class MainMenu {
 
   // 애플리케이션 객체(클래스) App을 실행할 때 다음 변수를 미리 준비해 둔다.
-  static final String ANSI_CLEAR = "\033[0m";
-  static final String ANSI_BOLD_RED = "\033[1;31m";
-  static final String ANSI_RED = "\033[0;31m";
-  static final String APP_TITLE = ANSI_BOLD_RED + "[과제관리 시스템]" + ANSI_CLEAR + "\n";
-  static final String MENU4 = ANSI_RED + "0. 종료" + ANSI_CLEAR;
+
   static final String[] MENU_ARR = new String[]{
-      APP_TITLE,
+      AnsiEscape.APP_TITLE,
       "1. 과제",
       "2. 게시글",
       "3. 회원",
-      "4. 도움말",
-      MENU4
+      "4. 가입인사",
+      "5. 도움말",
+      AnsiEscape.MENU4
   };
+  Prompt prompt;
+
+  public MainMenu(Prompt prompt) {
+    this.prompt = prompt;
+  }
 
   static void printMenu() {
     // 메뉴를 저장한 변수를 메소드 안에 두는 대신에
@@ -29,27 +34,38 @@ public class MainMenu {
     }
   }
 
-  static void execute() {
+  public void execute() {
+    BoardMenu boardMenu = new BoardMenu("게시판", this.prompt);
+    BoardMenu greetingMenu = new BoardMenu("가입인사", this.prompt);
+    AssignmentMenu assignmentMenu = new AssignmentMenu("과제", this.prompt);
+    MemberMenu memberMenu = new MemberMenu("회원", this.prompt);
+
     printMenu();
+
     while (true) {
-      String num = Prompt.input("메인> ");
+      String num = this.prompt.input("메인> ");
       switch (num) {
         case "1":
-          AssignmentMenu.execute();
+          assignmentMenu.execute();
           System.out.println();
           printMenu();
           break;
         case "2":
-          BoardMenu.execute();
+          boardMenu.execute();
           System.out.println();
           printMenu();
           break;
         case "3":
-          MemberMenu.execute();
+          memberMenu.execute();
           System.out.println();
           printMenu();
           break;
         case "4":
+          greetingMenu.execute();
+          System.out.println();
+          printMenu();
+          break;
+        case "5":
           System.out.println("도움말입니다.");
           break;
         case "0":
