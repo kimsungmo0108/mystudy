@@ -182,5 +182,24 @@ static Assignment[] assignments = new Assignment[3];
       return;
     }
 
+★ 클래스 로딩 시키기
+Class.forName("com.eomcs.oop.ex03.Exam0650$A");
 
+★ 클래스 필드 로딩 순서
+  static class A {
+    static int a = 7;
+    static {
+      System.out.println("A.static{}");
+      a += B.b;
+    }
+  }
+  static class B {
+    static int b = 22;
+    static {
+      System.out.println("B.static{}");
+      b += A.a;
+    }
+  }
+    System.out.println(A.a); // ?
+    System.out.println(B.b); // ?
 

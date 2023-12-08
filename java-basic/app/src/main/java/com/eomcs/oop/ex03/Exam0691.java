@@ -16,6 +16,7 @@ public class Exam0691 {
       b += A.a;
     }
   }
+
   public static void main(String[] args) {
     System.out.println(A.a); // ?
     System.out.println(B.b); // ?

@@ -5,11 +5,18 @@ import java.util.Scanner;
 public class Main {
   public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
-    int[] numbers = new int[9];
-    for (int j = 0; j < 9; j++) {
-      numbers[j] = scanner.nextInt();
+    int n = scanner.nextInt();
+    int m = scanner.nextInt();
+    int[] nums = new int[n];
+    for (int i = 0; i < m; i++) {
+      int x = scanner.nextInt() - 1, y = scanner.nextInt() - 1, z = scanner.nextInt();
+      for (int j = x; j <= y; j++) {
+        nums[j] = z;
+      }
     }
-
+    for (int j : nums) {
+      System.out.printf("%d ", j);
+    }
     scanner.close();
   }
 }
