@@ -10,22 +10,13 @@ public class Main {
 
     for (int i = 1; i < 29; i++) {
       x = scanner.nextInt();
-      nums[i] = x;
+      nums[x] = x;
     }
-
-    for (int j = 1; j < 29; j++) {
-      if (nums[j] == j) {
-        nums[j] = 0;
-      } else {
-        continue;
+    for (int i = 1; i < 31; i++) {
+      if (nums[i] == 0) {
+        System.out.println(i);
       }
     }
-    // for (int i : nums) {
-    // if (i > 0) {
-    // System.out.println(i);
-    // }
-    // }
-
     scanner.close();
   }
 }
