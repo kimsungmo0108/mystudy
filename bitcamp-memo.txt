@@ -1908,8 +1908,19 @@ class MenuGroup{
 	}
 }
 
-
-
+메뉴 다루기 → 메뉴를 선택했을 때 작업 실행하기	  ┏→ 메뉴를 실행하라는 명령이 들어왔을 때 작업을 수행한다 (이벤트 발생) → 옵저버(Observer)(관찰자 패턴)
+execute() → MenuItem → action() → <<Interface>>MenuHandler
+					  ┗→ 구현 클래스
+★ 게시글 메뉴
+<<게시글>>MenuGroup 
+		◇------→ <<등록>>MenuItem ◇------→ <<MenuHandler>>BoardAddHandler		|
+		◇------→ <<조회>>MenuItem ◇------→ <<MenuHandler>>BoardViewHandler	|
+		◇------→ <<변경>>MenuItem ◇------→ <<MenuHandler>>BoardModifyHandler         ◇------→ BoardRepository → Board[] boards;
+		◇------→ <<삭제>>MenuItem ◇------→ <<MenuHandler>>BoardDeleteHandler	|	int length;
+		◇------→ <<목록>>MenuItem ◇------→ <<MenuHandler>>BoardListHandler		|
+→ MenuItem에는 프로젝트 관련 코드가 있어서는 안된다 → 왜? 다른 프로젝트에서 재사용할 수 있도록 하기 위함
+→ 대신 메뉴를 선택했을 때 수행할 작업은 별도의 클래스로 분리한다
+→ 모두 공유를 하면 완성!!!!!!!!!!!!!!!
 
 
 

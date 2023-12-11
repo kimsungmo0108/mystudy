@@ -1,4 +1,4 @@
-package bitcamp.myapp.menu;
+package bitcamp.menu;
 
 //import bitcamp.myapp.vo.Menu;
 

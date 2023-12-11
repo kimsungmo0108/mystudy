@@ -1,4 +1,4 @@
-package bitcamp.myapp.menu;
+package bitcamp.menu;
 
 // 메뉴를 처리하는 객채의 사용법을 정의한다.
 
