@@ -25,7 +25,12 @@ public class AssignmentMenu implements Menu {
     System.out.println("0. 이전");
   }
 
-  public void execute() {
+  @Override
+  public String getTitle() {
+    return null;
+  }
+
+  public void execute(Prompt prompt) {
     this.printMenu();
 
     while (true) {
@@ -57,6 +62,7 @@ public class AssignmentMenu implements Menu {
       }
     }
   }
+
 
   void add() {
     System.out.printf("%s 등록:\n", this.title);

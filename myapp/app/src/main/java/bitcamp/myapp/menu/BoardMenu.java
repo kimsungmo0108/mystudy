@@ -1,11 +1,11 @@
 package bitcamp.myapp.menu;
 
-import bitcamp.myapp.vo.Board;
+import bitcamp.myapp.vo.Menu;
 import bitcamp.util.Prompt;
 
-public class BoardMenu implements Menu {
+public class BoardMenu implements bitcamp.myapp.menu.Menu {
 
-  Board[] boards = new Board[3];
+  Menu[] boards = new Menu[3];
   int length = 0;
   String title;
   Prompt prompt;
@@ -15,7 +15,12 @@ public class BoardMenu implements Menu {
     this.prompt = prompt;
   }
 
-  public void execute() {
+  @Override
+  public String getTitle() {
+    return null;
+  }
+
+  public void execute(Prompt prompt) {
     this.printMenu();
     while (true) {
       String input = this.prompt.input("메인/%s> ", this.title);
@@ -64,7 +69,7 @@ public class BoardMenu implements Menu {
       int oldSize = this.boards.length;
       int newSize = oldSize + (oldSize >> 1);
 
-      Board[] arr = new Board[newSize];
+      Menu[] arr = new Menu[newSize];
       for (int i = 0; i < oldSize; i++) {
         arr[i] = this.boards[i];
       }
@@ -72,7 +77,7 @@ public class BoardMenu implements Menu {
       this.boards = arr;
     }
 
-    Board board = new Board();
+    Menu board = new Menu();
     board.title = this.prompt.input("제목? ");
     board.content = this.prompt.input("내용? ");
     board.writer = this.prompt.input("작성자? ");
@@ -86,7 +91,7 @@ public class BoardMenu implements Menu {
     System.out.printf("%-20s\t%10s\t%s\n", "Title", "Writer", "Date");
 
     for (int i = 0; i < this.length; i++) {
-      Board board = this.boards[i];
+      Menu board = this.boards[i];
       System.out.printf("%-20s\t%10s\t%s\n", board.title, board.writer, board.createdDate);
     }
   }
@@ -100,7 +105,7 @@ public class BoardMenu implements Menu {
       return;
     }
 
-    Board board = this.boards[index];
+    Menu board = this.boards[index];
     System.out.printf("제목: %s\n", board.title);
     System.out.printf("내용: %s\n", board.content);
     System.out.printf("작성자: %s\n", board.writer);
@@ -116,7 +121,7 @@ public class BoardMenu implements Menu {
       return;
     }
 
-    Board board = this.boards[index];
+    Menu board = this.boards[index];
     board.title = this.prompt.input("제목(%s)? ", board.title);
     board.content = this.prompt.input("내용(%s)? ", board.content);
     board.writer = this.prompt.input("작성자(%s)? ", board.writer);
