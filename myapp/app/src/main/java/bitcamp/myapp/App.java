@@ -38,7 +38,7 @@ public class App {
     // 게시글 등록을 처리하는 메뉴를 게시글 메뉴에 추가한다
     boardMenu.add(boardAddMenu);
 
-    boardMenu.add(new MenuItem("조회", new BoardViewHandler()));
+    boardMenu.add(new MenuItem("조회", new BoardViewHandler(boardRepository, prompt)));
     boardMenu.add(new MenuItem("변경", new BoardModifyHandler()));
     boardMenu.add(new MenuItem("목록", new BoardListHandler(boardRepository)));
     boardMenu.add(new MenuItem("삭제", new BoardDeleteHandler()));
