@@ -3,7 +3,7 @@ package bitcamp.myapp.menu;
 import bitcamp.myapp.vo.Member;
 import bitcamp.util.Prompt;
 
-public class MemberMenu {
+public class MemberMenu implements Menu {
 
   Member[] members = new Member[3];
   int length = 0;
@@ -25,7 +25,7 @@ public class MemberMenu {
     System.out.println("0. 이전");
   }
 
-  void execute() {
+  public void execute() {
     this.printMenu();
 
     while (true) {

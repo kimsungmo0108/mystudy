@@ -3,7 +3,7 @@ package bitcamp.myapp.menu;
 import bitcamp.myapp.vo.Board;
 import bitcamp.util.Prompt;
 
-public class BoardMenu {
+public class BoardMenu implements Menu {
 
   Board[] boards = new Board[3];
   int length = 0;
@@ -15,7 +15,7 @@ public class BoardMenu {
     this.prompt = prompt;
   }
 
-  void execute() {
+  public void execute() {
     this.printMenu();
     while (true) {
       String input = this.prompt.input("메인/%s> ", this.title);
