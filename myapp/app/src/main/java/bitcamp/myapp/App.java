@@ -81,8 +81,9 @@ public class App {
     greetingMenu.add(new MenuItem("삭제", new GreetingDeleteHandler(greetingRepository, prompt)));
     mainMenu.add(greetingMenu);
 
-    mainMenu.add(new MenuGroup("도움말"));
-
+    MenuGroup helpMenu = new MenuGroup("도움말");
+    mainMenu.add(helpMenu);
+    
     mainMenu.execute(prompt);
 
     prompt.close();
