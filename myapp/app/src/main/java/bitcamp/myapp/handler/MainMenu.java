@@ -1,4 +1,4 @@
-package bitcamp.myapp.menu;
+package bitcamp.myapp.handler;
 
 import bitcamp.menu.Menu;
 import bitcamp.util.AnsiEscape;
