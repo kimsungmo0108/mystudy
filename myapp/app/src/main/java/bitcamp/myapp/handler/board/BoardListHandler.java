@@ -18,13 +18,10 @@ public class BoardListHandler implements MenuHandler {
   @Override
   public void action(Menu menu) {
     System.out.printf(AnsiEscape.ANSI_BOLD + "[%s]\n" + AnsiEscape.ANSI_CLEAR, menu.getTitle());
-    //System.out.printf("%s 목록: \n", this.title);
     System.out.printf("%-20s\t%10s\t%s\n", "Title", "Writer", "Date");
 
-    for (int i = 0; i < this.boardRepository.length; i++) {
-      Board board = this.boardRepository.boards[i];
+    for (Board board : boardRepository.toArray()) {
       System.out.printf("%-20s\t%10s\t%s\n", board.title, board.writer, board.createdDate);
     }
-
   }
 }

@@ -31,6 +31,6 @@ public class BoardAddHandler implements MenuHandler {
     // 목록에 객체를 추가시키는 코드를 BoardRepository가 감췄다(캡슐화 했다)
     // 대신 목록에 객체를 추가시킬 수 있도록 메소드를 제공하고 있다
     // 따라서 다음과 같이 boardRepository가 제공하는 메소드를 사용하여 게시글 객체를 추가하라
-    boardRepository.add(board);
+    this.boardRepository.add(board);
   }
 }

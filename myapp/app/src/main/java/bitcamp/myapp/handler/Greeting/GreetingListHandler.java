@@ -21,10 +21,8 @@ public class GreetingListHandler implements MenuHandler {
     //System.out.printf("%s 목록: \n", this.title);
     System.out.printf("%-20s\t%10s\t%s\n", "Title", "Writer", "Date");
 
-    for (int i = 0; i < this.greetingRepository.length; i++) {
-      Board board = this.greetingRepository.greetings[i];
+    for (Board board : greetingRepository.toArray()) {
       System.out.printf("%-20s\t%10s\t%s\n", board.title, board.writer, board.createdDate);
     }
-
   }
 }

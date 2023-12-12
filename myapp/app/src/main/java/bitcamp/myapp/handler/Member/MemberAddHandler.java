@@ -19,21 +19,16 @@ public class MemberAddHandler implements MenuHandler {
   @Override
   public void action(Menu menu) {
     System.out.printf(AnsiEscape.ANSI_BOLD + "[%s]\n" + AnsiEscape.ANSI_CLEAR, menu.getTitle());
-    if (this.memberRepository.length == this.memberRepository.members.length) {
-      int oldSize = this.memberRepository.members.length;
-      int newSize = oldSize + (oldSize / 2);
-      Member[] arr = new Member[newSize];
-      for (int i = 0; i < oldSize; i++) {
-        arr[i] = this.memberRepository.members[i];
-      }
-      this.memberRepository.members = arr;
-    }
+    System.out.printf(AnsiEscape.ANSI_BOLD + "[%s]\n" + AnsiEscape.ANSI_CLEAR, menu.getTitle());
+
     Member member = new Member();
     member.email = this.prompt.input("이메일? ");
     member.name = this.prompt.input("이름? ");
-    member.password = this.prompt.input("암호? ");
+    member.password = this.prompt.input("비밀번호? ");
     member.createDate = this.prompt.input("가입일? ");
-    this.memberRepository.members[this.memberRepository.length++] = member;
-
+    // 목록에 객체를 추가시키는 코드를 BoardRepository가 감췄다(캡슐화 했다)
+    // 대신 목록에 객체를 추가시킬 수 있도록 메소드를 제공하고 있다
+    // 따라서 다음과 같이 boardRepository가 제공하는 메소드를 사용하여 게시글 객체를 추가하라
+    this.memberRepository.add(member);
   }
 }

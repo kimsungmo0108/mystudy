@@ -22,12 +22,12 @@ public class BoardViewHandler implements MenuHandler {
   public void action(Menu menu) {
     System.out.printf(AnsiEscape.ANSI_BOLD + "[%s]\n" + AnsiEscape.ANSI_CLEAR, menu.getTitle());
     int index = this.prompt.inputInt("번호? ");
-    if (index < 0 || index >= this.boardRepository.length) {
-      System.out.println("번호가 유효하지 않습니다.");
+    Board board = this.boardRepository.get(index);
+    if (board == null) {
+      System.out.println("게시글 번호가 유효하지 않습니다.");
       return;
     }
 
-    Board board = this.boardRepository.boards[index];
     System.out.printf("제목: %s\n", board.title);
     System.out.printf("내용: %s\n", board.content);
     System.out.printf("작성자: %s\n", board.writer);

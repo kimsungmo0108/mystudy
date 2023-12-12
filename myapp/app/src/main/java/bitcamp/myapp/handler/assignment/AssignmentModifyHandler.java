@@ -20,15 +20,17 @@ public class AssignmentModifyHandler implements MenuHandler {
   public void action(Menu menu) {
     System.out.printf(AnsiEscape.ANSI_BOLD + "[%s]\n" + AnsiEscape.ANSI_CLEAR, menu.getTitle());
     int index = this.prompt.inputInt("번호? ");
-    if (index < 0 || index >= this.assignmentRepository.length) {
+    Assignment oldassignment = this.assignmentRepository.get(index);
+    if (oldassignment == null) {
       System.out.println("과제 번호가 유효하지 않습니다.");
       return;
     }
 
-    Assignment assignment = this.assignmentRepository.assignments[index];
-    assignment.title = this.prompt.input("과제명(%s)? ", assignment.title);
-    assignment.content = this.prompt.input("내용(%s)? ", assignment.content);
-    assignment.deadline = this.prompt.input("제출 마감일(%s)? ", assignment.deadline);
+    Assignment assignment = new Assignment();
+    assignment.title = this.prompt.input("과제명(%s)? ", oldassignment.title);
+    assignment.content = this.prompt.input("내용(%s)? ", oldassignment.content);
+    assignment.deadline = this.prompt.input("제출 마감일(%s)? ", oldassignment.deadline);
 
+    this.assignmentRepository.set(index, assignment);
   }
 }

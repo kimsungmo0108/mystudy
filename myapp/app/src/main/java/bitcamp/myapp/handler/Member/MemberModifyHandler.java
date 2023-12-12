@@ -21,15 +21,16 @@ public class MemberModifyHandler implements MenuHandler {
     System.out.println("회원정보 변경!");
     System.out.printf(AnsiEscape.ANSI_BOLD + "[%s]\n" + AnsiEscape.ANSI_CLEAR, menu.getTitle());
     int index = this.prompt.inputInt("회원 번호? ");
-    if (index < 0 || index >= this.memberRepository.length) {
+    Member oldmember = this.memberRepository.get(index);
+    if (oldmember == null) {
       System.out.println("회원 번호가 유효하지 않습니다.");
       return;
     }
-    Member member = this.memberRepository.members[index];
-    member.email = this.prompt.input("이메일(%s): ", member.email);
-    member.name = this.prompt.input("이름(%s): ", member.name);
+    Member member = new Member();
+    member.email = this.prompt.input("이메일(%s): ", oldmember.email);
+    member.name = this.prompt.input("이름(%s): ", oldmember.name);
     member.password = this.prompt.input("새암호: ");
-    member.createDate = this.prompt.input("가입일(%s): ", member.createDate);
-
+    member.createDate = this.prompt.input("가입일(%s): ", oldmember.createDate);
+    this.memberRepository.set(index, member);
   }
 }

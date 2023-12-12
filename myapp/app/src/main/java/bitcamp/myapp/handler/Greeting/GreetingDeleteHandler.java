@@ -2,6 +2,7 @@ package bitcamp.myapp.handler.Greeting;
 
 import bitcamp.menu.Menu;
 import bitcamp.menu.MenuHandler;
+import bitcamp.myapp.vo.Board;
 import bitcamp.util.AnsiEscape;
 import bitcamp.util.Prompt;
 
@@ -21,14 +22,9 @@ public class GreetingDeleteHandler implements MenuHandler {
   public void action(Menu menu) {
     System.out.printf(AnsiEscape.ANSI_BOLD + "[%s]\n" + AnsiEscape.ANSI_CLEAR, menu.getTitle());
     int index = this.prompt.inputInt("번호? ");
-    if (index < 0 || index >= this.greetingRepository.length) {
-      System.out.println("게시글 번호가 유효하지 않습니다.");
-      return;
+    Board board = this.greetingRepository.remove(index);
+    if (board == null) {
+      System.out.println("가입인사 번호가 유효하지 않습니다.");
     }
-
-    for (int i = index; i < (this.greetingRepository.length - 1); i++) {
-      this.greetingRepository.greetings[i] = this.greetingRepository.greetings[i + 1];
-    }
-    this.greetingRepository.greetings[--this.greetingRepository.length] = null;
   }
 }

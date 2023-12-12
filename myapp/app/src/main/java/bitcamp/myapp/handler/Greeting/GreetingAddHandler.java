@@ -22,25 +22,12 @@ public class GreetingAddHandler implements MenuHandler {
   public void action(Menu menu) {
     System.out.printf(AnsiEscape.ANSI_BOLD + "[%s]\n" + AnsiEscape.ANSI_CLEAR, menu.getTitle());
 
-    if (this.greetingRepository.length == this.greetingRepository.greetings.length) {
-      int oldSize = this.greetingRepository.greetings.length;
-      int newSize = oldSize + (oldSize >> 1);
-
-      Board[] arr = new Board[newSize];
-      for (int i = 0; i < oldSize; i++) {
-        arr[i] = this.greetingRepository.greetings[i];
-      }
-
-      this.greetingRepository.greetings = arr;
-    }
-
     Board board = new Board();
     board.title = this.prompt.input("제목? ");
     board.content = this.prompt.input("내용? ");
     board.writer = this.prompt.input("작성자? ");
     board.createdDate = this.prompt.input("작성일? ");
 
-    this.greetingRepository.greetings[this.greetingRepository.length++] = board;
-
+    this.greetingRepository.add(board);
   }
 }
