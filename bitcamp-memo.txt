@@ -1969,18 +1969,67 @@ OOP의 Encapsulation(캡슐화)
 → 목록을 다루는 방식을 변경하더라도 외부에 영향을 주지 않는다
 → 기능을 변경하더라도 다른 클래스에 옇야을 최소화시킬 수 있다
 
+★ 다형성 활용
+동물 → 포유류
+       → 고양이과
+       → 호랑이
+포유류 → 동물(X)
+          → 고양이과
+          → 사자
+고양이과 → 호랑이
+             → 사자
+             → 너구리(X)
+→ 부모는 자식을 포함할 수 있지만 자식은 부모를 포함할 수 없다
+다형성 활용(상속과 다형적 변수)
+Car(parent=super class) → Sedan → Tico(child=sub class)
+	     → Sonata
+      → Truck → Poter
+	     → Pavise
+예)
+Car c(다형적 변수, polymorphic variables) = new Car();
+Car c1 = new Sedan();
+Car c2 = new Tico();
+Sedan c1 = new Sedan();
+Sedan c2 = new Tico();
+잘못된 예)
+Sedan c = new Car();
+Sedan c1 = new Poter();
+Sedan c2 = new Truck();
 
+★ java.lang.Object 클래스 → 최상위 클래스 = 자바의 모든 클래스는 Object의 sub 클래스이다
+Object obj;
+obj = new App();
+     = new BoardAddHandler();
+     = new BoardRepository();
+     = new Member();
+     = new Board();
+Object
+obj  -→ App();
+     └→ BoardAddHandler
+     └→ BoardRepository
+     └→ Member
+     └→ Board
+다형적 변수를 이요하여 범용 Repository 만들기
+BoardAddHandler → BoardRepository → Board[]
+BoardListHandler  ┘
+	........
+MemAddHandler → MemberReposiroty → Member[]
+MemlistHandler  ┘
+	.........
+AssignmentAddHandler → AssignmentRepository → Assignment[]
+AssignmentListHandler  ┘
+	..........
 
-
-
-
-
-
-
-
-
-
-
+★과제19. ObjectRepository 범용 기능으로 변경 → 클래스 개수를 줄일 수 있고 중복 코드 제거
+BoardAddHandler → ObjectRepository → Object[]
+BoardListHandler  ┘
+	........
+MemAddHandler → ObjectRepository → Object[]
+MemlistHandler  ┘
+	.........
+AssignmentAddHandler → ObjectRepository → Object[]
+AssignmentListHandler  ┘
+	..........
 
 
 

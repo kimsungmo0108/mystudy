@@ -7,26 +7,23 @@ import bitcamp.myapp.handler.Greeting.GreetingAddHandler;
 import bitcamp.myapp.handler.Greeting.GreetingDeleteHandler;
 import bitcamp.myapp.handler.Greeting.GreetingListHandler;
 import bitcamp.myapp.handler.Greeting.GreetingModifyHandler;
-import bitcamp.myapp.handler.Greeting.GreetingRepository;
 import bitcamp.myapp.handler.Greeting.GreetingViewHandler;
 import bitcamp.myapp.handler.Member.MemberAddHandler;
 import bitcamp.myapp.handler.Member.MemberDeleteHandler;
 import bitcamp.myapp.handler.Member.MemberListHandler;
 import bitcamp.myapp.handler.Member.MemberModifyHandler;
-import bitcamp.myapp.handler.Member.MemberRepository;
 import bitcamp.myapp.handler.Member.MemberViewHandler;
 import bitcamp.myapp.handler.assignment.AssignmentAddHandler;
 import bitcamp.myapp.handler.assignment.AssignmentDeleteHandler;
 import bitcamp.myapp.handler.assignment.AssignmentListHandler;
 import bitcamp.myapp.handler.assignment.AssignmentModifyHandler;
-import bitcamp.myapp.handler.assignment.AssignmentRepository;
 import bitcamp.myapp.handler.assignment.AssignmentViewHandler;
 import bitcamp.myapp.handler.board.BoardAddHandler;
 import bitcamp.myapp.handler.board.BoardDeleteHandler;
 import bitcamp.myapp.handler.board.BoardListHandler;
 import bitcamp.myapp.handler.board.BoardModifyHandler;
-import bitcamp.myapp.handler.board.BoardRepository;
 import bitcamp.myapp.handler.board.BoardViewHandler;
+import bitcamp.util.ObjectRepository;
 import bitcamp.util.Prompt;
 
 public class App {
@@ -35,10 +32,10 @@ public class App {
     Prompt prompt = new Prompt(System.in);
     //new MainMenu(prompt).execute();
 
-    AssignmentRepository assignmentRepository = new AssignmentRepository();
-    BoardRepository boardRepository = new BoardRepository();
-    MemberRepository memberRepository = new MemberRepository();
-    GreetingRepository greetingRepository = new GreetingRepository();
+    ObjectRepository assignmentRepository = new ObjectRepository();
+    ObjectRepository boardRepository = new ObjectRepository();
+    ObjectRepository memberRepository = new ObjectRepository();
+    ObjectRepository greetingRepository = new ObjectRepository();
 
     MenuGroup mainMenu = new MenuGroup("메인");
 
@@ -83,7 +80,7 @@ public class App {
 
     MenuGroup helpMenu = new MenuGroup("도움말");
     mainMenu.add(helpMenu);
-    
+
     mainMenu.execute(prompt);
 
     prompt.close();

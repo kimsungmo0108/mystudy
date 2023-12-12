@@ -4,23 +4,24 @@ import bitcamp.menu.Menu;
 import bitcamp.menu.MenuHandler;
 import bitcamp.myapp.vo.Member;
 import bitcamp.util.AnsiEscape;
+import bitcamp.util.ObjectRepository;
 import bitcamp.util.Prompt;
 
 public class MemberViewHandler implements MenuHandler {
 
   Prompt prompt;
-  MemberRepository memberRepository;
+  ObjectRepository objectRepository;
 
-  public MemberViewHandler(Prompt prompt, MemberRepository memberRepository) {
+  public MemberViewHandler(Prompt prompt, ObjectRepository objectRepository) {
     this.prompt = prompt;
-    this.memberRepository = memberRepository;
+    this.objectRepository = objectRepository;
   }
 
   @Override
   public void action(Menu menu) {
     System.out.printf(AnsiEscape.ANSI_BOLD + "[%s]\n" + AnsiEscape.ANSI_CLEAR, menu.getTitle());
     int index = this.prompt.inputInt("회원 번호? ");
-    Member member = this.memberRepository.get(index);
+    Member member = (Member) this.objectRepository.get(index);
     if (member == null) {
       System.out.println("회원 번호가 유효하지 않습니다.");
       return;
