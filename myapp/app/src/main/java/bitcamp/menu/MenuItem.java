@@ -23,7 +23,7 @@ public class MenuItem implements Menu {
 
   public void execute(Prompt prompt) {
     if (this.menuHandler != null) {
-      this.menuHandler.action();
+      this.menuHandler.action(this);
     }
   }
 

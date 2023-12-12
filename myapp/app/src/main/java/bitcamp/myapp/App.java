@@ -3,6 +3,24 @@ package bitcamp.myapp;
 import bitcamp.menu.MenuGroup;
 import bitcamp.menu.MenuHandler;
 import bitcamp.menu.MenuItem;
+import bitcamp.myapp.handler.Greeting.GreetingAddHandler;
+import bitcamp.myapp.handler.Greeting.GreetingDeleteHandler;
+import bitcamp.myapp.handler.Greeting.GreetingListHandler;
+import bitcamp.myapp.handler.Greeting.GreetingModifyHandler;
+import bitcamp.myapp.handler.Greeting.GreetingRepository;
+import bitcamp.myapp.handler.Greeting.GreetingViewHandler;
+import bitcamp.myapp.handler.Member.MemberAddHandler;
+import bitcamp.myapp.handler.Member.MemberDeleteHandler;
+import bitcamp.myapp.handler.Member.MemberListHandler;
+import bitcamp.myapp.handler.Member.MemberModifyHandler;
+import bitcamp.myapp.handler.Member.MemberRepository;
+import bitcamp.myapp.handler.Member.MemberViewHandler;
+import bitcamp.myapp.handler.assignment.AssignmentAddHandler;
+import bitcamp.myapp.handler.assignment.AssignmentDeleteHandler;
+import bitcamp.myapp.handler.assignment.AssignmentListHandler;
+import bitcamp.myapp.handler.assignment.AssignmentModifyHandler;
+import bitcamp.myapp.handler.assignment.AssignmentRepository;
+import bitcamp.myapp.handler.assignment.AssignmentViewHandler;
 import bitcamp.myapp.handler.board.BoardAddHandler;
 import bitcamp.myapp.handler.board.BoardDeleteHandler;
 import bitcamp.myapp.handler.board.BoardListHandler;
@@ -17,16 +35,21 @@ public class App {
     Prompt prompt = new Prompt(System.in);
     //new MainMenu(prompt).execute();
 
+    AssignmentRepository assignmentRepository = new AssignmentRepository();
     BoardRepository boardRepository = new BoardRepository();
+    MemberRepository memberRepository = new MemberRepository();
+    GreetingRepository greetingRepository = new GreetingRepository();
 
     MenuGroup mainMenu = new MenuGroup("메인");
 
     MenuGroup assignmentMenu = new MenuGroup("과제");
-    assignmentMenu.add(new MenuItem("등록"));
-    assignmentMenu.add(new MenuItem("조회"));
-    assignmentMenu.add(new MenuItem("변경"));
-    assignmentMenu.add(new MenuItem("목록"));
-    assignmentMenu.add(new MenuItem("삭제"));
+    assignmentMenu.add(new MenuItem("등록", new AssignmentAddHandler(prompt, assignmentRepository)));
+    assignmentMenu.add(new MenuItem("조회", new AssignmentViewHandler(prompt, assignmentRepository)));
+    assignmentMenu.add(
+        new MenuItem("변경", new AssignmentModifyHandler(prompt, assignmentRepository)));
+    assignmentMenu.add(new MenuItem("목록", new AssignmentListHandler(assignmentRepository)));
+    assignmentMenu.add(
+        new MenuItem("삭제", new AssignmentDeleteHandler(prompt, assignmentRepository)));
     mainMenu.add(assignmentMenu);
 
     MenuGroup boardMenu = new MenuGroup("게시글");
@@ -43,19 +66,19 @@ public class App {
     mainMenu.add(boardMenu);
 
     MenuGroup memberMenu = new MenuGroup("회원");
-    memberMenu.add(new MenuItem("등록"));
-    memberMenu.add(new MenuItem("조회"));
-    memberMenu.add(new MenuItem("변경"));
-    memberMenu.add(new MenuItem("목록"));
-    memberMenu.add(new MenuItem("삭제"));
+    memberMenu.add(new MenuItem("등록", new MemberAddHandler(prompt, memberRepository)));
+    memberMenu.add(new MenuItem("조회", new MemberViewHandler(prompt, memberRepository)));
+    memberMenu.add(new MenuItem("변경", new MemberModifyHandler(prompt, memberRepository)));
+    memberMenu.add(new MenuItem("목록", new MemberListHandler(memberRepository)));
+    memberMenu.add(new MenuItem("삭제", new MemberDeleteHandler(prompt, memberRepository)));
     mainMenu.add(memberMenu);
 
     MenuGroup greetingMenu = new MenuGroup("가입인사");
-    greetingMenu.add(new MenuItem("등록"));
-    greetingMenu.add(new MenuItem("조회"));
-    greetingMenu.add(new MenuItem("변경"));
-    greetingMenu.add(new MenuItem("목록"));
-    greetingMenu.add(new MenuItem("삭제"));
+    greetingMenu.add(new MenuItem("등록", new GreetingAddHandler(greetingRepository, prompt)));
+    greetingMenu.add(new MenuItem("조회", new GreetingViewHandler(greetingRepository, prompt)));
+    greetingMenu.add(new MenuItem("변경", new GreetingModifyHandler(greetingRepository, prompt)));
+    greetingMenu.add(new MenuItem("목록", new GreetingListHandler(greetingRepository)));
+    greetingMenu.add(new MenuItem("삭제", new GreetingDeleteHandler(greetingRepository, prompt)));
     mainMenu.add(greetingMenu);
 
     mainMenu.add(new MenuGroup("도움말"));

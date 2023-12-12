@@ -1,4 +1,4 @@
-package bitcamp.myapp.handler;
+package bitcamp.myapp.handler.Member;
 
 import bitcamp.menu.Menu;
 import bitcamp.myapp.vo.Member;
