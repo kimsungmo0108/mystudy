@@ -10,16 +10,15 @@ import bitcamp.util.Prompt;
 public class MemberAddHandler implements MenuHandler {
 
   Prompt prompt;
-  ObjectRepository objectRepository;
+  ObjectRepository<Member> objectRepository;
 
-  public MemberAddHandler(Prompt prompt, ObjectRepository objectRepository) {
+  public MemberAddHandler(Prompt prompt, ObjectRepository<Member> objectRepository) {
     this.prompt = prompt;
     this.objectRepository = objectRepository;
   }
 
   @Override
   public void action(Menu menu) {
-    System.out.printf(AnsiEscape.ANSI_BOLD + "[%s]\n" + AnsiEscape.ANSI_CLEAR, menu.getTitle());
     System.out.printf(AnsiEscape.ANSI_BOLD + "[%s]\n" + AnsiEscape.ANSI_CLEAR, menu.getTitle());
 
     Member member = new Member();

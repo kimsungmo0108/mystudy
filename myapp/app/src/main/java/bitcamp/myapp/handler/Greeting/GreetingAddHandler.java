@@ -11,10 +11,10 @@ import bitcamp.util.Prompt;
 // - 반드시 MenuHandler 규칙에 따라 클래스를 작성해야 한다
 public class GreetingAddHandler implements MenuHandler {
 
-  ObjectRepository objectRepository;
+  ObjectRepository<Board> objectRepository;
   Prompt prompt;
 
-  public GreetingAddHandler(ObjectRepository objectRepository, Prompt prompt) {
+  public GreetingAddHandler(ObjectRepository<Board> objectRepository, Prompt prompt) {
     this.prompt = prompt;
     this.objectRepository = objectRepository;
   }

@@ -2,6 +2,7 @@ package bitcamp.myapp.handler.Member;
 
 import bitcamp.menu.Menu;
 import bitcamp.menu.MenuHandler;
+import bitcamp.myapp.vo.Member;
 import bitcamp.util.AnsiEscape;
 import bitcamp.util.ObjectRepository;
 import bitcamp.util.Prompt;
@@ -10,9 +11,9 @@ import bitcamp.util.Prompt;
 public class MemberDeleteHandler implements MenuHandler {
 
   Prompt prompt;
-  ObjectRepository objectRepository;
+  ObjectRepository<Member> objectRepository;
 
-  public MemberDeleteHandler(Prompt prompt, ObjectRepository objectRepository) {
+  public MemberDeleteHandler(Prompt prompt, ObjectRepository<Member> objectRepository) {
     this.prompt = prompt;
     this.objectRepository = objectRepository;
   }

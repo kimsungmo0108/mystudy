@@ -23,6 +23,9 @@ import bitcamp.myapp.handler.board.BoardDeleteHandler;
 import bitcamp.myapp.handler.board.BoardListHandler;
 import bitcamp.myapp.handler.board.BoardModifyHandler;
 import bitcamp.myapp.handler.board.BoardViewHandler;
+import bitcamp.myapp.vo.Assignment;
+import bitcamp.myapp.vo.Board;
+import bitcamp.myapp.vo.Member;
 import bitcamp.util.ObjectRepository;
 import bitcamp.util.Prompt;
 
@@ -32,10 +35,10 @@ public class App {
     Prompt prompt = new Prompt(System.in);
     //new MainMenu(prompt).execute();
 
-    ObjectRepository assignmentRepository = new ObjectRepository();
-    ObjectRepository boardRepository = new ObjectRepository();
-    ObjectRepository memberRepository = new ObjectRepository();
-    ObjectRepository greetingRepository = new ObjectRepository();
+    ObjectRepository<Assignment> assignmentRepository = new ObjectRepository<>();
+    ObjectRepository<Board> boardRepository = new ObjectRepository<>();
+    ObjectRepository<Member> memberRepository = new ObjectRepository<>();
+    ObjectRepository<Board> greetingRepository = new ObjectRepository<>();
 
     MenuGroup mainMenu = new MenuGroup("메인");
 

@@ -10,9 +10,9 @@ import bitcamp.util.Prompt;
 public class MemberViewHandler implements MenuHandler {
 
   Prompt prompt;
-  ObjectRepository objectRepository;
+  ObjectRepository<Member> objectRepository;
 
-  public MemberViewHandler(Prompt prompt, ObjectRepository objectRepository) {
+  public MemberViewHandler(Prompt prompt, ObjectRepository<Member> objectRepository) {
     this.prompt = prompt;
     this.objectRepository = objectRepository;
   }
@@ -21,7 +21,7 @@ public class MemberViewHandler implements MenuHandler {
   public void action(Menu menu) {
     System.out.printf(AnsiEscape.ANSI_BOLD + "[%s]\n" + AnsiEscape.ANSI_CLEAR, menu.getTitle());
     int index = this.prompt.inputInt("회원 번호? ");
-    Member member = (Member) this.objectRepository.get(index);
+    Member member = this.objectRepository.get(index);
     if (member == null) {
       System.out.println("회원 번호가 유효하지 않습니다.");
       return;

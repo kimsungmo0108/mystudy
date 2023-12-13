@@ -10,9 +10,9 @@ import bitcamp.util.ObjectRepository;
 // - 반드시 MenuHandler 규칙에 따라 클래스를 작성해야 한다
 public class GreetingListHandler implements MenuHandler {
 
-  ObjectRepository objectRepository;
+  ObjectRepository<Board> objectRepository;
 
-  public GreetingListHandler(ObjectRepository objectRepository) {
+  public GreetingListHandler(ObjectRepository<Board> objectRepository) {
     this.objectRepository = objectRepository;
   }
 
@@ -22,8 +22,10 @@ public class GreetingListHandler implements MenuHandler {
     //System.out.printf("%s 목록: \n", this.title);
     System.out.printf("%-20s\t%10s\t%s\n", "Title", "Writer", "Date");
 
-    for (Object object : objectRepository.toArray()) {
-      Board board = (Board) object;
+    Board[] boards = new Board[this.objectRepository.size()];
+    this.objectRepository.toArray(boards);
+
+    for (Board board : boards) {
       System.out.printf("%-20s\t%10s\t%s\n", board.title, board.writer, board.createdDate);
     }
   }
