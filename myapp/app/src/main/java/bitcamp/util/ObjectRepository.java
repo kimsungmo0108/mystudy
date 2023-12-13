@@ -1,6 +1,8 @@
 package bitcamp.util;
 
 
+import java.util.Arrays;
+
 // 수퍼 크랠스ㅡ이 레퍼런스는 서브 클래스의 인스턴스 주소를 담을 수 있다
 // 따라서 Object 레퍼런스는 Memeber, Assignment, Board 등 어떤 객체의 주소라도 담을 수 있다
 public class ObjectRepository<E> {
@@ -18,12 +20,7 @@ public class ObjectRepository<E> {
       int oldSize = this.objects.length;
       int newSize = oldSize + (oldSize >> 1);
 
-      Object[] arr = new Object[newSize];
-      for (int i = 0; i < oldSize; i++) {
-        arr[i] = this.objects[i];
-      }
-
-      this.objects = arr;
+      this.objects = Arrays.copyOf(this.objects, newSize);
     }
     this.objects[this.length++] = object;
   }
@@ -37,9 +34,8 @@ public class ObjectRepository<E> {
     // 배열에서 삭제하기 전에 임시 보관 해둔다
     Object deleted = this.objects[index];
 
-    for (int i = index; i < (this.length - 1); i++) {
-      this.objects[i] = this.objects[i + 1];
-    }
+    System.arraycopy(this.objects, index + 1, this.objects, index, this.length - (index + 1));
+
     this.objects[--this.length] = null;
 
     //삭제한 객체를 리턴한다
@@ -48,18 +44,16 @@ public class ObjectRepository<E> {
   }
 
   public Object[] toArray() {
-    Object[] arr = new Object[this.length];
-    for (int i = 0; i < this.length; i++) {
-      arr[i] = this.objects[i];
-    }
-    return arr;
+    return Arrays.copyOf(this.objects, this.length);
   }
 
-  public void toArray(E[] arr) {
-    for (int i = 0; i < this.length; i++) {
-      arr[i] = (E) this.objects[i];
+  public E[] toArray(E[] arr) {
+    if (arr.length >= this.length) {
+      System.arraycopy(this.objects, 0, arr, 0, this.length);
+      return arr;
     }
-    //return arr;
+
+    return (E[]) Arrays.copyOf(this.objects, this.length, arr.getClass());
   }
 
   public E get(int index) {

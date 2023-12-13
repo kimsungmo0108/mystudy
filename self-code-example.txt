@@ -203,3 +203,9 @@ Class.forName("com.eomcs.oop.ex03.Exam0650$A");
     System.out.println(A.a); // ?
     System.out.println(B.b); // ?
 
+★ Repository에 보관된 목록을 배열로 리턴 받기
+방법1 
+Board[] boards = new Board[this.objectRepository.size()];
+this.objectRepository.toArray(boards);
+방법2
+Board[] boards = this.objectRepository.toArray(new Board[0]);

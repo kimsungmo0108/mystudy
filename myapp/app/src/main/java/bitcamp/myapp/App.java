@@ -3,11 +3,6 @@ package bitcamp.myapp;
 import bitcamp.menu.MenuGroup;
 import bitcamp.menu.MenuHandler;
 import bitcamp.menu.MenuItem;
-import bitcamp.myapp.handler.Greeting.GreetingAddHandler;
-import bitcamp.myapp.handler.Greeting.GreetingDeleteHandler;
-import bitcamp.myapp.handler.Greeting.GreetingListHandler;
-import bitcamp.myapp.handler.Greeting.GreetingModifyHandler;
-import bitcamp.myapp.handler.Greeting.GreetingViewHandler;
 import bitcamp.myapp.handler.Member.MemberAddHandler;
 import bitcamp.myapp.handler.Member.MemberDeleteHandler;
 import bitcamp.myapp.handler.Member.MemberListHandler;
@@ -74,11 +69,11 @@ public class App {
     mainMenu.add(memberMenu);
 
     MenuGroup greetingMenu = new MenuGroup("가입인사");
-    greetingMenu.add(new MenuItem("등록", new GreetingAddHandler(greetingRepository, prompt)));
-    greetingMenu.add(new MenuItem("조회", new GreetingViewHandler(greetingRepository, prompt)));
-    greetingMenu.add(new MenuItem("변경", new GreetingModifyHandler(greetingRepository, prompt)));
-    greetingMenu.add(new MenuItem("목록", new GreetingListHandler(greetingRepository)));
-    greetingMenu.add(new MenuItem("삭제", new GreetingDeleteHandler(greetingRepository, prompt)));
+    greetingMenu.add(new MenuItem("등록", new BoardAddHandler(prompt, greetingRepository)));
+    greetingMenu.add(new MenuItem("조회", new BoardViewHandler(boardRepository, prompt)));
+    greetingMenu.add(new MenuItem("변경", new BoardModifyHandler(boardRepository, prompt)));
+    greetingMenu.add(new MenuItem("목록", new BoardListHandler(boardRepository)));
+    greetingMenu.add(new MenuItem("삭제", new BoardDeleteHandler(boardRepository, prompt)));
     mainMenu.add(greetingMenu);
 
     MenuGroup helpMenu = new MenuGroup("도움말");

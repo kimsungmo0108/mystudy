@@ -2043,7 +2043,16 @@ ObjectRepository에 제네릭 적용하기
 T[] toArray(T[]) 메소드 추가하기
 ★ 레퍼런스를 선언하는 시점에 지정된 타입이 아닌 값을 넣으려고 하면 컴파일 오류가 발생한다 즉 특정 타입만 사용하도록 제한할 수 있는 문법이 제네릭(Generic)이다
 
+제네릭(Generic)
+Member, Assignment, Board → ObjectRepository → Member, Assignment, Board
+Member, Assignemt, Board(O) → ObjectRepository<Board> → Board
 
+★ Repository에 보관된 목록을 배열로 리턴 받기
+방법1 
+Board[] boards = new Board[this.objectRepository.size()];
+this.objectRepository.toArray(boards);
+방법2
+Board[] boards = this.objectRepository.toArray(new Board[0]);
 
 
 
