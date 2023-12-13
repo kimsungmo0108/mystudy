@@ -8,11 +8,8 @@ public class Prompt {
   Scanner keyIn;
 
   public Prompt(InputStream in) {
-    this.keyIn = new Scanner(in);
-  }
 
-  public void close() {
-    this.keyIn.close();
+    keyIn = new Scanner(in);
   }
 
   public String input(String title, Object... args) {
@@ -33,5 +30,9 @@ public class Prompt {
   public boolean inputBoolean(String title, Object... args) {
     String str = this.input(title, args);
     return Boolean.parseBoolean(str);
+  }
+
+  public void close() {
+    this.keyIn.close();
   }
 }

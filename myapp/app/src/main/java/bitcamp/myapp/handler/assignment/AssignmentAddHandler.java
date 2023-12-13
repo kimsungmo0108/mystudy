@@ -12,9 +12,10 @@ public class AssignmentAddHandler implements MenuHandler {
   Prompt prompt;
   ArrayList<Assignment> objectRepository;
 
-  public AssignmentAddHandler(Prompt prompt, ArrayList<Assignment> objectRepository) {
-    this.prompt = prompt;
+
+  public AssignmentAddHandler(ArrayList<Assignment> objectRepository, Prompt prompt) {
     this.objectRepository = objectRepository;
+    this.prompt = prompt;
   }
 
   @Override

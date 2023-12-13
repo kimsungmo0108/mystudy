@@ -1,11 +1,9 @@
 package bitcamp.menu;
 
-//import bitcamp.myapp.vo.Menu;
-
 import bitcamp.util.Prompt;
 
-// Composite 패턴에서 '복합 객체(Composite Ovbject)' 역할을 하는 클래스
-// - 다른 메뉴 객체를 포함한다
+// Composite 패턴에서 '복합 객체(composite object)' 역할을 하는 클래스
+// - 다른 Menu 객체를 포함한다.
 public class MenuGroup implements Menu {
 
   String title;
@@ -16,7 +14,7 @@ public class MenuGroup implements Menu {
     this.title = title;
   }
 
-  @Override // 인터페이스나 슈퍼 클래스의 메소드를 정의하겠다고 컴파일러에게 알린다
+  @Override // 인터페이스나 수퍼 클래스의 메서드를 정의하겠다고 컴파일러에게 알린다.
   public void execute(Prompt prompt) {
     this.printMenu();
 
@@ -41,10 +39,10 @@ public class MenuGroup implements Menu {
   }
 
   private void printMenu() {
-    System.out.printf("\n[%s]\n", this.title);
+    System.out.printf("[%s]\n", this.title);
 
     for (int i = 0; i < this.menuSize; i++) {
-      System.out.printf("%d. %s\n", (i + 1), this.menus[i].getTitle());
+      System.out.printf("%d. %s\n", (i + 1), menus[i].getTitle());
     }
 
     System.out.printf("0. %s\n", "이전");
@@ -64,6 +62,7 @@ public class MenuGroup implements Menu {
       for (int i = 0; i < oldSize; i++) {
         arr[i] = this.menus[i];
       }
+
       this.menus = arr;
     }
     this.menus[this.menuSize++] = menu;
@@ -82,7 +81,7 @@ public class MenuGroup implements Menu {
   }
 
   int indexOf(Menu menu) {
-    for (int i = 0; i < this.menuSize; i++) {
+    for (int i = 0; i < menuSize; i++) {
       if (menu == this.menus[i]) {
         return i;
       }

@@ -1,4 +1,4 @@
-package bitcamp.myapp.handler.Member;
+package bitcamp.myapp.handler.member;
 
 import bitcamp.menu.Menu;
 import bitcamp.menu.MenuHandler;
@@ -16,15 +16,15 @@ public class MemberListHandler implements MenuHandler {
 
   @Override
   public void action(Menu menu) {
-    System.out.println("회원 목록! ");
     System.out.printf(AnsiEscape.ANSI_BOLD + "[%s]\n" + AnsiEscape.ANSI_CLEAR, menu.getTitle());
-    System.out.printf("%-20s\t%-20s\t%s\n", "이메일", "이름", "가입일");
+
+    System.out.printf("%-10s\t%30s\t%s\n", "이름", "이메일", "가입일");
 
     Member[] members = new Member[this.objectRepository.size()];
     this.objectRepository.toArray(members);
-
+    
     for (Member member : members) {
-      System.out.printf("%-20s\t%10s\t%s\n", member.email, member.name, member.createDate);
+      System.out.printf("%-10s\t%30s\t%s\n", member.name, member.email, member.createdDate);
     }
   }
 }
