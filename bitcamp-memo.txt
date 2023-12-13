@@ -2054,8 +2054,8 @@ this.objectRepository.toArray(boards);
 방법2
 Board[] boards = this.objectRepository.toArray(new Board[0]);
 
-
-
+과제21. 자바Collection API 사용하기 (ArraList)
+ArrayList() 클래스 → 객체 
 
 
 

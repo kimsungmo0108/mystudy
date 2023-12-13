@@ -4,13 +4,13 @@ import bitcamp.menu.Menu;
 import bitcamp.menu.MenuHandler;
 import bitcamp.myapp.vo.Assignment;
 import bitcamp.util.AnsiEscape;
-import bitcamp.util.ObjectRepository;
+import java.util.ArrayList;
 
 public class AssignmentListHandler implements MenuHandler {
 
-  ObjectRepository<Assignment> objectRepository;
+  ArrayList<Assignment> objectRepository;
 
-  public AssignmentListHandler(ObjectRepository<Assignment> objectRepository) {
+  public AssignmentListHandler(ArrayList<Assignment> objectRepository) {
     this.objectRepository = objectRepository;
   }
 

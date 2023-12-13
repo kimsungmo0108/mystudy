@@ -21,8 +21,8 @@ import bitcamp.myapp.handler.board.BoardViewHandler;
 import bitcamp.myapp.vo.Assignment;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Member;
-import bitcamp.util.ObjectRepository;
 import bitcamp.util.Prompt;
+import java.util.ArrayList;
 
 public class App {
 
@@ -30,10 +30,10 @@ public class App {
     Prompt prompt = new Prompt(System.in);
     //new MainMenu(prompt).execute();
 
-    ObjectRepository<Assignment> assignmentRepository = new ObjectRepository<>();
-    ObjectRepository<Board> boardRepository = new ObjectRepository<>();
-    ObjectRepository<Member> memberRepository = new ObjectRepository<>();
-    ObjectRepository<Board> greetingRepository = new ObjectRepository<>();
+    ArrayList<Assignment> assignmentRepository = new ArrayList<>();
+    ArrayList<Board> boardRepository = new ArrayList<>();
+    ArrayList<Member> memberRepository = new ArrayList<>();
+    ArrayList<Board> greetingRepository = new ArrayList<>();
 
     MenuGroup mainMenu = new MenuGroup("메인");
 

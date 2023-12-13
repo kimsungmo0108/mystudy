@@ -209,3 +209,7 @@ Board[] boards = new Board[this.objectRepository.size()];
 this.objectRepository.toArray(boards);
 방법2
 Board[] boards = this.objectRepository.toArray(new Board[0]);
+
+Arrays.copyOf(this.objects, this.length);
+
+System.arraycopy(this.objects, index + 1, this.objects, index, this.length - (index + 1));
