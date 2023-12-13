@@ -5,29 +5,16 @@ import java.util.Scanner;
 public class Main {
   public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
-    int[] nums = new int[10];
-    int c = 0, c1 = 0;
-    int j, j1 = 0;
-
+    boolean[] no = new boolean[42];
+    int c = 0;
     for (int i = 0; i < 10; i++) {
-      nums[i] = (scanner.nextInt() % 42);
+      no[scanner.nextInt() % 42] = true;
     }
-
-    for (int i = 0; i < 10; i++) {
-      for (int k = i + 1; k < 10; k++) {
-        j = nums[i] != nums[k] ? 1 : 0;
-        if (j == 1) {
-          j1++;
-        } else if (j == 0) {
-          break;
-        }
-      }
-      if (j1 > 0) {
+    for (int i = 0; i < 42; i++) {
+      if (no[i]) {
         c++;
-        j1 = 0;
       }
     }
-
     System.out.println(c);
 
     scanner.close();
