@@ -7,9 +7,9 @@ public class Exam0221 {
     Integer obj2 = new Integer(100);
     Integer obj3 = new Integer(100);
 
-    Integer i1 = Integer.valueOf(128);
-    Integer i2 = Integer.valueOf(128);
-    Integer i3 = Integer.valueOf(128);
+    Integer i1 = Integer.valueOf(127);
+    Integer i2 = Integer.valueOf(127);
+    Integer i3 = Integer.valueOf(127);
 
     // 1) 생성자를 통해 객체를 만들면 무조건 새 객체를 만든다.
     System.out.println(obj1 == obj2);

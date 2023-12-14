@@ -2134,11 +2134,13 @@ System.out.println(d1.getMonth() + 1);
 System.out.println(d1.getDate());
 // 스태틱 메서드 활용
 long currMillis = System.currentTimeMillis();
+
 // ★ 생성자 활용
 java.sql.Date today = new java.sql.Date(currMillis);
 String str = today.toString();
 System.out.println(str);
 → YYYY-MM-DD로 출력
+
 // ★ 스태틱 메서드 활용
 java.sql.Date d = java.sql.Date.valueOf("2019-12-30");
 System.out.println(d);

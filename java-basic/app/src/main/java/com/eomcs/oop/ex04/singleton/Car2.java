@@ -19,6 +19,3 @@ public class Car2 {
 }
 
 
-
-
-
