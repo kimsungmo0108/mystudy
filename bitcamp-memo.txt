@@ -2059,6 +2059,177 @@ ArrayList() 클래스
 
 
 
+2023.12.14(목)
+
+제네릭 → 특정 타입에 클래스를 일반화 시킨다, 타입을 제한
+
+객체지향 문법
+ISO-8859-1 → 변화(Encoding) → UTF-16BE 
+Charset.defaultCharset();
+→ JVM에서 외부로 데이터를 내보내거나 외부에서 데이터를 읽을 때 사용하는 문자 규칙
+JVM(UTF-16BE) ↔ OS(UTF-8)
+
+★ immutable(불변)
+String s1 = new String("Hello");
+String s2 = s1.concat(", world!");
+→ Hello + , world! → 결합해서 새로운 문자열을 만든다(새 String 객체) → 기존 객체를 변경하지 않는다
+
+★ 바이트 배열로 꺼낼 때
+byte[] bytes = s3.getBytes();
+→ 기본 인코딩 방식(UTF-8)으로 코드 값 저장
+byte[] bytes = s3.getBytes("인코딩 방식")
+→ 호환성을 높이자
+
+★ 형식을 갖춘 문자열을 만들기
+String s4 = String.format("%s님 반갑습니다", "홍길동");
+→ 스트링 객체를 만들어서 객체 주소 반환
+
+★ 구분자와 문자열들을 파라미터로 받아서 새 문자열을 만든다.
+String s5 = String.join(":", "홍길동", "임꺽정", "유관순");
+
+★ primitive 값을 문자열로 만든다.
+String s6 = String.valueOf(true); // "true"
+String s7 = String.valueOf(3.14f); // "3.14"
+String s8 = String.valueOf(100); // "100"
+Integer x2 = Integer.valueOf("44", 16); // 16진수라고 지정한다.
+
+★ Integer 객체에서 int 값을 뽑아 낼 때 
+int v1 = i2.intValue(); 
+
+★int 변환
+int v2 = Integer.parseInt("1280"); // String
+
+★ 2진수, 8진수, 16진수로 변환
+String s1 = Integer.toBinaryString(77);
+String s2 = Integer.toOctalString(77);
+String s3 = Integer.toHexString(77);
+
+★ ValueOf()로 만들면 한 객체만 생성해서 사용(-128~127
+Integer i1 = Integer.valueOf(127);
+Integer i2 = Integer.valueOf(127);
+Integer i3 = Integer.valueOf(127);
+→ 인테저 객체를 만든다(-128~127)
+
+★ Math 클래스
+// => 절대값 계산
+System.out.println(Math.abs(-200));
+// => ceil() : 파라미터로 주어진 부동소수점이 바로 위 큰 정수 값을 리턴
+// => floor() : 파라미터로 주어니 부동소수점의 바로 밑 작은 정수 값을 리턴
+System.out.println(Math.ceil(3.28)); // 4
+System.out.println(Math.floor(3.28)); // 3
+System.out.println(Math.ceil(-3.28)); // -3
+System.out.println(Math.floor(-3.28)); // -4
+// => 2의 7승 값을 알고 싶을 때
+System.out.println(Math.pow(2, 7));
+// => 반올림하여 정수 값 리턴
+System.out.println(Math.round(3.14));
+System.out.println(Math.round(3.54));
+
+★ 오늘 데이트 객체 만들어서 출력
+Date d1 = new Date();
+String str0 = d1.toString();
+// 인스턴스 메서드 활용
+System.out.println(d1.getYear() + 1900);
+System.out.println(d1.getMonth() + 1);
+System.out.println(d1.getDate());
+// 스태틱 메서드 활용
+long currMillis = System.currentTimeMillis();
+// ★ 생성자 활용
+java.sql.Date today = new java.sql.Date(currMillis);
+String str = today.toString();
+System.out.println(str);
+→ YYYY-MM-DD로 출력
+// ★ 스태틱 메서드 활용
+java.sql.Date d = java.sql.Date.valueOf("2019-12-30");
+System.out.println(d);
+// println()에 문자열을 주지 않고 그냥 객체(의 주소)를 넘기면
+// println() 내부에서 해당 객체의 toString()을 호출한 후에 
+// 그 리턴 값을 출력한다.
+
+★ 캘린더 클래스 ★
+Calendar c = Calendar.getInstance();
+System.out.println(c.get(5));
+// 인스턴스 메서드 활용
+System.out.println(c.get(1)); // 년도
+System.out.println(c.get(2) + 1); // 월(0 ~ 11)
+System.out.println(c.get(5)); // 일
+System.out.println(c.get(7)); // 요일(1 ~ 7)
+System.out.println(c.get(4)); // 그 달의 몇 번째 주
+System.out.println(c.get(10)); // 시(0 ~ 11)
+System.out.println(c.get(11)); // 시(24시)
+System.out.println(c.get(12)); // 분
+System.out.println(c.get(13)); // 초
+System.out.println("-----------------------");
+// 상수의 활용
+System.out.println(c.get(Calendar.YEAR)); // 년도
+System.out.println(c.get(Calendar.MONTH) + 1); // 월(0 ~ 11)
+System.out.println(c.get(Calendar.DATE)); // 일
+System.out.println(c.get(Calendar.DAY_OF_WEEK)); // 요일(1 ~ 7)
+System.out.println(c.get(Calendar.WEEK_OF_MONTH)); // 그 달의 몇 번째 주
+System.out.println(c.get(Calendar.HOUR)); // 시(0 ~ 11)
+System.out.println(c.get(Calendar.HOUR_OF_DAY)); // 시(24시)
+System.out.println(c.get(Calendar.MINUTE)); // 분
+System.out.println(c.get(Calendar.SECOND)); // 초
+
+★ 상속하지 않고 기능 추가
+Car() { model, maker, capacity }
+1. Car() { model, maker, capacity } + { sunroof, auto } → 기존 코드를 복제 후 코드 추가
+→ 새로운 생성자를 생성해서 기존 생성자를 호출한다
+기존 코드의 코드(기능) 추가
+→ 기능을 덧붙이면 점점 더 누더기 코드가 된다
+기능(코드) 추가 → 기존 코드 변경 → 쓰지도 않는 코드가 남게되어 누더기 코드가 된다
+2. Car() 클래스를 각 고객사에 복제 후 기능 추가
+문제점
+① 원본 코드에 오류 발생 → 복사해서 만든 모든 코드를 변경해야 한다
+② 원본 코드에 기능 추가 → 복사해서 만든 모든 코드에도 기능 추가, 변경해야 한다
+③ 중복 코드 발생!
+3. ★ 기존 코드를 손대지 않고 추가/변경 → 상속(Inheritance)
+Car() { model, maker, capacity } → 상속 → Car2() { sunroof, auto }
+장점
+→ 기존 코드가 소스파일이 필요 없다(클래스 파일만 필요)
+→ 간단한 선언으로 상속 받겠다고 표시한 후 새 기능만 추가하면 된다
+→ 기존 코드를 변경하면 상속 받는 모든 서브 클래스에 바로 적용된다
+→ 중복 코드가 생성되지 않는다
+단점
+→ 무조건 기존 코드의 모든 기능을 상속 받아야 한다
+→ 일부 기능만 상속 받기는 불가능
+예)
+class Sedan extends Car{
+	boolean sunroof;
+	boolean auto;
+}
+→ Car() : parent class = super class
+→ Sedan() : child class = sub class 
+특징 
+→ 기존 코드의 소스 파일이
+Sedan c = new Sedan("tico", "bit car", 5, true, true);
+① 인스턴스 생성 → super 클래스의 인스턴스 변수부터 생성
+Car()(super, parent) ◁---- extends---- Sedan()(sub, child)
+→ 코드 재사용성을 높인다
+
+class Calculator2 extends Calculator() {}
+인스턴스 변수는 super class에서 sub class 순으로 선언(Calculator2의 인스턴스)
+c.plus(5);
+→ Calculator2에서 plus() 찾는다 → 없으면 상속 계층을 따라가면서 찾는다
+c.multiple(2);
+→ Calculator2의 multiple() 호출
+→ 서브 클래스를 실행하려면 반드시 수퍼 클래스가 있어야한다
+→ 수퍼 클래스로 지정한 코드를 내것처럼 쓰겠다는 의미
+
+class Score2 extends Score() {}
+s1.compute();
+→ 수퍼 클래스의 메소드와 동일한 signeture(메소드명, 파라미터, 리턴타입)로 재정의 하는 것이 낫다
+→ super class의 메소드를 sub class의 역할에 맞게끔 재정의
+→ 오버라이딩 (재정의, Overriding)
+
+
+
+
+
+
+
+
+
 
 
 
