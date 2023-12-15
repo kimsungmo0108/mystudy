@@ -13,6 +13,7 @@ public class Exam0420 {
     void m1() {
       System.out.println("X의 m1()");
     }
+
     void m2() {
       System.out.println("X의 m2()");
     }
@@ -48,7 +49,7 @@ public class Exam0420 {
       this.m2(); // X3의 m2()
       super.m2(); // X3의 m2()
 
-      //      super.super.m1(); // 컴파일 오류! 이런 문법은 없다! 무협지 문법!
+      // super.super.m1(); // 컴파일 오류! 이런 문법은 없다! 무협지 문법!
 
     }
   }
@@ -58,14 +59,8 @@ public class Exam0420 {
     obj.test();
 
     // 레퍼런스에서 super를 사용할 수 없다.
-    //    obj.super.m1(); // 컴파일 오류!
+    // obj.super.m1(); // 컴파일 오류!
   }
 }
-
-
-
-
-
-
 
 

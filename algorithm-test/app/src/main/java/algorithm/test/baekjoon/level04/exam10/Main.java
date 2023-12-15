@@ -19,6 +19,7 @@ public class Main {
       score[i] = score[i] / max * 100;
       total += score[i];
     }
+    System.out.println(max);
     System.out.println(total / n);
     scanner.close();
   }
