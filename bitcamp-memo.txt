@@ -2236,9 +2236,98 @@ singleton
 Factory Method
 인스턴스를 생성하는게 복잡할 때 인스턴스 생성 기능을 메소드로 구분하자
 
+B b = new D();
+→ 다형적 변수 : 서브 클래스의 인스턴스 주소도 저장할 수 있다
+→ 형식상 b는 B 클래스의 레퍼런스
+→ B를 통해서 m3(), m4()를 찾아갈 수 없다
 
+★ 생성자는 수퍼 클래스로부터 해당 클래스까지 내려온다
+→ 인스턴스 생성 → C 클래스 생성자 호출 → B 클래스 생성자 호출 → A 클래스 생성자 호출 → 수퍼 클래스로부터 해당 클래스까지 리턴
+→ 각 생성자 앞에 super();를 컴파일이 자동으로 붙인다 → A 클래스는 Object 클래스 생성자를 호출
 
+★ 메소드 호출은 해당 클래스로부터 수퍼 클래스로 따라 올라간다
 
+★ 다중 상속
+→ 수퍼클래스의 코드가 겹칠수 있기 때문에 자바는 다중상속을 허락하지 않는다
+
+상속 : Specialization(전문화) , Generalization(일반화)
+Specialization(전문화)
+① Car() { model, maker, capacity, run() }
+② Sedan extends Car() { doSunroof(), run()(overriding) } → Specialization
+③ Truck extends Car() { dump(), run()(overriding) } → Specialization
+→ 수퍼 클래스를 상속 받아 서브 클래스를 만드는 것
+
+Generalization(일반화)
+① Sedan() { model, maker, capacity, run(), doSunroof() }
+② Truck() { model, maker, capacity, run(), dump() }
+→ 서브 클래스들의 공통 필드, 메소드 발견 → "코드 중복"
+③ Car() { model, maker, capacity, run() } 
+→ 중복 코드를 분리해서 super 클래스로 정의
+→ 서브 클래스들의 공통 기능을 뽑아 수퍼 클래스를 만드는 것
+
+★ 상속과 추상 클래스, 추상 메소드
+추상 클래스
+Sedan() { start(), shutdown(), run(), dosunroof() }
+Truck() { launch(), stop(), go(), dump() }
+→ 유사 기능 발견 → Generalization → Car 수퍼 클래스 정의
+Car() { start(), shutdown(), run() } → Sedan()과 Truck()에 상속
+→ 직접 Car 클래스를 사용하지 않도록 막을 필요가 있다
+→ 왜? Car 클래스의 목적은 Sedan()과 Truck()의 공통 코드 유지이기 때문이다
+→ 추상 클래스로 만든다
+★ abstract class Car() {} → Car c = new Car(); 인스턴스 생성 불가능
+abstract class  <=>  concrete class
+★ 추상 메소드
+run() 서브 클래스의 역할에 맞게 재정의 해야한다
+→ 어차피 서브 클래스에서 정의할 메소드라면 굳이 수퍼 클래스에 정의할 필요가 있는가?
+→ 있다. 메소드 시그너처(method signature)를 통일하기 위해서!
+→ 대신 서브 클래스에서 반드시 재정의 할 메소드라면 수퍼 클래스에서 구체적으로 구현하지 말라!
+→ 이것이 추상 메소드 → public abstract void run(); → {} 메소드 몸체를 가지지 않는다 → 메소드 시그너처(method signature)만 선언한다
+응용
+① 서브 클래스에서 재정의 할 메소드
+② 서브 클래스에서 반드시 재정의 하도록 강요하고 싶을 때
+★ 일반 클래스(concrete class)는 추상 메소드를 선언할 수 없다 → 추상 클래스와 인터페이스에서만 선언 가능
+
+★ 다형성(Polymophism)
+Vehiclea(){} 
+    → Bike
+    → Car
+        → Sedan
+        → Truck
+
+★ instanceof 연산자?
+=> 레퍼런스에 들어있는 주소가 특정 클래스의 인스턴스인지 검사한다.
+=> 또는 그 상위/하위 클래스의 인스턴스인지 검사한다.
+Vehicle v = new Sedan();
+System.out.println(v instanceof Sedan);
+System.out.println(v instanceof Car);
+System.out.println(v instanceof Vehicle);
+System.out.println(v instanceof Object);
+System.out.println(v instanceof Truck);
+System.out.println(v instanceof Bike);
+
+★ getClass() 연산자?
+=> 레퍼런스가 가리키는 인스턴스의 실제 클래스 정보를 리턴한다.
+=> == 연산자를 사용하여 특정 클래스의 인스턴스인지 좁혀서 검사할 수 있다.
+클래스명.class
+=> 클래스 정보를 갖고 있는 스태틱 변수이다.
+Vehicle v = new Sedan();
+System.out.println(v.getClass() == Sedan.class);
+System.out.println(v.getClass() == Car.class);
+System.out.println(v.getClass() == Vehicle.class);
+System.out.println(v.getClass() == Truck.class);
+System.out.println(v.getClass() == Bike.class);
+
+★ 다형성-오버로딩, 오버라이딩
+오버로딩
+plusi(int, int) : int
+plusf(float, float) : float
+→ 같은 이름의 메소드를 중복해서 만들수 없다면 위와 같이 유사한 이름으로 만들어야 한다
+→ 개발자는 더하기 계산을 수행할 때 타입에 따라 해당 메소드를 호출해야 한다 → 일관성이 없고 유지보수가 불편하다
+→ 파라미터의 형식(타입과 개수)은 다르지만 같은 기능을 수행하는 메소드에 대해 같은 이름을 부여함으로써 프로그래밍의 일관성을 제공하기 위한 문법이다
+오버라이딩
+→ 상속 받은 메소드를 서브 클래스의 역할에 맞게 재정의하는 문법
+→ 메소드 이름과 매개변수 개수나 타입이 같아야한다 → 시그너처(메소드 이름, 파라미터 타입, 개수, 순서)가 같아야한다
+→ 원래의 메소드보다 접근 범위가 같거나 같아야한다
 
 
 
