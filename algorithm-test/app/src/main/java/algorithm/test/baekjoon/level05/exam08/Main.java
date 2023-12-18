@@ -4,12 +4,17 @@ import java.util.Scanner;
 
 public class Main {
   public static void main(String[] args) {
-    Scanner scanner = new Scanner(System.in);
-    String[] str = new String[5];
-    int n = 0;
+    Scanner input = new Scanner(System.in);
 
+    String S = input.nextLine();
 
-
-    scanner.close();
+    if (S.equals(" ")) {
+      System.out.println(0);
+    } else {
+      S = S.strip();
+      String[] Sarr = S.split(" ");
+      System.out.println(Sarr.length);
+    }
+    input.close();
   }
 }
