@@ -2250,7 +2250,7 @@ B b = new D();
 ★ 다중 상속
 → 수퍼클래스의 코드가 겹칠수 있기 때문에 자바는 다중상속을 허락하지 않는다
 
-상속 : Specialization(전문화) , Generalization(일반화)
+★ 상속 : Specialization(전문화) , Generalization(일반화)
 Specialization(전문화)
 ① Car() { model, maker, capacity, run() }
 ② Sedan extends Car() { doSunroof(), run()(overriding) } → Specialization
@@ -2344,6 +2344,121 @@ this 레퍼런스
 super 레퍼런스
 → 메소드가 소속된 클래스의 수퍼 클래스, 예 : A 에서 메소드를 찾아 호출한다
 → 수퍼 클래스에 없으면 그 상위 클래스로 따라 올라간다
+
+
+
+2023.12.18(월)
+
+인스턴스 필드 찾을 때
+this → 메소드가 소속된 클래스의 필드부터 찾아 올라간다
+super → 메소드가 소속된 클래스의 수퍼 클래스부터 찾아 올라간다
+
+오버라이딩 메소드의 리턴 타입
+static class Car {}
+static class Sedan extends Car {}
+static class Truck extends Car {}
+static class Tico extends Sedan {}
+
+static class CarFactory {
+	Car create() {
+		return new Car();
+	}
+}
+
+static class SedanFactory extends CarFactory {
+	// 오버라이딩 메서드의 리턴 타입은
+	// 서브 클래스도 가능하다.
+	@Override
+	Sedan create() {
+		return new Sedan();
+	}
+}
+
+static class TicoFactory extends SedanFactory {
+	// 오버라이딩 메서드의 리턴 타입은
+	// 서브 클래스도 가능하다.
+	@Override
+	Tico create() {
+		return new Tico();
+	}
+}
+
+★ 클래스 앞에 final을 붙이면
+→ 서브 클래스를 만들 수 없다
+→ 서브 클래스의 생성을 방지하여 기존 클래스를 대체하지 못하도록 할 때 사용한다
+
+★ 메소드 앞에 final을 붙이면
+→ 오버라이딩 불가!!!!
+→ 서브 클래스에서 변경하면 안되는 메소드인 경우에 사용한다
+→ 보안에 관련된 메소드들에 사용된다
+
+★ 인스턴스, 스태틱 변수(필드) 생성할 때 final 붙이면 
+→ 상수 필드가 된다
+→ 생성자에서 초기화해야 한다
+→ 초기화 문장에서 값을 설정했으면 생성자에서 다시 값을 설정할 수 없다
+
+★ 로컬 변수 앞에 final 붙이면
+→ 값을 변경할 수 없는 상수로 사용
+
+★ 파라미터 앞에 final 붙이며
+→ 파라미터는 메소드가 호출될 때 외부의 값을 받는 용도의 변수다
+→ 메소드 안에서 파라미터 값을 임의로 변경하게 되면 처음 받은 파라미터 값을 사용하지 못하는 상황이 발생한다
+→ 그래서 이런 상황을 피하고자 보통 실무에서 파라미터 final로 선언한다
+→ 메소드 안에서는 값을 바꿀 수 없다 하지만 메소드 호출할 때 아규먼트 값은 변경 가능
+
+★ 추상 클래스의 목적
+→ 추상 메소드가 있든 없든 상관없이 추상 클래스를 만들 수 있다
+→ 서브 클래스에게 공통 필드나 메소드를 상속해주는 것이 목적이다
+→ 직접 사용하지 않는다
+→ 여러 클래스를 같은 타입으로 묶기 위함이다
+→ 상속에서 generalization을 통해 수퍼 클래스를 정의하는 경우에 그 수퍼 클래스를 주로 추상 클래스로 만든다.
+
+★ 추상 클래스
+→ 메소드 선언부에 abstract를 붙인다
+→ 메소드 몸체가 없다
+→ 추상 클래스나 인터페이스에서만 선언할 수 있다
+→ 서브 클래스마다 구현이 다를 수 있는 경우에 사용한다
+→ 서브 클래스가 반드시 구현해야 하는 메소드가 있다면 추상 메소드로 선언하라(강요하는 것이다)
+→ 이것 또한 오버라이딩이다
+→ 서브 클래스에서 추상 메소드를 구현하지 않는다면 추상 클래스가 되어야 한다
+→ ★ 서브 클래스들이 가져야할 공통 변수나 메서드를 제공하는 것이다.
+
+★ 추상 메소드, 추상 클래스를 활용한 GoF의 Template Methode 패턴
+→ prepareRecipe() 
+→ 어차피 서브 클래스에서 재정의해야한다
+→ 추상 메소드로 선언하라! 
+→ 이 메소드는 서브 클래스를 만들 때 일정의 틀 역할을 한다
+→ 이것이 Template Method(= abstract method)이다
+
+★ Template Method(템플릿 메소드)
+→ 실행 흐름(일고리즘)을 수퍼 클래스에서 정의하고 구체적인 동작의 정의는 서브 클래스에 맡긴다
+→ 규칙을 발견해서 규칙을 정의해서 상속으로 메소드의 역할에 맞춰 재정의한다
+
+★ getter/setter 를 다른 말로 "프로퍼티(property)"라 부른다.
+   → getter만 있는 경우: read only 프로퍼티
+   → setter만 있는 경우: write only 프로퍼티
+   → getter/setter 모두 있는 경우: read/write 프로퍼티
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
