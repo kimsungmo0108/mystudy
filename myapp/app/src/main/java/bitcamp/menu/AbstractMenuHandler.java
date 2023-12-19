@@ -1,16 +1,25 @@
 package bitcamp.menu;
 
 import bitcamp.util.AnsiEscape;
+import bitcamp.util.Prompt;
 
 public abstract class AbstractMenuHandler implements MenuHandler {
 
+  protected Prompt prompt;
+  protected Menu menu;
+
+  protected AbstractMenuHandler(Prompt prompt) {
+    this.prompt = prompt;
+  }
+
   @Override
   public void action(Menu menu) {
-    printMenuTitle(menu.getTitle());
+    this.printMenuTitle(menu.getTitle());
+    this.menu = menu;  // 서브 클래스를 구현할 때 사용할 일이 있다면 쓸 수 있도록 보관해 둔다
 
     // Menu를 실행할 때 이 메소드가 호출되면
     // 즉시 서브 클래스의 다음 메소드를 호출한다
-    action();
+    this.action();
   }
 
   private void printMenuTitle(String title) {

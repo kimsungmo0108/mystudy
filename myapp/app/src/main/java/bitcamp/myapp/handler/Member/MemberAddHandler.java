@@ -7,17 +7,16 @@ import java.util.ArrayList;
 
 public class MemberAddHandler extends AbstractMenuHandler {
 
-  private Prompt prompt;
   private ArrayList<Member> objectRepository;
 
   public MemberAddHandler(ArrayList<Member> objectRepository, Prompt prompt) {
+    super(prompt);
     this.objectRepository = objectRepository;
-    this.prompt = prompt;
   }
 
   @Override
   public void action() {
-    
+
     Member member = new Member();
     member.setEmail(this.prompt.input("이메일? "));
     member.setName(this.prompt.input("이름? "));
