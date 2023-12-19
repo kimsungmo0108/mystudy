@@ -10,7 +10,7 @@ public class Main {
     while (sc.hasNext()) {
       str = sc.nextLine();
       System.out.println(str);
-      if (str.equalsIgnoreCase("exit")) {
+      if (str.equals("exit")) {
         break;
       }
     }
