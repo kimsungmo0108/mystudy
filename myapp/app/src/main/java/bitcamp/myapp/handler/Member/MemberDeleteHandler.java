@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public class MemberDeleteHandler implements MenuHandler {
 
-  Prompt prompt;
-  ArrayList<Member> objectRepository;
+  private Prompt prompt;
+  private ArrayList<Member> objectRepository;
 
   public MemberDeleteHandler(ArrayList<Member> objectRepository, Prompt prompt) {
     this.objectRepository = objectRepository;

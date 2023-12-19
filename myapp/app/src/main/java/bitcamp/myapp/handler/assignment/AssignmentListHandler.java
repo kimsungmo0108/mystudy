@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class AssignmentListHandler implements MenuHandler {
 
-  ArrayList<Assignment> objectRepository;
+  private ArrayList<Assignment> objectRepository;
 
 
   public AssignmentListHandler(ArrayList<Assignment> objectRepository) {
@@ -24,7 +24,7 @@ public class AssignmentListHandler implements MenuHandler {
     this.objectRepository.toArray(assignments);
 
     for (Assignment assignment : assignments) {
-      System.out.printf("%-20s\t%s\n", assignment.title, assignment.deadline);
+      System.out.printf("%-20s\t%s\n", assignment.getTitle(), assignment.getDeadline());
     }
   }
 }

@@ -6,9 +6,9 @@ import bitcamp.util.Prompt;
 // - 다른 Menu 객체를 포함한다.
 public class MenuGroup implements Menu {
 
-  String title;
-  Menu[] menus = new Menu[10];
-  int menuSize;
+  private String title;
+  private Menu[] menus = new Menu[10];
+  private int menuSize;
 
   public MenuGroup(String title) {
     this.title = title;

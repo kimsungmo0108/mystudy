@@ -12,8 +12,8 @@ import java.util.ArrayList;
 //
 public class BoardModifyHandler implements MenuHandler {
 
-  ArrayList<Board> objectRepository;
-  Prompt prompt;
+  private ArrayList<Board> objectRepository;
+  private Prompt prompt;
 
   public BoardModifyHandler(ArrayList<Board> objectRepository, Prompt prompt) {
     this.objectRepository = objectRepository;
@@ -25,17 +25,17 @@ public class BoardModifyHandler implements MenuHandler {
     System.out.printf(AnsiEscape.ANSI_BOLD + "[%s]\n" + AnsiEscape.ANSI_CLEAR, menu.getTitle());
 
     int index = this.prompt.inputInt("번호? ");
-    Board oldBoard = (Board) this.objectRepository.get(index);
+    Board oldBoard = this.objectRepository.get(index);
     if (oldBoard == null) {
       System.out.println("게시글 번호가 유효하지 않습니다.");
       return;
     }
 
     Board board = new Board();
-    board.title = this.prompt.input("제목(%s)? ", oldBoard.title);
-    board.content = this.prompt.input("내용(%s)? ", oldBoard.content);
-    board.writer = this.prompt.input("작성자(%s)? ", oldBoard.writer);
-    board.createdDate = this.prompt.input("작성일(%s)? ", oldBoard.createdDate);
+    board.setTitle(this.prompt.input("제목(%s)? ", oldBoard.getTitle()));
+    board.setContent(this.prompt.input("내용(%s)? ", oldBoard.getContent()));
+    board.setWriter(this.prompt.input("작성자(%s)? ", oldBoard.getWriter()));
+    board.setCreatedDate(this.prompt.input("작성일(%s)? ", oldBoard.getCreatedDate()));
 
     this.objectRepository.set(index, board);
   }

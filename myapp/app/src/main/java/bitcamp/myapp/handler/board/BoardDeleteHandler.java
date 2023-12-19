@@ -12,8 +12,8 @@ import java.util.ArrayList;
 //
 public class BoardDeleteHandler implements MenuHandler {
 
-  ArrayList<Board> objectRepository;
-  Prompt prompt;
+  private ArrayList<Board> objectRepository;
+  private Prompt prompt;
 
   public BoardDeleteHandler(ArrayList<Board> objectRepository, Prompt prompt) {
     this.objectRepository = objectRepository;

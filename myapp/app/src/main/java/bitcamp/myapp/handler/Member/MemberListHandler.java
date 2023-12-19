@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class MemberListHandler implements MenuHandler {
 
-  ArrayList<Member> objectRepository;
+  private ArrayList<Member> objectRepository;
 
   public MemberListHandler(ArrayList<Member> objectRepository) {
     this.objectRepository = objectRepository;
@@ -22,9 +22,10 @@ public class MemberListHandler implements MenuHandler {
 
     Member[] members = new Member[this.objectRepository.size()];
     this.objectRepository.toArray(members);
-    
+
     for (Member member : members) {
-      System.out.printf("%-10s\t%30s\t%s\n", member.name, member.email, member.createdDate);
+      System.out.printf("%-10s\t%30s\t%s\n", member.getName(), member.getEmail(),
+          member.getCreatedDate());
     }
   }
 }

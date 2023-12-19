@@ -12,8 +12,8 @@ import java.util.ArrayList;
 //
 public class BoardViewHandler implements MenuHandler {
 
-  ArrayList<Board> objectRepository;
-  Prompt prompt;
+  private ArrayList<Board> objectRepository;
+  private Prompt prompt;
 
   public BoardViewHandler(ArrayList<Board> objectRepository, Prompt prompt) {
     this.objectRepository = objectRepository;
@@ -25,15 +25,15 @@ public class BoardViewHandler implements MenuHandler {
     System.out.printf(AnsiEscape.ANSI_BOLD + "[%s]\n" + AnsiEscape.ANSI_CLEAR, menu.getTitle());
 
     int index = this.prompt.inputInt("번호? ");
-    Board board = (Board) this.objectRepository.get(index);
+    Board board = this.objectRepository.get(index);
     if (board == null) {
       System.out.println("게시글 번호가 유효하지 않습니다.");
       return;
     }
 
-    System.out.printf("제목: %s\n", board.title);
-    System.out.printf("내용: %s\n", board.content);
-    System.out.printf("작성자: %s\n", board.writer);
-    System.out.printf("작성일: %s\n", board.createdDate);
+    System.out.printf("제목: %s\n", board.getTitle());
+    System.out.printf("내용: %s\n", board.getContent());
+    System.out.printf("작성자: %s\n", board.getWriter());
+    System.out.printf("작성일: %s\n", board.getCreatedDate());
   }
 }

@@ -12,8 +12,8 @@ import java.util.ArrayList;
 //
 public class BoardAddHandler implements MenuHandler {
 
-  Prompt prompt;
-  ArrayList<Board> objectRepository;
+  private Prompt prompt;
+  private ArrayList<Board> objectRepository;
 
   public BoardAddHandler(ArrayList<Board> objectRepository, Prompt prompt) {
     this.objectRepository = objectRepository;
@@ -25,10 +25,10 @@ public class BoardAddHandler implements MenuHandler {
     System.out.printf(AnsiEscape.ANSI_BOLD + "[%s]\n" + AnsiEscape.ANSI_CLEAR, menu.getTitle());
 
     Board board = new Board();
-    board.title = this.prompt.input("제목? ");
-    board.content = this.prompt.input("내용? ");
-    board.writer = this.prompt.input("작성자? ");
-    board.createdDate = this.prompt.input("작성일? ");
+    board.setTitle(this.prompt.input("제목? "));
+    board.setContent(this.prompt.input("내용? "));
+    board.setWriter(this.prompt.input("작성자? "));
+    board.setCreatedDate(this.prompt.input("작성일? "));
 
     // 목록에 객체를 추가시키는 코드를 BoardRepository가 감췄다.(캡슐화 했다)
     // 대신 목록에 객체를 추가시킬 수 있도록 메서드를 제공하고 있다.

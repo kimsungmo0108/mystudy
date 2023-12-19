@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public class AssignmentAddHandler implements MenuHandler {
 
-  Prompt prompt;
-  ArrayList<Assignment> objectRepository;
+  private Prompt prompt;
+  private ArrayList<Assignment> objectRepository;
 
 
   public AssignmentAddHandler(ArrayList<Assignment> objectRepository, Prompt prompt) {
@@ -23,9 +23,9 @@ public class AssignmentAddHandler implements MenuHandler {
     System.out.printf(AnsiEscape.ANSI_BOLD + "[%s]\n" + AnsiEscape.ANSI_CLEAR, menu.getTitle());
 
     Assignment assignment = new Assignment();
-    assignment.title = this.prompt.input("과제명? ");
-    assignment.content = this.prompt.input("내용? ");
-    assignment.deadline = this.prompt.input("제출 마감일? ");
+    assignment.setTitle(this.prompt.input("과제명? "));
+    assignment.setContent(this.prompt.input("내용? "));
+    assignment.setDeadline(this.prompt.input("제출 마감일? "));
 
     this.objectRepository.add(assignment);
   }
