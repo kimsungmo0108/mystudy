@@ -2503,7 +2503,7 @@ class CarFactory{
 물리적으로 존재하는 객체(학생) → 추상화 → class Student{String name; int age; ......} → 추상적인 데이터
 주문 → 추상화 → class Oder{.....} → 추상적인 데이터
 
-과제22. 셋터, 겟터 도입하기
+과제22. 접근 제어 modifier 및 셋터, 겟터 도입하기
 → 인스턴스 필드에 직접 접근하는 것을 막는 방법 : private
 → 인스턴스 필드에 값을 저장하고 꺼내는 방벙 : getter/setter
 
