@@ -2510,6 +2510,9 @@ class CarFactory{
 과제23. 상속(generalization)과 추상 클래스 활용하기
 → MenuHandler 구현체의 공통 분모를 추출하여 수퍼 클래스 정의하기
 → 수퍼 클래스를 추상 클래스로 정의하여 직접 사용을 막기
+→ action(Menu menu){ super.action(menu); }
+→ 오버라이딩 하기 전에 하던 일을 하게 하고 그 다음에 하위 클래스 일을 더하는 효과
+
 
 
 
