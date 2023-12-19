@@ -16,7 +16,7 @@ public class AssignmentDeleteHandler extends AbstractMenuHandler {
   }
 
   @Override
-  public void action() {
+  protected void action() {
 
     int index = this.prompt.inputInt("번호? ");
     if (this.objectRepository.remove(index) == null) {

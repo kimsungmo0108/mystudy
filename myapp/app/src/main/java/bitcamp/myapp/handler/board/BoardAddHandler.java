@@ -19,7 +19,7 @@ public class BoardAddHandler extends AbstractMenuHandler {
   }
 
   @Override
-  public void action() {
+  protected void action() {
     // MenuHandler 인터페이스에 선언된 메소드 대신
     // AbstractMenuHandler 클래스에 선언된 action() 추상 메소드를 구현한다
 

@@ -71,7 +71,7 @@ public class App {
     greetingMenu.add(new MenuItem("목록", new BoardListHandler(greetingRepository, prompt)));
     mainMenu.add(greetingMenu);
 
-    mainMenu.add(new MenuItem("도움말", new HelpHandler()));
+    mainMenu.add(new MenuItem("도움말", new HelpHandler(prompt)));
 
     mainMenu.execute(prompt);
 
