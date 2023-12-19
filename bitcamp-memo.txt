@@ -2349,7 +2349,7 @@ super 레퍼런스
 
 2023.12.18(월)
 
-인스턴스 필드 찾을 때
+다형적 변수(인스턴스 필드) 찾을 때
 this → 메소드가 소속된 클래스의 필드부터 찾아 올라간다
 super → 메소드가 소속된 클래스의 수퍼 클래스부터 찾아 올라간다
 
@@ -2439,17 +2439,69 @@ static class TicoFactory extends SedanFactory {
    → setter만 있는 경우: write only 프로퍼티
    → getter/setter 모두 있는 경우: read/write 프로퍼티
 
+this 메소드 → 실제 객체 기준
+super 메소드 → 메소드가 소속된 클래스 기준
+
+this 필드 → 메소드가 소속된 클래스 기준
+super 필드 → 메소드가 소속된 클래스 기준
 
 
 
+2023.12.19(화)
 
+protected 접근제어
+→ Y + 같은 패키지 + 서브 클래스 에서 접근 가능
+→ 서브 클래스가 만든 변수인 경우 접근 가능
+→ Y 클래스가 만든 변수이다 Exam0213 클래스가 만든 변수가 아니다
+class Exam0214 extends Y {
+	maint() {
+		Exam0214 obj = new Exam0214();
+		obj.protectedVar = 100;
+	}
+}
+→ Exam0214에서 Y 설게도에 따라 만든 변수
+→ Exam0214가 소유한 변수
 
+생성자를 private으로 선언
+→ 외부에서 이 클래스의 인스턴스를 생성하는 것을 막을 수 있다
+→ 인스턴스 생성 과정이 복잡할 경우
+→ 직접 인스턴스를 생성하기 보다는 인스턴스를 생성해주는 메서드를 사용하여 인스턴스를 만드는 것이 유지보수할 때 편하다.
+→ 즉 인스턴스를 생성해 주는 메서드를 통해 인스턴스를 생성하면 인스턴스를 사용하고픈 개발자는 코드가 간결해진다 이런 설계 방식에 대해 이름을 붙였으니 
+→ 이런 설계 방식에 대해 이름을 붙였으니 그 이름도 유명한 "factory method" 설계 패턴이다.
 
+팩토리 메소드(Factory Method) 패턴
+class Car {
+	private Car() {}  	  → 생성자를 private으로 만들어서 외부에서는 인스턴스 생성 불가
+	public static Car create() {
+		Car c = new Car();
+		return c;
+	}	
+}
+Car c = Car.create(); 
+→ Factory Method
+→ 호출할 때마다 새 객체를 만들어 리턴
 
+싱글톤(Singleton) 패턴
+class Car {
+	public Car(){}
+}
+class CarFactory{
+	private CarFactory(){}
+	static CarFactory instance;
+	public static CarFactory getInstance(){
+		if( instance == null ){
+			instance = new CarFactory();
+		}
+		return instance;
+	}
+}
+→ CarFactory factory = CarFactory.getInstance();
+→ Car c1 = factory.create();
+→ 같은 객체 리턴
 
-
-
-
+추상화 => 데이터화 + 연산자
+물리적으로 존재하는 객체(학생) → 추상화 → class Student{String name; int age; ......} → 추상적인 데이터
+주문 → 추상화 → class Oder{.....} → 추상적인 데이터
 
 
 
