@@ -2507,7 +2507,7 @@ class CarFactory{
 → 인스턴스 필드에 직접 접근하는 것을 막는 방법 : private
 → 인스턴스 필드에 값을 저장하고 꺼내는 방벙 : getter/setter
 
-과제23. 상속(generalization)과 추상 클래스 활용하기
+과제23. 상속(generalization)과 추상 클래스, 접근 제어 활용하기
 → MenuHandler 구현체의 공통 분모를 추출하여 수퍼 클래스 정의하기
 → 수퍼 클래스를 추상 클래스로 정의하여 직접 사용을 막기
 → action(Menu menu){ super.action(menu); }
