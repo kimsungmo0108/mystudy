@@ -2551,9 +2551,21 @@ class CarFactory{
 default 메소드 다중 구현 불가
 → 메소드가 구현된 경우 어느 메소드를 상속 받아야 하는지 결정할 수 없기 때문에 다중 구현 불가
 
+★ 인터페이스와 추상 클래스의 콜라보 ★
+<<interface>>ProtocolA (){ rule1(), rule2(), rule3(), rule4(), rule5(), rule6(), rule7(), rule8() }
+→ MyClass 클래스 구현하려면 인터페이스의 모든 규칙을 구현해야한다
+→ 추상 클래스에서 최소상태로 구현해서 상속을 한다
+<<abstract>>AbstractProtocolA implement ProtocolA (){ rule1(){}, rule2(){}, rule3(){}, rule4(){}, rule5(){}, rule6(){}, rule7(){}, rule8(){} }
+→ 추상 클래스를 상속 받아서 그 중에 필요한 규칙만 오버라이딩 하면 된다
 
+인터페이스 -- 추상클래스 콜라보 예
+<<interface>> Servlet() { init(), service(), destory(), gerServletInfo(), getServletConfig() } 
 
-
+<<concrete>> Myservlet2 implements () { init(){}, service(){}, destory(){}, gerServletInfo(){}, getServletConfig(){} }
+→ 인터페이스로 바로 구현하면 모든 추상 메소드를 구현해야한다
+<<abstract>> GenericServlet implements Servlet () { init(){}, destory(){}, gerServletInfo(){}, getServletConfig(){} }
+<<concrete>> MyServlet extends GenericServlet () { service(){} }
+→ 인터페이스로 추상 클래스를 구현하고 상속 받아서 구현하면 추상 클래스에서 구현하지 않은 추상 메소드만 구현하면 된다
 
 
 
