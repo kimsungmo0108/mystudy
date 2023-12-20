@@ -1,3 +1,12 @@
+★ 해시 값 활용 예 ★
+톰캣 서버 사이트 → tomcqt.zip 다운 → 로컬
+→ 해커가 개입해서 변조된 파일이 다운로드 될 수 있다
+→ 서버에 원본 파일과 같은지 검증이 필요하다
+→ 해시 알고리즘에 따라서 (PGP, SHA512) 해시 값 참조
+→ 우리 해시 값이랑 비교
+→ $ certutil -hashfile "apache-tomcat-9.0.84.zip" SHA512 
+→ 명령어로 해시 값 만들어서 비교하기
+
 ★ 로컬 변수와 클래스 변수 사용
 int a;
 static int b;
@@ -333,7 +342,37 @@ System.out.println(c.get(Calendar.HOUR_OF_DAY)); // 시(24시)
 System.out.println(c.get(Calendar.MINUTE)); // 분
 System.out.println(c.get(Calendar.SECOND)); // 초
 
+★ Object 클래스와 instanceof
+모든 클래스는 Object 클래스를 상속 받는다
+Object 클래스의 주요 메서드
+1) toString()
+=> 클래스이름과 해시코드를 리턴한다.(클래스 정보 간단히 출력)
+2) equals()
+=> 같은 인스턴스인지 검사한다. 
+3) hashCode()
+=> 인스턴스를 식별하는 값을 리턴한다.
+4) getClass()
+=> 인스턴스의 클래스 정보를 리턴한다.
+5) clone()
+=> 인스턴스를 복제한 후 그 복제 인스턴스를 리턴한다.
+6) finalize()
+=> 가비지 컬렉터에 의해 메모리에서 해제되기 직전에 호출된다.
 
+★ 해시 값 출력
+obj.toString();
+
+★ 인스턴스 값 비교, equals 메소드를 오버라이딩 해서 쓰기도 한다
+str.equals(str1);
+
+★ 해시 값(디지털 지문)
+=> 특정 수학 공식(알고리즘)(MD4, MD5, SHA, PGP, CRC 등)에 따라 값을 계산한다.
+=> 알고리즘이 좋을수록 같은 값을 가질 확률이 줄어든다
+=> 알고리즘이 좋은 이유는 복잡하고, 변환속가 느리고, 결과값이 커지기 때문이다
+Object에서 상속 받은 hashCode()는 인스턴스마다 고유의 4바이트 정수 값을 리턴한다.
+=> 이 값은 toString()의 출력 값으로 사용된다.
+=> System.out.println(Integer.toHexString(obj1.hashCode()));
+해시 값 간단 = 정확도 다운 = 생성시간 빠름
+해시 값 복잡 = 정확도 업 = 생성시간 느림
 
 
 

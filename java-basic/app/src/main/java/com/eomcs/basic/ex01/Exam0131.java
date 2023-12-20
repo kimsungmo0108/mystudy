@@ -40,6 +40,10 @@ public class Exam0131 {
     int gender;
     boolean working;
 
+    // @Override
+    // public int hashCode() {
+    // return Objects.hash(age, email, gender, name, tel, working);
+    // }
     @Override
     public boolean equals(Object obj) {
       if (this == obj)
@@ -54,12 +58,6 @@ public class Exam0131 {
           && working == other.working;
     }
   }
-
 }
-
-
-
-
-
 
 
