@@ -2573,8 +2573,9 @@ Object 클래스의 주요 메서드
 1) toString()
 => 클래스이름과 해시코드를 리턴한다.(클래스 정보 간단히 출력)
 => 객체의 타입이 String 타입이 아니라면 toString 메소드를 자동으로 호출
-2) equals()
+2) ★equals()
 => 같은 인스턴스인지 검사한다. 
+=> s1.equalsIgnoreCase(s2) → 알파벳에 대소문자 구분하지 않고 비교한다
 3) hashCode()
 => 인스턴스를 식별하는 값을 리턴한다.
 4) getClass()
@@ -2675,6 +2676,103 @@ public Score clone() throws CloneNotSupportedException {
 "aaa" + obj → 문자열과 레퍼런스 결합
 → "aaa" + "obj.toString() 리턴 값"
 → "aaa리턴값"
+  
+★ String 클래스
+Heap
+String s1 = new String("Hello");
+String s2 = new String("Hello");
+→ new 명령으로는 Heap에 새로운 인스턴스를 만들기 때문에 다른 객체가 생성
+★ 상수풀(Constant pool)
+String s3 = "Hello";
+String s4 = "Hello";
+→ 레퍼런스한테 바로 값을 넣으면 상수풀(Constant pool)이라는 곳에 생성된다
+→ 상수풀에 같은 값이 있다면 새로운 인스턴스를 만들지 않고 같은 값에 인스턴스 주소를 리턴한다
+String s2 = s1.intern();
+→ String 객체에 들어 있는 문자열과 동일한 문자열을 갖고 있는 String 객체를 상수풀에서 찾는다.
+→ 있으면 그 String 객체의 주소를 리턴한다. 없으면 상수풀에 String 객체를 생성한 후 그 주소를 리턴한다.
+
+String - toLowerCase()
+String s1 = new String("Hello");
+String s2 = s1.toLowerCase();
+→ 새 String 인스턴스 생성 하고 알파벳을 소문자로 바꾼 뒤 s2에 저장 
+→ String은 불변(Immutable) 객체이기 때문에 새로운 객체에 저장하는 것이다
+
+StringBuffer 객체는 mutable 객체이다.
+→ 인스턴스의 데이터를 변경할 수 있다
+→ 원래의 문자열을 변경하고 싶을 때 사용하는 클래스이다
+
+★ StringBuffer와 StringBuilder 차이점
+→ 여러 스레드가 작업해야 한다면 StringBuffer를 사용하고 한 스레드만 작업해야 한다면 StringBuilder를 사용한다
+StringBuffer
+→ 여러 스레드가 작업 할때 하나의 스레드만 작업할 수 있게 (동기화 지원)
+→ StringBuilder보다 작업시간이 느리다 하지만 작업이 안정적이다
+StringBuilder
+→ 여러 스레드가 작업 할때 다른 스레드가 작업 권한을 가지게 된다 (동기화 비지원)
+→ StringBuffer보다 작업시간이 빠르다 하지만 작업 권한을 막지 못해서 작업이 안정적이지 않다
+→ 여러 스레드가 작업해야 한다면 StringBuffer를 사용하고 한 스레드만 작업해야 한다면 StringBuilder를 사용한다
+
+★ StringBuffer와 MultiTread(스트링 버퍼)( HashTable : 동기화 )
+append(String str){
+	① 입력할 위치를 알아낸다
+	② 문자열을 붙인다
+	③ 저장된 문자열의 수를 변경한다
+}
+→ Tread → w1("AAAA"), w2("----"), w3("XXXX"), w4("****")
+→ w1이 진입 → ①②③(length=4) → return
+→ w3이 진입 → ①②③(length=8) → return
+	→ w3이 자원 권한을 뺏겨도 다른 스레드를 밀어내다가 w3가 자원 권한을 획득하고 작업을 마친 후 다른 스레드 작업
+	→ 먼저 진입해서 작업하던 w3가 나올 때까지 진입할 수 없다
+	→ Synchronized = 동기화 처리 = lock(잠금) → 동시에 여러 스레드 진입 불가
+→ w4이 진입 → ①②③(length=12) → return
+특징
+→ StringBuffer는 한 번에 한 스레드만이 버퍼를 다루도록 제한한다
+→ 대신 lock/nulock 하는데 시간소요 
+→ StringBuilder보다 느리다
+→ ★ "Thread-safe" 보장, 여러 스레드가 와도 안전하다
+
+★ StringBuilder와 MultiThread(스트링 빌더)( HashMap : 비동기화 )
+append(String str){
+	① 입력할 위치를 알아낸다
+	② 문자열을 붙인다
+	③ 저장된 문자열의 수를 변경한다
+}
+→ Tread → w1("AAAA"), w2("----"), w3("XXXX"), w4("****")
+→ w1이 진입 → ①②③(length=4) → return
+→ w3이 진입 → ①② interrupt → OS가 자원을 관리 하기 때문에 통제
+→ w4이 진입 → ①②③(length=8) → return
+→ w4이 진입 → ①②③(length=12) → return → OS가 통제하지 않으면 작업한다
+→ w3이 ③(length=8) → return → 전에 하던 작업을 이어서 한다
+→ 글자 손실 발생
+특징
+→ StringBuilder는 여러 스레드가 동시에 버퍼를 사용하는 것을 막지 않는다 
+→ 다른 스레드가 한 작업을 덮어 쓸 수 있다 
+→ Single Thread만이 작업하는 경우에 적합하다
+→ StringBuffer에 비해 빠르다
+→ ★ "Thread-safe" 하지 않는다
+
+Thread-Safe
+→ 여러 스레드가 동시에 작업하더라도 문제가 발생하지 않도록 조치를 했다
+	→ 여러 스레드가 같은 변수의 값을 동시에 변경하려 할 때 한번에 한 스레드만이 작업하도록 제한하는 것
+→ 여러 스레드가 동시에 진입해서 명령을 실행하더라도 문제가 발생하지 않는 코드다
+	→ 변수의 값을 조회만 하는 코드
+
+임계 영역(Critical Section)
+→ 동기화
+→ 다른 스레드가 작업을 하지 못하게 영역을 정해주는 것
+→ 하나의 변수를 동시에 변경할려고 하는 코드에 적용
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

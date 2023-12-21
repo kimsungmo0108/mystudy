@@ -16,7 +16,7 @@ public class Exam0141 {
     // => 위 예에서 obj가 가리키는 것은 String 이기 때문에
     // => 이 경우 toString()을 호출할 때 String 클래스에서부터 찾는다.
     // => String 클래스가 toString()을 오버라이딩 했기 때문에
-    //    결국 이 오버라이딩 메서드를 호출할 것이다.
+    // 결국 이 오버라이딩 메서드를 호출할 것이다.
     String x2 = obj.toString(); // x2 <---- 100
 
     System.out.println(x1 == x2);

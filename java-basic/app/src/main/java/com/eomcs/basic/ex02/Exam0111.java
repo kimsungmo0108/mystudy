@@ -12,7 +12,6 @@ public class Exam0111 {
     //
     String x1 = "Hello"; // 새 String 인스턴스의 주소를 리턴한다.
     String x2 = "Hello"; // 기존의 String 인스턴스 주소를 리턴한다.
-
     // 인스턴스의 주소를 비교해 보면,
     System.out.println(x1 == x2); // true => 두 String 객체는 같다.
   }

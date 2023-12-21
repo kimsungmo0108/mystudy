@@ -38,8 +38,9 @@ public class Exam0153 {
 
 
   }
+
   public static void main(String[] args) {
-    HashMap<MyKey2,Student> map = new HashMap<>();
+    HashMap<MyKey2, Student> map = new HashMap<>();
 
     MyKey2 k1 = new MyKey2("ok");
     MyKey2 k2 = new MyKey2("no");
@@ -71,10 +72,5 @@ public class Exam0153 {
     System.out.println(k3.equals(k6)); // equals()의 비교 결과도 같다.
   }
 }
-
-
-
-
-
 
 
