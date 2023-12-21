@@ -16,15 +16,15 @@ public class Exam0150 {
       this.working = working;
     }
 
-    //    @Override
-    //    public int hashCode() {
-    //      return 100;
-    //    }
-
-    //    @Override
-    //    public boolean equals(Object obj) {
-    //      return true;
-    //    }
+    // @Override
+    // public int hashCode() {
+    // return 100;
+    // }
+    //
+    // @Override
+    // public boolean equals(Object obj) {
+    // return true;
+    // }
 
   }
 
@@ -54,8 +54,7 @@ public class Exam0150 {
     Object[] list = set.toArray();
     for (Object obj : list) {
       Student student = (Student) obj;
-      System.out.printf("%s, %d, %s\n",
-          student.name, student.age, student.working ? "재직중" : "실업중");
+      System.out.printf("%s, %d, %s\n", student.name, student.age, student.working ? "재직중" : "실업중");
     }
 
     // 집합?
@@ -65,19 +64,14 @@ public class Exam0150 {
     // => 값을 저장할 때 해시값을 계산하여 저장 위치를 알아낸다.
     // => 집합 방식으로 목록을 다룬다. 즉 중복 값을 저장하지 않는다.
     // => 저장 과정:
-    //    1) equals()와 hashCode()를 호출하여 중복 여부를 검사한다.
-    //    2) equals()의 리턴 값도 true이고 hashCode()의 리턴 값도 같을 경우,
-    //       같은 객체로 판단하여 저장하지 않는다.
-    //    3) 저장할 때 저장 위치는 hashCode()의 리턴 값을 사용하여 계산한다.
+    // 1) equals()와 hashCode()를 호출하여 중복 여부를 검사한다.
+    // 2) equals()의 리턴 값도 true이고 hashCode()의 리턴 값도 같을 경우,
+    // 같은 객체로 판단하여 저장하지 않는다.
+    // 3) 저장할 때 저장 위치는 hashCode()의 리턴 값을 사용하여 계산한다.
     //
 
   }
 
 }
-
-
-
-
-
 
 
