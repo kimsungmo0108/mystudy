@@ -24,12 +24,16 @@ public class AssignmentModifyHandler extends AbstractMenuHandler {
       System.out.println("과제 번호가 유효하지 않습니다.");
       return;
     }
+    try {
+      Assignment assignment = new Assignment();
+      assignment.setTitle(this.prompt.input("과제명(%s)? ", old.getTitle()));
+      assignment.setContent(this.prompt.input("내용(%s)? ", old.getContent()));
+      assignment.setDeadline(this.prompt.inputDate("제출 마감일(%s)? ", old.getDeadline()));
 
-    Assignment assignment = new Assignment();
-    assignment.setTitle(this.prompt.input("과제명(%s)? ", old.getTitle()));
-    assignment.setContent(this.prompt.input("내용(%s)? ", old.getContent()));
-    assignment.setDeadline(this.prompt.inputDate("제출 마감일(%s)? ", old.getDeadline()));
-
-    this.objectRepository.set(index, assignment);
+      this.objectRepository.set(index, assignment);
+    } catch (Exception e) {
+      System.out.println("과제 변경 중 오류 발생!");
+      System.out.println("다시 시도하시기 바랍니다.");
+    }
   }
 }
