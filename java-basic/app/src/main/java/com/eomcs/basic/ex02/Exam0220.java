@@ -13,14 +13,11 @@ public class Exam0220 {
     int i1 = 100;
     Integer obj1 = Integer.valueOf(i1);
 
+
     // Integer ==> int
     int i2 = obj1.intValue();
 
   }
 }
-
-
-
-
 
 
