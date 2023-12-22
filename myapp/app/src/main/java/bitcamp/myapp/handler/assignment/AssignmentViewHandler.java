@@ -17,13 +17,24 @@ public class AssignmentViewHandler extends AbstractMenuHandler {
 
   @Override
   protected void action() {
+    Assignment assignment = null;
+    int index = 0;
 
-    int index = this.prompt.inputInt("번호? ");
-    Assignment assignment = this.objectRepository.get(index);
-    if (assignment == null) {
+    try {
+      index = this.prompt.inputInt("번호? ");
+    } catch (Exception e) {
+      System.out.println("숫자를 입력하세요!");
+      return;
+    }
+
+    try {
+      assignment = this.objectRepository.get(index);
+    } catch (
+        Exception e) {
       System.out.println("과제 번호가 유효하지 않습니다.");
       return;
     }
+
     System.out.printf("과제명: %s\n", assignment.getTitle());
     System.out.printf("내용: %s\n", assignment.getContent());
     System.out.printf("제출 마감일: %s\n", assignment.getDeadline());
