@@ -23,10 +23,6 @@ public class BoardModifyHandler extends AbstractMenuHandler {
 
     int index = this.prompt.inputInt("번호? ");
     Board oldBoard = this.objectRepository.get(index);
-    if (oldBoard == null) {
-      System.out.println("게시글 번호가 유효하지 않습니다.");
-      return;
-    }
 
     Board board = new Board();
     board.setTitle(this.prompt.input("제목(%s)? ", oldBoard.getTitle()));

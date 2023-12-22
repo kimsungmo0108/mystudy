@@ -19,10 +19,6 @@ public class MemberModifyHandler extends AbstractMenuHandler {
 
     int index = this.prompt.inputInt("번호? ");
     Member old = this.objectRepository.get(index);
-    if (old == null) {
-      System.out.println("회원 번호가 유효하지 않습니다.");
-      return;
-    }
 
     Member member = new Member();
     member.setEmail(this.prompt.input("이메일(%s)? ", old.getEmail()));
