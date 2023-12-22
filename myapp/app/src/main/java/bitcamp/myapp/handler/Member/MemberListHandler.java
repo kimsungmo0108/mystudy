@@ -23,7 +23,9 @@ public class MemberListHandler extends AbstractMenuHandler {
     this.objectRepository.toArray(members);
 
     for (Member member : members) {
-      System.out.printf("%-10s\t%30s\t%s\n", member.getName(), member.getEmail(),
+      System.out.printf("%-10s\t%30s\t%3$tY-%3$tm-%3$td %3$tH:%3$tM:%3$tS\n",
+          member.getName(),
+          member.getEmail(),
           member.getCreatedDate());
     }
   }
