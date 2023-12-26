@@ -31,6 +31,9 @@ public class Exam0430 {
       // 그 예외 객체를 파라미터로 받을 수 있는
       // catch 문을 찾아 실행한다.
       //
+    } catch (RuntimeException e) {
+      System.out.println("RuntimeException 발생");
+
     } catch (IOException e) {
       // catch 블록에서 그 예외를 받아서 처리한다.
       // 메서드가 던지는 예외 개수 만큼 catch 블록을 선언하면 된다.
@@ -38,9 +41,6 @@ public class Exam0430 {
 
     } catch (SQLException e) {
       System.out.println("SQLException 발생");
-
-    } catch (RuntimeException e) {
-      System.out.println("RuntimeException 발생");
 
     } catch (Exception e) {
       System.out.println("기타 Exception 발생");

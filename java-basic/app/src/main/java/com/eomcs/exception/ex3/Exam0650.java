@@ -14,14 +14,13 @@ public class Exam0650 {
   }
 
   public static void main(String[] args) throws Exception {
-    B obj2 = null;
+    // B obj2 = null;
 
-    try (
-        obj2 = new B(); // 컴파일 오류!
+    try (B obj2 = new B(); // 컴파일 오류!
         // 이유: 변수 선언은 반드시 괄호 안에 해야 한다.
 
         B obj3 = new B(); // OK
-        ) {
+    ) {
       System.out.println("try 블록 실행...");
     }
   }
