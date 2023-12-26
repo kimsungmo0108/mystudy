@@ -9,8 +9,14 @@ public class Test {
     list.add(new String("ccc"));
     list.add(new String("ddd"));
 
-    System.out.println(list.first.value);
-    System.out.println(list.last.value);
+    Node node = list.first;
+    System.out.println(node.value);
+    node = node.next;
+    System.out.println(node.value);
+    node = node.next;
+    System.out.println(node.value);
+    node = node.next;
+    System.out.println(node.value);
 
   }
 
