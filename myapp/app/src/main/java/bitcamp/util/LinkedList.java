@@ -33,4 +33,59 @@ public class LinkedList {
     return arr;
   }
 
+  public Object get(int index) {
+    if (index < 0 || index >= size) {
+      throw new IndexOutOfBoundsException("무효한 인덱스입니다");
+    }
+    int cursor = 0;
+    Node node = first;
+    while (cursor++ < index) {
+      node = node.next;
+    }
+    return node.value;
+  }
+
+  public Object set(int index, Object value) {
+    if (index < 0 || index >= size) {
+      throw new IndexOutOfBoundsException("무효한 인덱스입니다");
+    }
+    int cursor = 0;
+    Node node = first;
+    while (cursor++ < index) {
+      node = node.next;
+    }
+    Object old = node.value;
+    node.value = value;
+    return old;
+  }
+
+  public void add(int index, Object value) {
+    if (index < 0 || index > size) {
+      throw new IndexOutOfBoundsException("무효한 인덱스입니다");
+    }
+    Node node = new Node();
+    node.value = value;
+
+    if (first == null) {
+      first = last = node;
+    } else if (index == 0) {
+      node.next = first;
+      first = node;
+    } else if (index == size) {
+      last.next = node;
+      last = node;
+    } else {
+      Node oldNode = first;
+      Node tempNode = new Node();
+      int cursor = 0;
+      while (cursor++ < index) {
+        tempNode = oldNode;
+        oldNode = oldNode.next;
+      }
+      tempNode.next = node;
+      node.next = oldNode;
+    }
+    size++;
+  }
+
 }
