@@ -3064,6 +3064,30 @@ Exception
 
 2023.12.27(수)
 -------------------------------------------------------------------------------------
+과제26. LinkedList 자료구조 구현하기
+→ 목록 관리 범용 클래스 LinkedList 정의
+  → LinkedList 구동원리 이해 및 구현
+  → 중첩 클래스 활용
+  → 제네릭 적용
+→ MenuGroup에 적용
+-------------------------------------------------------------------------------------
+중첩 클래스(nested class)
+LinkedList.java
+public class LinkedList{
+	void add(){}
+	Object toArray(){}
+	Object get(){}
+	Object set(){}
+	void add(int, Object){}
+	Object remove(int){}
+	private static class Node{}
+}
+→ 컴파일 하게되면 LinkedList$Node.class    LinkedList.class 로 나뉘어서 컴파일
+→ 클래스당 클래스파일 생성
+→ 컴파일이 끝난 LinkedList.class에는 Node.class가 없다 개별적으로 파일이 생성된다
+→ 클래스 사용 범위를 제약하는 것이다 → 유지보수 쉽게(높은 가독성, 높은 이해도)
+
+
 
 
 

@@ -72,7 +72,7 @@ public class App {
     mainMenu.add(greetingMenu);
 
     mainMenu.add(new MenuItem("도움말", new HelpHandler(prompt)));
-
+    
     // 프로그램을 실행하다가 어느 지점에서 예외가 발생하면 해당 위치에서 적절한 조치를 취할 것이다
     // 다만 그에 벗어나서 조치가 되지 않은 예외가 보고 되는 경우를 대비해
     // 마지막 보류인 main()에서는 예외를 처리해야 한다
