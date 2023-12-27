@@ -3080,6 +3080,7 @@ public class LinkedList{
 	Object set(){}
 	void add(int, Object){}
 	Object remove(int){}
+	boolean remove(E value){}
 	private static class Node{}
 }
 → 컴파일 하게되면 LinkedList$Node.class    LinkedList.class 로 나뉘어서 컴파일

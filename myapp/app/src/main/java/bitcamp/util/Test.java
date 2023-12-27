@@ -3,24 +3,31 @@ package bitcamp.util;
 public class Test {
 
   public static void main(String[] args) {
-    LinkedList<String> list = new LinkedList<>();
+    LinkedList1 list = new LinkedList1();
     list.add("aaa");
     list.add("bbb");
     list.add("ccc");
     list.add("ddd");
 
-    //list.add(0, new String("xxx"));
-    //list.add(5, new String("yyy"));
-    //list.add(1, new String("mmm"));
-    //list.add(3, new String("ttt"));
-    //list.add(7, new String("ppp"));
+    System.out.println(list.remove("aaa"));
+
+    //System.out.println(list.remove(1));
+
+//    list.add(0, "xxx");
+//    list.add(1, "111");
+//    list.add(2, "222");
+//    list.add(3, "333");
+    //list.add(5, "yyy");
+    //list.add(1, "mmm");
+    //list.add(3, "ttt");
+    //list.add(7, "ppp");
 //    System.out.println();
 
-    System.out.println(list.remove("xxx"));
-    System.out.println(list.remove("ccc"));
-    System.out.println(list.remove("ddd"));
-    System.out.println(list.remove("aaa"));
-    System.out.println(list.remove("bbb"));
+    //System.out.println(list.remove("xxx"));
+    //System.out.println(list.remove("ccc"));
+    //System.out.println(list.remove("ddd"));
+    //System.out.println(list.remove("aaa"));
+    //System.out.println(list.remove("bbb"));
 //    list.add("xxx");
 //    list.add("yyy");
 //    list.add("zzz");
@@ -36,26 +43,21 @@ public class Test {
 //    System.out.println(node2.value);
 //    System.out.println(node3.value);
 //    System.out.println(node4.value);
-    for (Object value : list.toArray()) {
-      System.out.printf("%s, ", value);
-    }
-    System.out.println();
-
-//    try {
-//      System.out.println(list.get(0));
-//      System.out.println(list.get(1));
-//      System.out.println(list.get(2));
-//      System.out.println(list.get(3));
-//      System.out.println(list.get(4));
-//    } catch (Exception e) {
-//      System.out.println(e.getMessage());
-//    }
-//
 //    try {
 //      System.out.println(list.set(0, "eee"));
 //    } catch (Exception e) {
 //      System.out.println(e.getMessage());
 //    }
+    for (Object value : list.toArray()) {
+      System.out.printf("%s, ", value);
+    }
+//    System.out.println();
+
+//    System.out.println(list.get(0));
+//    System.out.println(list.get(1));
+//    System.out.println(list.get(2));
+//    System.out.println(list.get(3));
+    //System.out.println(list.get(4));
 
   }
 
