@@ -75,17 +75,20 @@ public class LinkedList {
       last.next = node;
       last = node;
     } else {
-      Node oldNode = first;
-      Node tempNode = new Node();
+      Node currNode = first;
+      //Node tempNode = new Node();
       int cursor = 0;
-      while (cursor++ < index) {
-        tempNode = oldNode;
-        oldNode = oldNode.next;
+      while (++cursor < index) {
+        //tempNode = currNode;
+        currNode = currNode.next;
       }
-      tempNode.next = node;
-      node.next = oldNode;
+      //tempNode.next = node;
+      //node.next = currNode;
+      node.next = currNode.next;
+      currNode.next = node;
     }
     size++;
   }
 
+  
 }
