@@ -15,7 +15,7 @@ public class MenuGroup extends AbstractMenu {
     super(title, breadcrumb);
   }
 
-  // GoF의 Factory Method 디자인 패턴
+  // GoF의 Factory Method 디자인 패턴git
   public static MenuGroup getInstance(String title) {
     return new MenuGroup(title, new Stack<String>());
   }
