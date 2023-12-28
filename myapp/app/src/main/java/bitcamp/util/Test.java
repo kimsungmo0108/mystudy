@@ -3,7 +3,7 @@ package bitcamp.util;
 public class Test {
 
   public static void main(String[] args) {
-    LinkedList1 list = new LinkedList1();
+    LinkedList<String> list = new LinkedList<>();
     list.add("aaa");
     list.add("bbb");
     list.add("ccc");
