@@ -36,6 +36,16 @@ public class Arraylist<E> {
     return (E) deleted;
   }
 
+  public boolean remove(E value) {
+    for (int i = 0; i < this.length; i++) {
+      if (this.objects[i].equals(value)) {
+        this.remove(i);
+        return true;
+      }
+    }
+    return false;
+  }
+
   public Object[] toArray() {
     return Arrays.copyOf(this.objects, this.length);
   }

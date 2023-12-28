@@ -9,7 +9,7 @@ public class Test {
     list.add("ccc");
     list.add("ddd");
 
-    System.out.println(list.remove("aaa"));
+    System.out.println(list.remove(0));
 
     //System.out.println(list.remove(1));
 
@@ -48,7 +48,7 @@ public class Test {
 //    } catch (Exception e) {
 //      System.out.println(e.getMessage());
 //    }
-    for (Object value : list.toArray()) {
+    for (String value : list.toArray(new String[0])) {
       System.out.printf("%s, ", value);
     }
 //    System.out.println();
