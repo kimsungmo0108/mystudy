@@ -21,8 +21,10 @@ import bitcamp.myapp.handler.member.MemberViewHandler;
 import bitcamp.myapp.vo.Assignment;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Member;
+import bitcamp.util.ArrayList;
+import bitcamp.util.LinkedList;
+import bitcamp.util.List;
 import bitcamp.util.Prompt;
-import java.util.ArrayList;
 
 public class App {
 
@@ -30,10 +32,10 @@ public class App {
     Prompt prompt = new Prompt(System.in);
     //new MainMenu(prompt).execute();
 
-    ArrayList<Board> boardRepository = new ArrayList<>();
-    ArrayList<Assignment> assignmentRepository = new ArrayList<>();
-    ArrayList<Member> memberRepository = new ArrayList<>();
-    ArrayList<Board> greetingRepository = new ArrayList<>();
+    List<Board> boardRepository = new LinkedList<>();
+    List<Assignment> assignmentRepository = new LinkedList<>();
+    List<Member> memberRepository = new ArrayList<>();
+    List<Board> greetingRepository = new ArrayList<>();
 
     MenuGroup mainMenu = new MenuGroup("메인");
 
@@ -72,7 +74,7 @@ public class App {
     mainMenu.add(greetingMenu);
 
     mainMenu.add(new MenuItem("도움말", new HelpHandler(prompt)));
-    
+
     // 프로그램을 실행하다가 어느 지점에서 예외가 발생하면 해당 위치에서 적절한 조치를 취할 것이다
     // 다만 그에 벗어나서 조치가 되지 않은 예외가 보고 되는 경우를 대비해
     // 마지막 보류인 main()에서는 예외를 처리해야 한다
