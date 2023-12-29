@@ -2,6 +2,7 @@ package bitcamp.myapp.handler.board;
 
 import bitcamp.menu.AbstractMenuHandler;
 import bitcamp.myapp.vo.Board;
+import bitcamp.util.Iterator;
 import bitcamp.util.List;
 import bitcamp.util.Prompt;
 
@@ -21,10 +22,10 @@ public class BoardListHandler extends AbstractMenuHandler {
   protected void action() {
     System.out.printf("%-20s\t%10s\t%s\n", "Title", "Writer", "Date");
 
-    Board[] boards = new Board[this.objectRepository.size()];
-    this.objectRepository.toArray(boards);
+    Iterator<Board> iterator = this.objectRepository.iterator();
 
-    for (Board board : boards) {
+    while (iterator.hasNext()) {
+      Board board = iterator.next();
       System.out.printf("%-20s\t%10s\t%3$tY-%3$tm-%3$td %3$tH:%3$tM:%3$tS\n",
           board.getTitle(),
           board.getWriter(),

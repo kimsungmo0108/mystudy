@@ -2,6 +2,7 @@ package bitcamp.myapp.handler.member;
 
 import bitcamp.menu.AbstractMenuHandler;
 import bitcamp.myapp.vo.Member;
+import bitcamp.util.Iterator;
 import bitcamp.util.List;
 import bitcamp.util.Prompt;
 
@@ -19,10 +20,10 @@ public class MemberListHandler extends AbstractMenuHandler {
 
     System.out.printf("%-10s\t%30s\t%s\n", "이름", "이메일", "가입일");
 
-    Member[] members = new Member[this.objectRepository.size()];
-    this.objectRepository.toArray(members);
+    Iterator<Member> iterator = this.objectRepository.iterator();
 
-    for (Member member : members) {
+    while (iterator.hasNext()) {
+      Member member = iterator.next();
       System.out.printf("%-10s\t%30s\t%3$tY-%3$tm-%3$td %3$tH:%3$tM:%3$tS\n",
           member.getName(),
           member.getEmail(),

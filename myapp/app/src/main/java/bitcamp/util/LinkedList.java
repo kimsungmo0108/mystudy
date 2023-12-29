@@ -168,6 +168,135 @@ public class LinkedList<E> extends AbstractList<E> {
     return true;
   }
 
+  // 1)
+  //  @Override
+//  public Iterator<E> iterator() {
+//    return new LinkedListIterator<>(this);
+//  }
+
+  //2)
+//  @Override
+//  public Iterator<E> iterator() {
+//    return new IteratorImpl<>(this);
+//  }
+//
+//  private static class IteratorImpl<E> implements Iterator<E> {
+//
+//    LinkedList<E> list;
+//    int cursor;
+//
+//    public IteratorImpl(LinkedList<E> list) {
+//      this.list = list;
+//    }
+//
+//    @Override
+//    public boolean hasNext() {
+//      return cursor >= 0 && cursor < list.size();
+//    }
+//
+//    @Override
+//    public E next() {
+//      return list.get(cursor++);
+//    }
+//  }
+
+  // 3)
+//  @Override
+//  public Iterator<E> iterator() {
+//    return new IteratorImpl<>();
+//  }
+
+  //  class IteratorImpl<E> implements Iterator<E> {
+//
+//    Node<E> cursor;
+//
+//    public IteratorImpl() {
+//      this.cursor = (Node<E>) LinkedList.this.first;
+//    }
+//
+//    @Override
+//    public boolean hasNext() {
+//      return cursor != null;
+//    }
+//
+//    @Override
+//    public E next() {
+//      E value = cursor.value;
+//      cursor = cursor.next;
+//      return value;
+//    }
+//  }
+
+  // 4)
+//  @Override
+//  public Iterator<E> iterator() {
+//    class IteratorImpl<E> implements Iterator<E> {
+//
+//      Node<E> cursor;
+//
+//      public IteratorImpl() {
+//        this.cursor = (Node<E>) LinkedList.this.first;
+//      }
+//
+//      @Override
+//      public boolean hasNext() {
+//        return cursor != null;
+//      }
+//
+//      @Override
+//      public E next() {
+//        E value = cursor.value;
+//        cursor = cursor.next;
+//        return value;
+//      }
+//    }
+//    return new IteratorImpl<>();
+//  }
+
+  // 5)
+//  @Override
+//  public Iterator<E> iterator() {
+//    Iterator<E> obj = new Iterator<E>() {
+//
+//      Node<E> cursor = LinkedList.this.first;
+//      ;
+//
+//      @Override
+//      public boolean hasNext() {
+//        return cursor != null;
+//      }
+//
+//      @Override
+//      public E next() {
+//        E value = cursor.value;
+//        cursor = cursor.next;
+//        return value;
+//      }
+//    };
+//    return obj;
+//  }
+
+  // 6)
+  @Override
+  public Iterator<E> iterator() {
+    return new Iterator<E>() {
+
+      Node<E> cursor = LinkedList.this.first;
+      ;
+
+      @Override
+      public boolean hasNext() {
+        return cursor != null;
+      }
+
+      @Override
+      public E next() {
+        E value = cursor.value;
+        cursor = cursor.next;
+        return value;
+      }
+    };
+  }
 
   private static class Node<E> {
 
@@ -175,4 +304,6 @@ public class LinkedList<E> extends AbstractList<E> {
     Node<E> next;
 
   }
+
+
 }
