@@ -282,7 +282,7 @@ public class LinkedList<E> extends AbstractList<E> {
     return new Iterator<E>() {
 
       Node<E> cursor = LinkedList.this.first;
-      ;
+      
 
       @Override
       public boolean hasNext() {

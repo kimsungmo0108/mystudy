@@ -11,15 +11,19 @@ class A2 {
     //
     // - Java16 부터는 inner class도 스태틱 멤버를 가질 수 있다.
     //
-    //    static int v1; // 컴파일 오류!
-    //    static void m1() {} // 컴파일 오류!
-    //    static {} // 컴파일 오류!
+    // static int v1; // 컴파일 오류!
+    // static void m1() {} // 컴파일 오류!
+    // static {} // 컴파일 오류!
 
     int v2;
+
     void m2() {}
-    {}
+
+    {
+    }
   }
 }
+
 
 public class Exam0111 {
   public static void main(String[] args) {
