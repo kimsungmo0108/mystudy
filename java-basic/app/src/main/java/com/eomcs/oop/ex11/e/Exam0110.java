@@ -9,9 +9,11 @@ public class Exam0110 {
     void print();
   }
 
-  class X {}
+  class X {
+  }
 
-  static class Y {}
+  static class Y {
+  }
 
   public static void main(final String[] args) {
 
@@ -27,5 +29,9 @@ public class Exam0110 {
 
     A obj = new My();
     obj.print();
+
+    class X obj = new X();
+
+    Y obj2 = new Y();
   }
 }
