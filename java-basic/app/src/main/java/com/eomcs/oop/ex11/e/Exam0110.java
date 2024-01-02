@@ -30,6 +30,7 @@ public class Exam0110 {
     A obj = new My();
     obj.print();
 
+
     class X obj = new X();
 
     Y obj2 = new Y();
