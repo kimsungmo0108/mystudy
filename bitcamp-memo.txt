@@ -2704,7 +2704,7 @@ public Score clone() throws CloneNotSupportedException {
 "aaa" + obj → 문자열과 레퍼런스 결합
 → "aaa" + "obj.toString() 리턴 값"
 → "aaa리턴값"
-  -------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
 ★ String 클래스
 Heap
 String s1 = new String("Hello");
@@ -3231,7 +3231,123 @@ top level class 접근 범위
 → 익명 클래스 (anonymous class)
   → 문법 = 클래스를 정의 하는 문법 + 인스턴스를 만드는 문법
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.01.02(화)
+-------------------------------------------------------------------------------------
+중첩 클래스 문법
+// non-static nested class는 바깥 클래스의 인스턴스 주소를 저장할 변수를 갖고 있다
+// 예)
+// B3 this$0;
+// non-static nested class는 바깔 클래스의 인스턴스 주소를 받는 생성자를 갖고있다
+// 예)
+// X(B3 obj){
+// this$0 = obj;}
+
+X obj = this.new X();
+→ 아래 코드로 변경될 수 있다
+→ ① X obj = new X(this);
+→ ② X obj = new X();
+  → obj.this$0 = this;
+
+→ 스태틱 멤버는 인스턴스 멤버를 사용할 수 없다 (레퍼런스 변수 선언은 가능)
+-------------------------------------------------------------------------------------
+import 사용
+→ 중첩 클래스를 직접 import 할 수 있다
+→ import가 하는 일은 클래스를 로딩하는 것이 아니다
+→ 컴파일러에게 클래스의 위치를 알려주는 것이다
+-------------------------------------------------------------------------------------
+inner class 바깥 클래스의 인스턴스를 보관할 this 변수와 생성자
+→ 컴파일러는 모든 생성자에 바깥 클래스의 객체 주소를 받는 파라미터를 추가한다
+X() {}
+→ X(F arg0) {}
+X(int a) {}
+→ X(F arg0, int a) {}
+X(String s, int a) {}
+→ X(F arg0, String s, int a) {}
+-------------------------------------------------------------------------------------
+local class 
+→ 메소드 안에 정의하는 클래스
+→ 특정 메소드 안에서만 사용되는 경우 로컬 클래스로 정의한다
+→ 메소드를 호출할 때 클래스가 정의된다는 뜻이다
+-------------------------------------------------------------------------------------
+인스턴스 메소드와 로컬 클래스
+→ 인스턴스 메소드는 C 인스턴스 주소를 this 변수에 저장한다
+→ 그래서 인스턴스 메소드 안에 정의된 로컬 클래스는 바깥 클래스의 인스턴스를 사용할 수 이싿
+스태틱 메소드와 로컬 클래스
+→ 스태틱 메소드는 C2 인스턴스 주소를 저장할 this라는 변수가 없다
+→ 그래서 인스턴스 바깥 클래스의 인스턴스를 사용할 수 없다
+-------------------------------------------------------------------------------------
+local class에서 바깥 메소드의 로컬 변수 접근
+
+① 로컬 클래스에서 메소드의 파라키터 값을 사용한다면
+// 컴파일러는 로컬 클래스를 컴파일할 때
+// 파라미터 값을 저장할 수 있도록 관련 코드를 자동으로 추가한다
+// 따라서 create1()의 경우처럼 개발자가 직접 코드를 추가할 필요가 없다
+// 예)
+// float interest;
+//
+// CalculatorImpl(float interest){
+// this.interest = interest;
+// }
+
+② interest는 create2() 함수의 로컬 변수이다
+// CalculatorImpl 객체를 생성하여 리턴한 후에는 interest 로컬 변수는 스택에서 사라진 상태일 것이다
+// 나중에 compute()를 호출할 때 intersest 변수는 없을텐데, 어떻게 된 것인가?
+// => 로컬 클래스에서 바깥 메소드(enclosing method)의 로컬 변수를 사용한다면
+//      컴파일러는 로컬 클래스에 바깥 메소드의 로컬 변수 값을 저장할 필드를 추가한다
+//      또한 로컬 클래스의 객체를 생성할 때 생성자에 로컬 변수의 값을 넘겨 줄 것이다
+
+this 를 생략하면 다음 순서로 변수를 찾는다.
+1) 로컬 변수
+2) 인스턴스 변수
+3) 메서드에 선언된 로컬 변수
+4) 바깥 클래스의 인스턴스 변수 또는 스태틱 변수
+
+로컬 클래스에서 메소드에 선언된 로컬 변수 접근하기
+- 상수 값이거나 상수에 준하는 경우(값을 한 번만 할당한 경우)
+   로컬 클래스에서 메서드의 로컬 변수를 사용할 수 있다.
+- 즉 로컬 클래스에서 바깥 메서드의 로컬 변수를 사용하는 상황?
+   값을 조회하는 용도할 때.
+- 왜?
+   로컬 객체가 사용하는 로컬 변수는
+   메서드 호출이 끝났을 때 제거되기 때문이다.
+-------------------------------------------------------------------------------------
+★ HelloWorld bytecode
+cafebabe 0000 0034 0000 0021 0000 0000 0000 0000 0000 0000
+ClassFile {
+    4 bytes        Java Magic Number
+    2 bytes        Minor Version
+    2 bytes        Major Version
+    2 bytes        Size of the constant pool
+    * bytes        Numerous bytes making up the constant pool
+    2 bytes        This class' access modifiers (Ie. public)
+    2 bytes        Index of this class in constant pool
+    2 bytes        Index of this class' super class in constant pool
+    2 bytes        Number of interfaces
+    * bytes        Numerous bytes making up interface definitions
+    2 bytes        Number of fields in this class
+    * bytes        Numerous bytes making up field definitions
+    2 bytes        Number of methods in this class
+    * bytes        Numerous bytes making up method definitions
+    2 bytes        Attributes count ( meta data for class file )
+    * bytes        Numerous bytes making up attribute definitions
+}
+
+Java File: CAFE BABE
+Version 8: 0000 0034
+Constant Pool Size of ZERO: 0000
+Super Public: 0021
+Unknown index of class in constant pool: 0000
+Unknown index of super class in constant pool: 0000
+zero interfaces: 0000
+zero fields: 0000
+zero methods: 0000
+zero attributes: 0000
+
+참고자료
+https://medium.com/@davethomas_9528/writing-hello-world-in-java-byte-code-34f75428e0ad
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
@@ -3241,15 +3357,9 @@ top level class 접근 범위
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------

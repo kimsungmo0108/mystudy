@@ -16,6 +16,7 @@ class D {
   }
 }
 
+
 public class Exam0410 {
 
   public static void main(String[] args) {

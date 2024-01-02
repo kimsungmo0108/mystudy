@@ -10,7 +10,7 @@ public class Prompt {
 
   public Prompt(InputStream in) {
 
-    keyIn = new Scanner(in);
+    this.keyIn = new Scanner(in);
   }
 
   public String input(String title, Object... args) {

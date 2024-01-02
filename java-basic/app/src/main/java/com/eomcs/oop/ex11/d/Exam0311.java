@@ -10,27 +10,27 @@ class D {
     class X {
       // 로컬 클래스에서 바깥 메서드(m1())의 로컬 변수(a,b) 값을 사용한다면
       // 1) 다음과 같이 컴파일 할 때 그 값을 저장할 필드(a)를 자동으로 추가한다.
-      //    => 사용하는 변수에 대해서만 필드를 생성한다.
-      //    => 로컬 변수 b는 사용하지 않기 때문에 b 값을 받을 필드는 생성하지 않는다.
-      //      int a;
-      //      D outer;
+      // => 사용하는 변수에 대해서만 필드를 생성한다.
+      // => 로컬 변수 b는 사용하지 않기 때문에 b 값을 받을 필드는 생성하지 않는다.
+      // int a;
+      // D outer;
       //
       // 2) 또한 로컬 클래스의 객체를 생성할 때 그 값을 사용할 수 있도록
-      //    생성자에 파라미터를 추가한다.
-      //      public X(D outer, int a) {
-      //        this.a = a;
-      //        this.outer = outer;
-      //      }
+      // 생성자에 파라미터를 추가한다.
+      // public X(D outer, int a) {
+      // this.a = a;
+      // this.outer = outer;
+      // }
       //
       // .class 파일의 코드:
-      //      class com.eomcs.oop.ex11.d.D$1X {
+      // class com.eomcs.oop.ex11.d.D$1X {
       //
-      //        final synthetic com.eomcs.oop.ex11.d.D this$0;
+      // final synthetic com.eomcs.oop.ex11.d.D this$0;
       //
-      //        private final synthetic int val$a;
+      // private final synthetic int val$a;
       //
-      //        D$1X(com.eomcs.oop.ex11.d.D arg0, int arg1);
-      //        ...
+      // D$1X(com.eomcs.oop.ex11.d.D arg0, int arg1);
+      // ...
       //
       void f1() {
         // 그래서 다음과 같이
@@ -52,12 +52,12 @@ class D {
     // 자동으로 생성되지 않는다.
     //
     // .class 파일의 코드:
-    //    class com.eomcs.oop.ex11.d.D$2X {
+    // class com.eomcs.oop.ex11.d.D$2X {
     //
-    //      private final synthetic int val$b;
+    // private final synthetic int val$b;
     //
-    //      D$2X(int arg0);
-    //      ..
+    // D$2X(int arg0);
+    // ..
     class X {
       void f1() {
         System.out.println(b);
@@ -68,6 +68,7 @@ class D {
     obj.f1();
   }
 }
+
 
 public class Exam0311 {
 

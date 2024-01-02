@@ -7,17 +7,27 @@ class B3 {
   int v1 = 10;
 
   class X {
+    // non-static nested class는 바깥 클래스의 인스턴스 주소를 저장할 변수를 갖고 있다
+    // 예)
+    // B3 this$0;
     int v1 = 100;
+
+    // non-static nested class는 바깔 클래스의 인스턴스 주소를 받는 생성자를 갖고있다
+    // 예)
+    // X(B3 obj){
+    // this$0 = obj;
+    // }
 
     void test() {
       int v1 = 1000;
 
-      System.out.printf("v1 = %d\n", v1); // 로컬 변수 
-      System.out.printf("this.v1 = %d\n", this.v1); // 인스턴스 변수 
-      System.out.printf("B3.this.v1 = %d\n", B3.this.v1); // 바깥 객체의 인스턴스 변수 
+      System.out.printf("v1 = %d\n", v1); // 로컬 변수
+      System.out.printf("this.v1 = %d\n", this.v1); // 인스턴스 변수
+      System.out.printf("B3.this.v1 = %d\n", B3.this.v1); // 바깥 객체의 인스턴스 변수
     }
   }
 }
+
 
 public class Exam0230 {
 
