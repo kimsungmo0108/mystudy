@@ -2,9 +2,9 @@ package bitcamp.myapp.handler.member;
 
 import bitcamp.menu.AbstractMenuHandler;
 import bitcamp.myapp.vo.Member;
-import bitcamp.util.Iterator;
-import bitcamp.util.List;
 import bitcamp.util.Prompt;
+import java.util.Iterator;
+import java.util.List;
 
 public class MemberListHandler extends AbstractMenuHandler {
 

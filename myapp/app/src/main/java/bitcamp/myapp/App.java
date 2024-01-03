@@ -20,26 +20,43 @@ import bitcamp.myapp.handler.member.MemberViewHandler;
 import bitcamp.myapp.vo.Assignment;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Member;
-import bitcamp.util.ArrayList;
-import bitcamp.util.LinkedList;
-import bitcamp.util.List;
 import bitcamp.util.Prompt;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class App {
 
+  List<Board> boardRepository = new LinkedList<>();
+  List<Assignment> assignmentRepository = new LinkedList<>();
+  List<Member> memberRepository = new ArrayList<>();
+  List<Board> greetingRepository = new ArrayList<>();
+  MenuGroup mainMenu;
+  Prompt prompt = new Prompt(System.in);
+
+  App() {
+    prepareMenu();
+  }
+
   public static void main(String[] args) throws Exception {
-    Prompt prompt = new Prompt(System.in);
-    //new MainMenu(prompt).execute();
+    new App().run();
+  }
 
-    List<Board> boardRepository = new LinkedList<>();
-    List<Assignment> assignmentRepository = new LinkedList<>();
-    List<Member> memberRepository = new ArrayList<>();
-    List<Board> greetingRepository = new ArrayList<>();
+  void run() {
+    while (true) {
+      try {
+        mainMenu.execute(prompt);
+        prompt.close();
+        break;
+      } catch (Exception e) {
+        System.out.println("예외 발생!");
+      }
+    }
+  }
 
+  void prepareMenu() {
     // 메뉴의 경로를 저장할 스택 객체 준비
-
-    MenuGroup mainMenu = MenuGroup.getInstance("메인");
-
+    mainMenu = MenuGroup.getInstance("메인");
     MenuGroup assignmentMenu = mainMenu.addGroup("과제");
     assignmentMenu.addItem("등록", new AssignmentAddHandler(assignmentRepository, prompt));
     assignmentMenu.addItem("조회", new AssignmentViewHandler(assignmentRepository, prompt));
@@ -71,20 +88,5 @@ public class App {
     greetingMenu.addItem("목록", new BoardListHandler(greetingRepository, prompt));
 
     mainMenu.addItem("도움말", new HelpHandler(prompt));
-
-    // 프로그램을 실행하다가 어느 지점에서 예외가 발생하면 해당 위치에서 적절한 조치를 취할 것이다
-    // 다만 그에 벗어나서 조치가 되지 않은 예외가 보고 되는 경우를 대비해
-    // 마지막 보류인 main()에서는 예외를 처리해야 한다
-    // main()에서 마저 처리하지 않는다면 JVM에게 보고될 것이고,
-    // JVM은 개발자나 알아 볼 메시지를 출력하고 종료할 것이다
-    while (true) {
-      try {
-        mainMenu.execute(prompt);
-        prompt.close();
-        break;
-      } catch (Exception e) {
-        System.out.println("예외 발생!");
-      }
-    }
   }
 }

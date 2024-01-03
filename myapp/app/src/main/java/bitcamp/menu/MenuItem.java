@@ -1,7 +1,7 @@
 package bitcamp.menu;
 
 import bitcamp.util.Prompt;
-import bitcamp.util.Stack;
+import java.util.Stack;
 
 // Composite 패턴에서 leaf 역할을 수행하는 클래스
 // Leaf?

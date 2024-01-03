@@ -1,6 +1,6 @@
 package bitcamp.menu;
 
-import bitcamp.util.Stack;
+import java.util.Stack;
 
 public abstract class AbstractMenu implements Menu {
 

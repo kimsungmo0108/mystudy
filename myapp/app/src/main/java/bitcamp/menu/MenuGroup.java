@@ -1,10 +1,10 @@
 package bitcamp.menu;
 
-import bitcamp.util.Iterator;
-import bitcamp.util.LinkedList;
-import bitcamp.util.List;
 import bitcamp.util.Prompt;
-import bitcamp.util.Stack;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
 
 // Composite 패턴에서 '복합 객체(composite object)' 역할을 하는 클래스
 // - 다른 Menu 객체를 포함한다.
