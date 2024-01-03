@@ -8,7 +8,7 @@ public class Exam0130 {
     // java.lang 패키지의 멤버를 사용할 때는 그냥 이름을 지정하면 된다.
     // 그 외 다른 패키지의 멤버를 사용할 때는 반드시 패키지 이름을 함께 지정해야 한다.
     java.util.Date today = new java.util.Date();
-
+    System.out.println(today.getTime());
     // %t[날짜 및 시각 옵션]
     // 날짜 및 시간 옵션
     // Y : 날짜 및 시각 데이터에서 년도를 추출하여 4자리로 표현한다.
