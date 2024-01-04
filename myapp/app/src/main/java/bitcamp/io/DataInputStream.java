@@ -31,10 +31,10 @@ public class DataInputStream extends FileInputStream {
   }
 
   public String readUTF() throws IOException {
-    int len = readInt();
-//    byte[] bytes = new byte[len];
-//    read(bytes, 0, len);
-    byte[] bytes = readNBytes(len); // java 11 버전부터 사용가능
+    int len = readShort();
+    byte[] bytes = new byte[len];
+    read(bytes, 0, len);
+    //byte[] bytes = readNBytes(len); // java 11 버전부터 사용가능
     return new String(bytes, 0, len, StandardCharsets.UTF_8);
   }
 
