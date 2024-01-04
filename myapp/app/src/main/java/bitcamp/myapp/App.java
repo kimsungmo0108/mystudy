@@ -2,8 +2,6 @@ package bitcamp.myapp;
 
 import bitcamp.io.BufferedDataInputStream;
 import bitcamp.io.BufferedDataOutputStream;
-import bitcamp.io.DataInputStream;
-import bitcamp.io.DataOutputStream;
 import bitcamp.menu.MenuGroup;
 import bitcamp.myapp.handler.HelpHandler;
 import bitcamp.myapp.handler.assignment.AssignmentAddHandler;
@@ -107,7 +105,7 @@ public class App {
     try (BufferedDataInputStream in = new BufferedDataInputStream("assignment.data")) {
 
       int size = in.readInt();
-      long start = System.currentTimeMillis();
+//      long start = System.currentTimeMillis();
       for (int i = 0; i < size; i++) {
         Assignment assignment = new Assignment();
         assignment.setTitle(in.readUTF());
@@ -116,8 +114,8 @@ public class App {
 
         assignmentRepository.add(assignment);
       }
-      long end = System.currentTimeMillis();
-      System.out.printf("로딩 걸린 시간 : %d\n", end - start);
+//      long end = System.currentTimeMillis();
+//      System.out.printf("로딩 걸린 시간 : %d\n", end - start);
     } catch (Exception e) {
       System.out.println("과제 데이터 로딩 중 오류 발생!");
       e.printStackTrace();
@@ -127,7 +125,7 @@ public class App {
   void saveAssignment() {
     try (BufferedDataOutputStream out = new BufferedDataOutputStream("assignment.data")) {
 
-      long start = System.currentTimeMillis();
+      //long start = System.currentTimeMillis();
       // 저장할 데이터 개수를 2바이트로 출력한다.
       out.writeInt(assignmentRepository.size());
 
@@ -137,8 +135,8 @@ public class App {
         out.writeUTF(assignment.getDeadline().toString());
       }
 
-      long end = System.currentTimeMillis();
-      System.out.printf("저장 걸린 시간 : %d\n", end - start);
+      //long end = System.currentTimeMillis();
+      //System.out.printf("저장 걸린 시간 : %d\n", end - start);
     } catch (Exception e) {
       System.out.println("과제 데이터 저장 중 오류 발생!");
       e.printStackTrace();
@@ -146,7 +144,7 @@ public class App {
   }
 
   void loadMember() {
-    try (DataInputStream in = new DataInputStream("member.data")) {
+    try (BufferedDataInputStream in = new BufferedDataInputStream("member.data")) {
       int size = in.readInt();
 
       for (int i = 0; i < size; i++) {
@@ -166,8 +164,8 @@ public class App {
   }
 
   void saveMember() {
-    try (DataOutputStream out = new DataOutputStream("member.data")) {
-      out.writeShort(memberRepository.size());
+    try (BufferedDataOutputStream out = new BufferedDataOutputStream("member.data")) {
+      out.writeInt(memberRepository.size());
 
       for (Member member : memberRepository) {
         out.writeUTF(member.getEmail());
@@ -183,7 +181,7 @@ public class App {
   }
 
   void loadBoard() {
-    try (DataInputStream in = new DataInputStream("board.data")) {
+    try (BufferedDataInputStream in = new BufferedDataInputStream("board.data")) {
       int size = in.readInt();
 
       for (int i = 0; i < size; i++) {
@@ -203,8 +201,8 @@ public class App {
   }
 
   void saveBoard() {
-    try (DataOutputStream out = new DataOutputStream("board.data")) {
-      out.writeShort(boardRepository.size());
+    try (BufferedDataOutputStream out = new BufferedDataOutputStream("board.data")) {
+      out.writeInt(boardRepository.size());
 
       for (Board board : boardRepository) {
         out.writeUTF(board.getTitle());
@@ -219,7 +217,7 @@ public class App {
   }
 
   void loadGreeting() {
-    try (DataInputStream in = new DataInputStream("greeting.data")) {
+    try (BufferedDataInputStream in = new BufferedDataInputStream("greeting.data")) {
       int size = in.readInt();
 
       for (int i = 0; i < size; i++) {
@@ -239,8 +237,8 @@ public class App {
   }
 
   void saveGreeting() {
-    try (DataOutputStream out = new DataOutputStream("greeting.data")) {
-      out.writeShort(greetingRepository.size());
+    try (BufferedDataOutputStream out = new BufferedDataOutputStream("greeting.data")) {
+      out.writeInt(greetingRepository.size());
 
       for (Board greetingBoard : greetingRepository) {
         out.writeUTF(greetingBoard.getTitle());

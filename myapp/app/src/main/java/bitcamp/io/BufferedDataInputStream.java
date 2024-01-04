@@ -21,7 +21,7 @@ public class BufferedDataInputStream extends DataInputStream {
         return -1;
       }
     }
-    return buffer[cursor++] & 0xff; // 주의!
+    return buffer[cursor++] & 0x000000ff; // 주의!
   }
 
   @Override
