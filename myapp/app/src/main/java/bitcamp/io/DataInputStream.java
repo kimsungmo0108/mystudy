@@ -16,7 +16,7 @@ public class DataInputStream extends FileInputStream {
   }
 
   public int readInt() throws IOException {
-    return read() << 8 | read();
+    return read() << 24 | read() << 16 | read() << 8 | read();
   }
 
   public long readLong() throws IOException {
@@ -31,9 +31,10 @@ public class DataInputStream extends FileInputStream {
   }
 
   public String readUTF() throws IOException {
-    byte[] bytes = new byte[60000];
     int len = readInt();
-    read(bytes, 0, len);
+//    byte[] bytes = new byte[len];
+//    read(bytes, 0, len);
+    byte[] bytes = readNBytes(len); // java 11 버전부터 사용가능
     return new String(bytes, 0, len, StandardCharsets.UTF_8);
   }
 
