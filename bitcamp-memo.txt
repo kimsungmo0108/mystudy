@@ -3424,8 +3424,9 @@ anonymous class 생성자
 2024.01.03(목)
 -------------------------------------------------------------------------------------
 과제 33. 입출력 성능을 높이기 위해 버퍼 기능 추가하기
-
-→
+- 기존의 클래스에 버퍼 기능을 추가한다.
+  - BufferedDataInputStream = DataInputStream + 버퍼 기능
+  - BufferedDataOutputStream = DataOutputStream + 버퍼 기능
 -------------------------------------------------------------------------------------
 버퍼 사용하기
 ① 기존 방식
@@ -3441,8 +3442,30 @@ FileOutputStream{write(int), wrtie(byte[]), ....}
 → extends → Dataoutput{writeShort(), writeInt(), writeLong(), writeBoolean(), writeUTF(), ....}
 → extends → BufferedDataOutputStream{buf : byte[], write(int), write(byte[]), }
 -------------------------------------------------------------------------------------
-→
+과제 34. Decorator 패턴
+① 상속을 이용한 기능 확장 방식의 문제점
+FileInputStream{} → extends → DataInputStream{byte 데이터 → primitive data type, String으로 변환} → extends → BufferedDataInputStream{버퍼 기능}
+→ BufferedFileInpuStream에 있는 버퍼 기능이랑 중복
+→ 상속을 이용해 다양한 기능을 추가시키다보면 다양한 조합의 서브 클래스들이 대량으로 생성되는 문제
+→ 서브 클래스 끼리 기능이 중복되는 문제가 발생할 수 있다
+② 위임과 포함을 이용한 기능 확장
+InputStream → extends → FileInputStream(말단 component)
+		      → ByteArrayInputStream(말단 component)
+		      → PipedInputStream(말단 component)
+                 → extends → FilterInputStream(중간 부품=Decorator) →InputStream을 사용
+				→ extends → BufferedInputStream(중간 부품=Decorator)
+					  → DataInputStream(중간 부품=Decorator)
+ 					  → CipherInputStream(중간 부품=Decorator)
 -------------------------------------------------------------------------------------
+파일 읽기 기본 기능
+FileInputStream 사용
+FileInputstream in = new FileInputStream(" ");
+in.read();
+파일 읽기 + 버퍼
+FileInputStream과 BufferedInputStream을 연결해서 사용
+FileInputstream in = new FileInputStream(" ");
+BufferedInputStream in2 = new Bufferedinput(in);
+in2.read();
 →
 -------------------------------------------------------------------------------------
 →
