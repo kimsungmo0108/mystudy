@@ -13,6 +13,26 @@ public class Assignment implements Serializable, CsvString {
   private String content;
   private Date deadline;
 
+  // 팩토리 메소드
+  public static Assignment createFromCsv(String csv) {
+    String[] valus = csv.split(",");
+    Assignment obj = new Assignment();
+    obj.setTitle(valus[0]);
+    obj.setContent(valus[1]);
+    obj.setDeadline(Date.valueOf(valus[2]));
+    return obj;
+  }
+//  public void createFromCsv(String csv) {
+//    String[] valus = csv.split(",");
+//
+////    this.title = valus[0];
+////    this.content = valus[1];
+////    this.deadline = Date.valueOf(valus[2]);
+//    setTitle(valus[0]);
+//    setContent(valus[1]);
+//    setDeadline(Date.valueOf(valus[2]));
+//  }
+
   public String getTitle() {
     return title;
   }

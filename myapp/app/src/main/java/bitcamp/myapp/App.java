@@ -22,13 +22,14 @@ import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.CsvString;
 import bitcamp.myapp.vo.Member;
 import bitcamp.util.Prompt;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.ObjectInputStream;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 public class App {
 
@@ -46,10 +47,10 @@ public class App {
 //    loadData("board.data", boardRepository);
 //    loadData("member.data", memberRepository);
 //    loadData("greeting.data", greetingRepository);
-    assignmentRepository = loadData("assignment.data");
-    boardRepository = loadData("board.data");
-    memberRepository = loadData("member.data");
-    greetingRepository = loadData("greeting.data");
+    assignmentRepository = loadData("assignment.csv", Assignment.class);
+    boardRepository = loadData("board.csv", Board.class);
+    memberRepository = loadData("member.csv", Member.class);
+    greetingRepository = loadData("greeting.csv", Board.class);
 
     prepareMenu();
   }
@@ -132,18 +133,31 @@ public class App {
 //    }
 //  }
 
-  <E> List<E> loadData(String filepath) {
-    try (ObjectInputStream in = new ObjectInputStream(
-        new BufferedInputStream(new FileInputStream(filepath)))) {
+  <E> List<E> loadData(String filepath, Class<E> clazz) {
 
-      return (List<E>) in.readObject();
+    // 0) 객체를 저장할 list를 준비한다
+    ArrayList<E> list = new ArrayList<>();
+    try (Scanner in = new Scanner(new FileReader(filepath))) {
 
+      // 1) 클래스 정보를 가지고 팩토리 메소드를 알아낸다
+      Method factoryMethod = clazz.getMethod("createFromCsv", String.class);
 
+      while (true) {
+        // 2) 팩토리 메소드에 CSV 문자열을 전달하고 객체로 리턴 받는다
+        E obj = (E) factoryMethod.invoke(null, in.nextLine());
+
+        // 3) 생성한 객체를 list에 저장한다
+        list.add(obj);
+      }
+
+    } catch (NoSuchElementException e) {
+      System.out.printf("%s 파일 로딩 완료!\n", filepath);
+      //return list;
     } catch (Exception e) {
       System.out.printf("%s 파일 로딩 중 오류 발생!\n", filepath);
       e.printStackTrace();
     }
-    return new ArrayList<E>();
+    return list;
   }
 
 }

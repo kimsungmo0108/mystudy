@@ -13,6 +13,16 @@ public class Member implements Serializable, CsvString {
   private String password;
   private Date createdDate;
 
+  public static Member createFromCsv(String csv) {
+    String[] valus = csv.split(",");
+    Member obj = new Member();
+    obj.setEmail(valus[0]);
+    obj.setName(valus[1]);
+    obj.setPassword(valus[2]);
+    obj.setCreatedDate(new Date(Long.valueOf(valus[3])));
+    return obj;
+  }
+
   public String getEmail() {
     return email;
   }
