@@ -27,7 +27,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.sql.Date;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,22 +37,22 @@ public class App {
 
   Prompt prompt = new Prompt(System.in);
 
-  List<Board> boardRepository = new LinkedList<>();
-  List<Assignment> assignmentRepository = new LinkedList<>();
+  List<Board> boardRepository = new ArrayList<>();
+  List<Assignment> assignmentRepository;
   List<Member> memberRepository = new ArrayList<>();
   List<Board> greetingRepository = new ArrayList<>();
 
   MenuGroup mainMenu;
 
   App() {
-    prepareMenu();
     loadAssignment();
     loadMember();
     loadBoard();
     loadGreeting();
+    prepareMenu();
   }
 
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) {
     new App().run();
   }
 
@@ -106,44 +107,42 @@ public class App {
   }
 
   void loadAssignment() {
-    try (DataInputStream in = new DataInputStream(
+    try (ObjectInputStream in = new ObjectInputStream(
         new BufferedInputStream(new FileInputStream("assignment.data")))) {
 
-      int size = in.readInt();
-      long start = System.currentTimeMillis();
-      for (int i = 0; i < size; i++) {
-        Assignment assignment = new Assignment();
-        assignment.setTitle(in.readUTF());
-        assignment.setContent(in.readUTF());
-        assignment.setDeadline(Date.valueOf(in.readUTF()));
-
-        assignmentRepository.add(assignment);
-      }
-      long end = System.currentTimeMillis();
-      System.out.printf("로딩 걸린 시간 : %d\n", end - start);
+      assignmentRepository = (List<Assignment>) in.readObject();
+//      int size = in.readInt();
+//      //long start = System.currentTimeMillis();
+//      for (int i = 0; i < size; i++) {
+//        Assignment assignment = (Assignment) in.readObject();
+//        assignmentRepository.add(assignment);
+//      }
+      //long end = System.currentTimeMillis();
+      //System.out.printf("로딩 걸린 시간 : %d\n", end - start);
     } catch (Exception e) {
+      assignmentRepository = new LinkedList<>();
       System.out.println("과제 데이터 로딩 중 오류 발생!");
       e.printStackTrace();
     }
   }
 
   void saveAssignment() {
-    try (DataOutputStream out = new DataOutputStream(
+    try (ObjectOutputStream out = new ObjectOutputStream(
         new BufferedOutputStream(new FileOutputStream("assignment.data")))) {
 
-      long start = System.currentTimeMillis();
+      //long start = System.currentTimeMillis();
+
+      out.writeObject(assignmentRepository);
+
       //저장할 데이터 개수를 2바이트로 출력한다.
-      out.writeInt(assignmentRepository.size());
+      //out.writeInt(assignmentRepository.size());
 
-      for (Assignment assignment : assignmentRepository) {
-        out.writeUTF(assignment.getTitle());
-        out.writeUTF(assignment.getContent());
-        out.writeUTF(assignment.getDeadline().toString());
+//      for (Assignment assignment : assignmentRepository) {
+//        out.writeObject(assignment);
+//      }
 
-      }
-
-      long end = System.currentTimeMillis();
-      System.out.printf("저장 걸린 시간 : %d\n", end - start);
+      //long end = System.currentTimeMillis();
+      //System.out.printf("저장 걸린 시간 : %d\n", end - start);
     } catch (Exception e) {
       System.out.println("과제 데이터 저장 중 오류 발생!");
       e.printStackTrace();
