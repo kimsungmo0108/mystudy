@@ -1,10 +1,12 @@
 package bitcamp.myapp.vo;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
 public class Board implements Serializable/*, CsvString */ {
 
+  @Serial
   private static final long serialVersionUID = 100L;
 
   private String title;

@@ -1,10 +1,12 @@
 package bitcamp.myapp.vo;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Date;
 
 public class Assignment implements Serializable/*, CsvString*/ {
 
+  @Serial
   private static final long serialVersionUID = 100L;
 
   private String title;
