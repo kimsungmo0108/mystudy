@@ -109,7 +109,16 @@ public class App {
     saveData("greeting.data", greetingRepository);
   }
 
-
+  //  void saveData(String filepath, List<? extends CsvString> dataList) {
+//    try (FileWriter out = new FileWriter(filepath)) {
+//      for (CsvString csvObject : dataList) {
+//        out.write(csvObject.toCsvString() + "\n");
+//      }
+//    } catch (Exception e) {
+//      System.out.printf("%s 파일 저장 중 오류 발생!\n", filepath);
+//      e.printStackTrace();
+//    }
+//  }
   void saveData(String filepath, List<?> dataList) {
     try (ObjectOutputStream out = new ObjectOutputStream(
         new BufferedOutputStream(new FileOutputStream(filepath)))) {
