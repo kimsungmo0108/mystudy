@@ -3534,7 +3534,7 @@ new Member 인스턴스 생성(100번) → ObjectOutputStream → 파일(Member,
 - CSV 형식으로 데이터를 읽고 쓰는 법
 - FileReader/FileWriter 사용법
 -------------------------------------------------------------------------------------
-CSV 형식으로 I/O
+CSV(★ Comma Sepqarated value) 형식으로 I/O
 List<Board> : Board Board Board Board ....
 → 제목, 내용, 작성자, 작성날짜
 
@@ -3545,7 +3545,11 @@ toCsvString() 규칙 정의
 → 데이터의 구조를 잘 알고 있는 도메인 객체(vo, DTO)가 CSV 문자열을 만들게 한다
 → GRASP 패턴의 Information Expert
 -------------------------------------------------------------------------------------
-→
+deserialize와 serialVersionUID
+파일(클래스 정보, 인스턴스 변수 값, serialVersionUID)
+→ read(=deserialize) → ObjectInputStream → 클래스 정보와 serialVersionUID를 이용해서 new 인스턴스 생성
+→ deserialize할 때 버전 일치 여부를 검사한다 다르면 예외 발생 !!!
+
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
