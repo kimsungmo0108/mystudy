@@ -109,6 +109,7 @@ public class App {
         new BufferedInputStream(new FileInputStream("assignment.data")))) {
 
       assignmentRepository = (List<Assignment>) in.readObject();
+      //System.out.println(assignmentRepository.size());
 //      int size = in.readInt();
 //      //long start = System.currentTimeMillis();
 //      for (int i = 0; i < size; i++) {
