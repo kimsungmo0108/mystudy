@@ -19,9 +19,9 @@ import bitcamp.myapp.handler.member.MemberModifyHandler;
 import bitcamp.myapp.handler.member.MemberViewHandler;
 import bitcamp.myapp.vo.Assignment;
 import bitcamp.myapp.vo.Board;
-import bitcamp.myapp.vo.CsvString;
 import bitcamp.myapp.vo.Member;
 import bitcamp.util.Prompt;
+import com.google.gson.Gson;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.lang.reflect.Method;
@@ -109,11 +109,14 @@ public class App {
     saveData("greeting.csv", greetingRepository);
   }
 
-  void saveData(String filepath, List<? extends CsvString> dataList) {
+  void saveData(String filepath, List<?> dataList) {
     try (FileWriter out = new FileWriter(filepath)) {
-      for (CsvString csvObject : dataList) {
-        out.write(csvObject.toCsvString() + "\n");
-      }
+
+      Gson gson = new Gson();
+      String gsonData = gson.toJson(dataList);
+      System.out.println(gsonData);
+      System.out.println("-------------------");
+
     } catch (Exception e) {
       System.out.printf("%s 파일 저장 중 오류 발생!\n", filepath);
       e.printStackTrace();
@@ -144,6 +147,7 @@ public class App {
 
       while (true) {
         // 2) 팩토리 메소드에 CSV 문자열을 전달하고 객체로 리턴 받는다
+        // 앞에는 인스턴스 주소 또는 static 메소드면 null
         E obj = (E) factoryMethod.invoke(null, in.nextLine());
 
         // 3) 생성한 객체를 list에 저장한다

@@ -3469,7 +3469,10 @@ in2.read();
 예3 )
 파일 읽기 + 버퍼 + 데이터 가공
 FileInputStream과 BufferedInputStream, DataInputStream 과 연결해서 사용
-
+FileInputstream in = new FileInputStream(" ");
+BufferedInputStream in2 = new Bufferedinput(in);
+DataInputStream in3 = new DataInputStream(in2);
+in3.read();
 -------------------------------------------------------------------------------------
 
 
@@ -3481,17 +3484,17 @@ FileInputStream과 BufferedInputStream, DataInputStream 과 연결해서 사용
   - java.io.Serializable 인터페이스 사용법
   - transient modifier 사용법
 -------------------------------------------------------------------------------------
-객체 직렬화(serialize)
+★ 객체 직렬화(serialize)
 인스턴스 → serialize → bytes[]
 bytes[] → (deserialize=unmarshaling) → 인스턴스
-class → new 인스턴스 → ObjectOuputStream → bytes[](인스턴스 변수, 클래스 정보) 배열로 내보낼 수 있다
+class → new 인스턴스 → ObjectOuputStream → ★ bytes[](인스턴스 변수, 클래스 정보) 배열로 내보낼 수 있다
 bytes[] → ObjectInputStream → 인스턴스
 -------------------------------------------------------------------------------------
 ★ character Stream
 utf8 → utf16-BE로 변환
 → utf8로 변환된 16진수를 1byte씩 읽는다
 → 1byte씩 읽다가 한글을 읽게되면 3byte를 읽는다
-→ 4byte로 변환한다
+→ 2byte로 변환한다
 AB가각
 → 41 42 ea b0 80 ea b0 81 
 → 0041 0042 ac00 ac01 
@@ -3534,10 +3537,9 @@ new Member 인스턴스 생성(100번) → ObjectOutputStream → 파일(Member,
 - CSV 형식으로 데이터를 읽고 쓰는 법
 - FileReader/FileWriter 사용법
 -------------------------------------------------------------------------------------
-CSV(★ Comma Sepqarated value ★) 형식으로 I/O
+CSV(★ Comma Separated value ★) 형식으로 I/O
 List<Board> : Board Board Board Board ....
-→ 제목, 내용, 작성자, 작성날짜
-
+→ toCsvString() → Board 객체 읽어오기 → return → 제목, 내용, 작성자, 작성날짜 → write → 파일에 저장
 -------------------------------------------------------------------------------------
 toCsvString() 규칙 정의
 <<interface>>CsvString{ toCsvString() }
@@ -3553,16 +3555,67 @@ deserialize와 serialVersionUID
 
 
 
+2024.01.08(월)
+-------------------------------------------------------------------------------------
+과제 38. JSON 형식으로 읽고/쓰기
+→ Gson(google gson) 라이브러리 사용법
+JSON → javascript 객체 리터럴 표기형식 모방 → JavaScript Object Notation
+javascript 형식
+{
+  title : "제목",
+  'content' : "내용",
+  "deadline" : "2023-01-01"
+}
+JSON 형식(예: property 명은 무조건 "문자열" = "문자열)
+{
+  "title" : "제목",
+  "content" : "내용",
+  "deadline" : "2023-01-01"
+}
+→ XML 처럼 구조적인 데이터를 표현하기 쉽다
+→ XML tag처럼 데이터를 구분하는 메타데이터가 있다
+→ text 형식으로 프로그램 언어간에 주고 받기 쉽다
+→ 그래서 Open API에서 많이 사용한다
+-------------------------------------------------------------------------------------
+gson 사용방법
+1) 객체 준비
+    Member m = new Member();
+    m.setNo(100);
+    m.setName("홍길동");
+    m.setEmail("hong@test.com");
+    m.setPassword("1111");
+    m.setPhoto("hong.gif");
+    m.setTel("010-2222-1111");
+    m.setRegisteredDate(new Date(System.currentTimeMillis()));
 
+2) JSON 처리 객체 준비
+    Gson gson = new Gson();
+
+3) 객체의 값을 JSON 문자열로 얻기
+    String jsonStr = gson.toJson(m);
+
+    System.out.println(jsonStr);
 -------------------------------------------------------------------------------------
-→
+gson vs jackson
+→ gson은 필드명으로 객체화(serialize, deserialize)하고
+→ jackson은 getter, setter 프로퍼티명으로 객체화 한다
+→ java.sql.Date 날짜 값도 다르게 저장된다
+→ 각 쓰고 읽는 법이 정해져 있다
 -------------------------------------------------------------------------------------
-→
+GoF의 Builder 패턴
+→ 복합 객체의 생성 과정을 캡슐화한다
+① 일반적
+Gson gson = new Gson();
+
+② Builder 패턴
+GsonBuilder builder = new GsonBuilder();
+builder.setDateFormat("yyyy-MM-dd");
+Gson gson = builder.create();
+→ Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+→ 객체 생성에 필요한 옵션 설정 후 객체 생성
+→ 여러 객체를 조립해서 만들어야 하는 경우 복잡한 객체 생성 과정을 감추기 위해 외부 객체(Builder)에 의뢰해서 객체를 얻는 기법
 -------------------------------------------------------------------------------------
-→
--------------------------------------------------------------------------------------
-→
--------------------------------------------------------------------------------------
+
 →
 -------------------------------------------------------------------------------------
 →
