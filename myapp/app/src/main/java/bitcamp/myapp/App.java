@@ -112,6 +112,7 @@ public class App {
   void saveData(String filepath, List<?> dataList) {
     try (BufferedWriter out = new BufferedWriter(new FileWriter(filepath))) {
 
+      // GsonBuilder를 이용해서 날짜 옵션을 설정 후 Gson을 생성 후 dataList 객체를 Json으로 변환 후 리턴
       out.write(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(dataList));
 
     } catch (Exception e) {
