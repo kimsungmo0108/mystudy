@@ -510,7 +510,9 @@ size = 0;
 ★ 버퍼에 한번에 읽기
 size = super.read(buffer);
 -----------------------------------------------------------------
-
+Date 객체 밀리초에서 스트링으로 바꾸기
+@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = ("Asia/Seoul"))
+  private Date startDate;
 -----------------------------------------------------------------
 
 -----------------------------------------------------------------

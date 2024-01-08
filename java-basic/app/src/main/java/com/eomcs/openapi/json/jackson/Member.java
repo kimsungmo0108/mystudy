@@ -4,18 +4,30 @@ import java.sql.Date;
 
 public class Member {
   private int no;
-  private String fullname;
+  private String name;
   private String email;
   private String password;
   private String photo;
   private String tel;
   private Date registeredDate;
 
+  private School school;
+
+  public School getSchool() {
+    return school;
+  }
+
+  public void setSchool(School school) {
+    this.school = school;
+  }
+
+
+
   @Override
   public String toString() {
-    return "Member [no=" + no + ", fullname=" + fullname + ", email=" + email + ", password="
-        + password + ", photo=" + photo + ", tel=" + tel + ", registeredDate=" + registeredDate
-        + "]";
+    return "Member [no=" + no + ", name=" + name + ", email=" + email + ", password=" + password
+        + ", photo=" + photo + ", tel=" + tel + ", registeredDate=" + registeredDate + ", school="
+        + school + "]";
   }
 
   public int getNo() {
@@ -27,11 +39,11 @@ public class Member {
   }
 
   public String getName() {
-    return fullname;
+    return name;
   }
 
-  public void setName(String fullname) {
-    this.fullname = fullname;
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getEmail() {

@@ -3596,11 +3596,14 @@ gson 사용방법
 
     System.out.println(jsonStr);
 -------------------------------------------------------------------------------------
-gson vs jackson
+★ gson vs jackson
 → gson은 필드명으로 객체화(serialize, deserialize)하고
 → jackson은 getter, setter 프로퍼티명으로 객체화 한다
 → java.sql.Date 날짜 값도 다르게 저장된다
 → 각 쓰고 읽는 법이 정해져 있다
+→ Gson 과 달리 JSON 프로퍼티에 해당하는 객체 프로퍼티가 없다면 예외가 발생한다.
+→ @JsonIgnoreProperties 애노테이션을 사용하여 JSON 프로퍼티 중에서 무시할 항목을 지정해야 한다.
+→ @JsonIgnoreProperties(value = {"name", "email", "password", "photo", "tel"})
 -------------------------------------------------------------------------------------
 GoF의 Builder 패턴
 → 복합 객체의 생성 과정을 캡슐화한다
