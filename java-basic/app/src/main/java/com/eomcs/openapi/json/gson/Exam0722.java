@@ -6,7 +6,8 @@ import com.google.gson.Gson;
 public class Exam0722 {
   public static void main(String[] args) {
 
-    String jsonStr = "{\"no\":100,\"title\":\"Hello\",\"manager\":{\"position\":\"대리\",\"fax\":\"02-1111-2222\",\"no\":101,\"name\":\"홍길동\",\"email\":\"hong@test.com\",\"registeredDate\":\"10월 5, 2021\"}}";
+    String jsonStr =
+        "{\"no\":100,\"title\":\"Hello\",\"manager\":{\"position\":\"대리\",\"fax\":\"02-1111-2222\",\"no\":101,\"name\":\"홍길동\",\"email\":\"hong@test.com\",\"registeredDate\":\"10월 5, 2021\"}}";
 
     ManagerParam param = new Gson().fromJson(jsonStr, ManagerParam.class);
 
@@ -15,8 +16,5 @@ public class Exam0722 {
     System.out.println(param.manager);
   }
 }
-
-
-
 
 
