@@ -38,7 +38,7 @@ public class Exam0620 {
 
     // 위의 코드는 내부적으로 다음과 같다.
     // 1) 람다 표현
-    //    Interest i1 = money -> 보통예금.year(money);
+    // Interest i1 = money -> 보통예금.year(money);
     //
     // 2) 익명 클래스
     Interest i1 = new Interest() {

@@ -20,6 +20,17 @@ public class Exam0920 {
         System.out.println(item);
       }
     }
+    // 이 메소드는 list의 각 항목을 반복할 때마다 호출된다
+    // 따라서 list에 대해 반복문을 돌면서 각 항목에 대해 처리할 작업이 있다면
+    // 이 메소드에 작성한다
     names.forEach(new MyConsumer<String>());
+
+
+    //
+    // public void forEach(Consumer<? super E> action) {
+    // for(E value : this) {
+    // action.accept(value);
+    // }
+    // }
   }
 }

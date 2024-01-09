@@ -21,6 +21,10 @@ public class Exam0610 {
     public double day(int money) {
       return money * rate / 100 / 365;
     }
+
+    public double bonus() {
+      return 100000;
+    }
   }
 
   static interface Interest {
@@ -45,7 +49,7 @@ public class Exam0610 {
     Interest i1 = 보통예금::year; // 인스턴스 메서드를 메서드 레퍼런스로 지정한다.
     //
     // 람다 문법으로 표현하면:
-    //    Interest i1 = money -> 보통예금.year(money);
+    // Interest i1 = money -> 보통예금.year(money);
 
     System.out.printf("년 이자: %.1f\n", i1.compute(10_0000_0000));
 
@@ -66,6 +70,9 @@ public class Exam0610 {
 
     i2 = 정기예금::day;
     System.out.printf("일 이자: %.1f\n", i2.compute(10_0000_0000));
+
+    // i2 = 보통예금::bonus; 컴파일 오류
+    // => i2 = (int money) -> {return 보통예금.bonus(money);};
   }
 }
 
