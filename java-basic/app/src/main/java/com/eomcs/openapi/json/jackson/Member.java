@@ -9,6 +9,8 @@ public class Member {
   private String password;
   private String photo;
   private String tel;
+
+  // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = ("Asia/Seoul"))
   private Date registeredDate;
 
   private School school;

@@ -8,7 +8,8 @@ public class Exam0121 {
   public static void main(String[] args) {
 
     // 1) JSON 문자열 준비
-    String jsonStr = "{\"no\":100,\"name\":\"홍길동\",\"email\":\"hong@test.com\",\"password\":\"1111\",\"photo\":\"hong.gif\",\"tel\":\"010-2222-1111\",\"registeredDate\":\"2023-07-03\"}";
+    String jsonStr =
+        "{\"no\":100,\"name\":\"홍길동\",\"email\":\"hong@test.com\",\"password\":\"1111\",\"photo\":\"hong.gif\",\"tel\":\"010-2222-1111\",\"registeredDate\":\"2023-07-03\"}";
 
     // 2) JSON 처리 객체 준비
     Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
@@ -19,8 +20,5 @@ public class Exam0121 {
     System.out.println(m);
   }
 }
-
-
-
 
 

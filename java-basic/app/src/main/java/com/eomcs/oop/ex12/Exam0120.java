@@ -9,6 +9,9 @@ public class Exam0120 {
   }
 
   public static void main(String[] args) {
+    Player p0 = () -> System.out.println("Hi!");
+    p0.play();
+
     // 1) 한 문장일 때는 중괄호를 생략할 수 있다.
     Player p1 = () -> System.out.println("테스트1");
     p1.play();
@@ -20,7 +23,7 @@ public class Exam0120 {
     p2.play();
 
     // => 파라미터가 없다고 괄호를 생략할 수는 없다.
-    //    Player p3 = -> System.out.println("테스트3"); // 컴파일 오류!
+    // Player p3 = -> System.out.println("테스트3"); // 컴파일 오류!
   }
 }
 

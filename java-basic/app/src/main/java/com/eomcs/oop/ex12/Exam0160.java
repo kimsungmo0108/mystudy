@@ -9,7 +9,7 @@ public class Exam0160 {
   // 스태틱 필드
   static A obj1 = () -> System.out.println("스태틱 필드");
 
-  //인스턴스 필드
+  // 인스턴스 필드
   A obj2 = () -> System.out.println("인스턴스 필드");
 
   public static void main(final String[] args) {

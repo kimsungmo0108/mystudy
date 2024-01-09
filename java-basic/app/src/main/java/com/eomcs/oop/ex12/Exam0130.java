@@ -8,6 +8,10 @@ public class Exam0130 {
   }
 
   public static void main(String[] args) {
+    Player p0 = name -> System.out.println(name);
+
+    p0.play("김성모");
+
     // 1) 파라미터는 괄호() 안에 선언한다.
     Player p1 = (String name) -> System.out.println(name + " 님 환영합니다.");
     p1.play("홍길동");
