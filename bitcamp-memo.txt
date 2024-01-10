@@ -3768,29 +3768,161 @@ Predicate<My> p3 = My::m; // OK!
 // => Predicate<My> p3 = (My value) -> {return value.m();};
 p3.test(new My());
 -------------------------------------------------------------------------------------
+생성자 레퍼런스
+Calculator c1 = Player::new;
+-------------------------------------------------------------------------------------
 
 
 
 2024.01.10(수)
 -------------------------------------------------------------------------------------
-→
+I18N(Internationalization) 과 L10N(Localization)
+기존 방식(한국어 버전)
+System.out.printf("제목 : %s\n", title)
+→ 나라별 언어마다 프로그램을 짜야한다
+다국어 지원
+System.out.printf("%s:%s\n", prop.get("title"), title);
+→ 사용자가 선호하는 언어로 라벨을 출력
+→ xxx.properties, xxx.xml 등 파일에서 특정 언어로 작성된 라벨을 읽어온다
+→ %s를 통해서 값만 주고 받으면 유연해진다
+
+→ 다른 언어로 라벨을 교체할 수 있도록 프로그래밍 하는 것 = "I18N 지원"
+→ 특정 국가의 특정 언어로 라벨을 작성하는 것 = "L10N 지원"
+→ 지역화는 프로그래밍이 아니다
 -------------------------------------------------------------------------------------
-→
+★ 운영체제에서 환경변수 값 갖고 오기
+userCountry = System.getProperty("user.country");
+userLanguage = System.getProperty("user.language");
+Properties props = System.getProperties();
+→ 기본 값은 US, en으로 되어있다
+→ 사용자에 맞는 값은 보통 xml 파일로 만든다
 -------------------------------------------------------------------------------------
-→
+메소드 제네릭 
+→ 즉 What이 무슨 타입인지는 메서드가 호출될 때 넘겨주는 파라미터로 결정된다.
+→ 제네릭을 사용하면 특정 타입을 다루는 메서드 여러 개를 한 개의 메서드로 줄일 수 있다.
+→ 이때 "What"을 가리키는 용어로 "타입(이름을 받는) 파라미터"라고 부른다.
+<다루는_타입_별명> 다루는_타입_별명 메서드명(다루는_타입_별명 파라미터, ...) {...}
+예) <What> What test(What obj) {...}
+→ What = 타입 파라미터(type parameter)
+→ 대문자로 시작하지만 클래스와 헷갈릴 수 있다 그래서 한 글자로 많이 표현한다
+→ 보통 긴 이름을 사용하지 않고 다음과 같이 한 개의 대문자로 된 이름을 많이 사용한다
+// T - Type이라는 의미를 표현할 수 있어 많이 사용하는 이름이다.
+// E - Element라는 의미로 목록의 항목을 가리킬 때 사용한다.
+// K - Key 객체를 가리킬 때 사용한다.
+// N - Number의 의미로 숫자 타입을 가리킬 때 주로 사용한다.
+// V - Value의 의미로 값의 타입을 가리킬 때 사용한다.
+// S,U,V 등 - 한 번에 여러 타입을 가리킬 때 두 번째, 세 번째, 네 번째 이름으로 주로 사용한다.
 -------------------------------------------------------------------------------------
-→
+클래스 제네릭
+→ 범용적인 클래스를 만드는 문법
+static class Box<T> {
+    T value; 
+    public T get() {return this.value;}
+    public void set(T value) {this.value = value;}
+}
+Box<Member> b1 = new Box<>();
+Box<String> b2 = new Box<>();
+Box<Integer> b3 = new Box<>();
+
+b1.set(new Member("홍길동", 20));
+b2.set("Hello");
+b3.set(100);
+
+Member v1 = b1.get();
+→ 제네릭은 컴파일할 때 적합한지 검사하는 용도이다, 컴파일이 끝나면 제네릭은 사라진다
+→ 제네릭을 설정해도 Object 클래스로 주고 받는다
+→ 제네릭을 설정하지 않으면 Object로 설정한다
 -------------------------------------------------------------------------------------
-→
+여러 개 제네릭 설정
+ A<String,Integer,Member> obj = new A<>();
+class A2<T,S,U> {
+  T v1;
+  S v2;
+  U v3;
+}
+→ 제네릭도 변수라서 이름을 마음대로 지어도 되지만 통상적으로 이렇게 T, S, U 이렇게 설정한다
 -------------------------------------------------------------------------------------
-→
+제네릭 배열 생성하기
+// 예1) new 명령어는 컴파일 오류
+
+// 예2) 견본 배열을 받아서 복제하는 방법을 사용한다.
+static <T> T[] create2(T[] arr) {
+    // copyOf(original, newLength)
+    // => 원래 배열(original)과 같은 타입의 배열을 배열크기(newLength)에 맞춰 새로 생성한다.
+    return Arrays.copyOf(arr, 10);
+}
+// 예3) 배열의 타입 정보를 받아 생성하기
+  @SuppressWarnings("unchecked")
+  static <T> T[] create3(Class<?> type) {
+    return (T[]) Array.newInstance(type, 10);
+}
+
+// 예4) 견본 배열에서 타입 정보를 추출하여 배열을 생성하기
+  @SuppressWarnings("unchecked")
+  static <T> T[] create4(T[] arr) {
+    Class<?> arrayTypeInfo = arr.getClass(); // 예) String[]
+    System.out.println(arrayTypeInfo);
+
+    Class<?> arrayItemTypeInfo = arrayTypeInfo.getComponentType(); // 예) String
+    System.out.println(arrayItemTypeInfo);
+
+    return (T[]) Array.newInstance(arrayItemTypeInfo, 10);
+}
 -------------------------------------------------------------------------------------
-→
+파라미터 타입 레퍼런스와 인스턴스 - extends
+static class A {}
+static class B1 extends A {}
+static class B2 extends A {}
+static class C extends B1 {}
+  /*
+   *   Object
+   *     |
+   *     A
+   *    / \
+   *   B1 B2
+   *   |
+   *   C
+   */
+
+ArrayList<A> list1;
+//    list1 = new ArrayList(); // 이렇게 사용하지 말고, 명확히 제네릭의 타입을 지정하라.
+//    list1 = new ArrayList<Object>(); // 컴파일 오류!
+list1 = new ArrayList<A>();
+list1 = new ArrayList<>(); // 생략하면 레퍼런스와 같은 제네릭 타입이 된다.
+//    list1 = new ArrayList<B1>(); // 컴파일 오류!
+//    list1 = new ArrayList<B2>(); // 컴파일 오류!
+//    list1 = new ArrayList<C>(); // 컴파일 오류!
+
+list1.add(new B2()); // OK! → 컴파일러는 레퍼런스의 형식을 따져서 문법의 옳고 그름을 판단한다
+
+→ 제네릭은 서브 클래스든 수퍼 클래스든 제네릭으로 설정한 객체 타입만 가능하다
+→ 서브 클래스를 가르키고 싶다면 <? extends B1> 이런식으로 제네릭을 설정해야한다
+→ 수퍼 클래스를 가르키고 싶다면 <? super B1> 이렇게 한다면 B1 타입과 B1의 수퍼 클래스 타입도 가르킬 수 있다
+package com.eomcs.generic.ex02 참조
 -------------------------------------------------------------------------------------
-→
+애노테이션 사용
+//=> 클래스, 필드, 메서드, 로컬 변수 선언에 붙이는 특별한 주석이다.
+//=> 다른 주석과 달리 컴파일이나 실행할 때 추출할 수 있다.
+//=> 애노테이션 문법이 도입되기 전에 
+//   일반 주석에 특별한 문법을 포함시켜 사용했던 doclet 이라는 기술이 있었다.
+//=> 일반 주석과 달리 '프로퍼티명=값' 형태로 값을 다룰 수 있다.
+//=> 사용법
+//   - 애노테이션 정의 또는 기존에 정의된 애노테이션 사용
+//   - 클래스나 인터페이스에 적용
+//=> .class 파일에 포함된 애노테이션을 확인하라!
 -------------------------------------------------------------------------------------
-→
+애노테인션 활용
+→ 소스파일에서 애노테이션 정보를 읽어서 새 소스파일이나 설정 파일을 생성한다
+→ 컴파일러가 컴파일할 때 애노테이션에 설정된 정보를 참고하여 컴파일을 수행한다
+예) lombok 라이브러리 @Data @Getter @Setter
+→ JVM이 .class 파일에 들어있는 애노테이션 정보를 참고하여 Application을 실행한다
+예) @JsonFormat
+→ public @interface MyAnnotation2{String value();}
+→ 명사(명사구)로 이름을 짓는다
+→ 값을 꺼낼 때 메소드 호출로 꺼낸다
 -------------------------------------------------------------------------------------
+애노테이션 유지 정책
+
 →
 -------------------------------------------------------------------------------------
 →

@@ -17,11 +17,11 @@ public class Exam0110 {
     //
     Object obj = echo(new String("Hello")); // OK!
 
-    //    String obj1 = echo(new String("Hello")); // 컴파일 오류!
+    // String obj1 = echo(new String("Hello")); // 컴파일 오류!
     String obj2 = (String) echo(new String("Hello"));
 
     // 잘못된 형변환은 컴파일러는 속일 수 있을 지라도, runtime 에서는 오류를 발생시킨다.
-    //    Integer obj3 = (Integer) echo(new String("Hello")); // 실행 오류!
+    // Integer obj3 = (Integer) echo(new String("Hello")); // 실행 오류!
 
     Date obj4 = (Date) echo(new Date());
 
