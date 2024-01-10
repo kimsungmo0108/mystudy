@@ -8,7 +8,6 @@ public class Board implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 100L;
-
   private String title;
   private String content;
   private String writer;
@@ -22,6 +21,16 @@ public class Board implements Serializable {
     obj.setWriter(valus[2]);
     obj.setCreatedDate(new Date(Long.valueOf(valus[3])));
     return obj;
+  }
+
+  @Override
+  public String toString() {
+    return "Board{" +
+        "title='" + title + '\'' +
+        ", content='" + content + '\'' +
+        ", writer='" + writer + '\'' +
+        ", createdDate=" + createdDate +
+        '}';
   }
 
   public String getTitle() {

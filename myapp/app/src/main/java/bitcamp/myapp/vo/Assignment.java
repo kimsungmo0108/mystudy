@@ -56,4 +56,13 @@ public class Assignment implements Serializable {
   public void setDeadline(Date deadline) {
     this.deadline = deadline;
   }
+
+  @Override
+  public String toString() {
+    return "Assignment{" +
+        "title='" + title + '\'' +
+        ", content='" + content + '\'' +
+        ", deadline=" + deadline +
+        '}';
+  }
 }
