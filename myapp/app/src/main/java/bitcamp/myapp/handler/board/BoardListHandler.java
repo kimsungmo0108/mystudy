@@ -25,7 +25,7 @@ public class BoardListHandler extends AbstractMenuHandler {
     List<Board> list = this.boardDao.findAll();
 
     for (Board board : list) {
-      System.out.printf("%-4s\t%-20s\t%10s\t%4$tY-%4$tm-%4$td %4$tH:%4$tM:%4$tS\n",
+      System.out.printf("%-4d\t%-20s\t%10s\t%4$tY-%4$tm-%4$td %4$tH:%4$tM:%4$tS\n",
           board.getNo(),
           board.getTitle(),
           board.getWriter(),
