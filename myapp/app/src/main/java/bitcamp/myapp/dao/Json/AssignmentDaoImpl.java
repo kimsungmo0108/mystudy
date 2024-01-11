@@ -7,7 +7,7 @@ import java.util.List;
 public class AssignmentDaoImpl extends AbstractDao<Assignment> implements AssignmentDao {
 
   private static int index;
-  private int lastNo = list.getLast().getNo();
+  private int lastKey = list.getLast().getNo();
 
   public AssignmentDaoImpl(String filepath) {
     super(filepath);
@@ -15,14 +15,14 @@ public class AssignmentDaoImpl extends AbstractDao<Assignment> implements Assign
 
   @Override
   public void add(Assignment assignment) {
-    assignment.setNo(++lastNo);
+    assignment.setNo(++lastKey);
     list.add(assignment);
     saveData();
   }
 
   @Override
-  public int remove(int no) {
-    index = indexOf(no);
+  public int delete(int no) {
+    int index = indexOf(no);
     if (index == -1) {
       return 0;
     }
@@ -38,7 +38,7 @@ public class AssignmentDaoImpl extends AbstractDao<Assignment> implements Assign
 
   @Override
   public Assignment findBy(int no) {
-    index = indexOf(no);
+    int index = indexOf(no);
     if (index == -1) {
       return null;
     }
@@ -47,7 +47,7 @@ public class AssignmentDaoImpl extends AbstractDao<Assignment> implements Assign
 
   @Override
   public int update(Assignment assignment) {
-    index = indexOf(assignment.getNo());
+    int index = indexOf(assignment.getNo());
     if (index == -1) {
       return 0;
     }

@@ -18,7 +18,7 @@ public class AssignmentDeleteHandler extends AbstractMenuHandler {
   protected void action() {
     try {
       int no = this.prompt.inputInt("번호? ");
-      this.assignmentDao.remove(no);
+      this.assignmentDao.delete(no);
     } catch (Exception e) {
       System.out.println("삭제 오류!");
     }

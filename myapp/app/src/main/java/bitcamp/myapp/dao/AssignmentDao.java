@@ -8,7 +8,7 @@ public interface AssignmentDao {
 
   public void add(Assignment assignment);
 
-  public int remove(int no);
+  public int delete(int no);
 
   public List<Assignment> findAll();
 
