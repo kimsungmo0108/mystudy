@@ -3,6 +3,9 @@ package bitcamp.myapp;
 import bitcamp.menu.MenuGroup;
 import bitcamp.myapp.dao.AssignmentDao;
 import bitcamp.myapp.dao.BoardDao;
+import bitcamp.myapp.dao.Json.AssignmentDaoImpl;
+import bitcamp.myapp.dao.Json.BoardDaoImpl;
+import bitcamp.myapp.dao.Json.MemberDaoImpl;
 import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.handler.HelpHandler;
 import bitcamp.myapp.handler.assignment.AssignmentAddHandler;
@@ -34,10 +37,10 @@ public class App {
 
   Prompt prompt = new Prompt(System.in);
 
-  BoardDao boardDao = new BoardDao("board.json");
-  BoardDao greetingDao = new BoardDao("greeting.json");
-  AssignmentDao assignmentDao = new AssignmentDao("assignment.json");
-  MemberDao memberDao = new MemberDao("member.json");
+  BoardDao boardDao = new BoardDaoImpl("board.json");
+  BoardDao greetingDao = new BoardDaoImpl("greeting.json");
+  AssignmentDao assignmentDao = new AssignmentDaoImpl("assignment.json");
+  MemberDao memberDao = new MemberDaoImpl("member.json");
 
 
   MenuGroup mainMenu;

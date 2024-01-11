@@ -1,0 +1,67 @@
+package bitcamp.myapp.dao.Json;
+
+import bitcamp.myapp.dao.AssignmentDao;
+import bitcamp.myapp.vo.Assignment;
+import java.util.List;
+
+public class AssignmentDaoImpl extends AbstractDao<Assignment> implements AssignmentDao {
+
+  private static int index;
+  private int lastNo = list.getLast().getNo();
+
+  public AssignmentDaoImpl(String filepath) {
+    super(filepath);
+  }
+
+  @Override
+  public void add(Assignment assignment) {
+    assignment.setNo(++lastNo);
+    list.add(assignment);
+    saveData();
+  }
+
+  @Override
+  public int remove(int no) {
+    index = indexOf(no);
+    if (index == -1) {
+      return 0;
+    }
+    list.remove(index);
+    saveData();
+    return 1;
+  }
+
+  @Override
+  public List<Assignment> findAll() {
+    return list.subList(0, list.size());
+  }
+
+  @Override
+  public Assignment findBy(int no) {
+    index = indexOf(no);
+    if (index == -1) {
+      return null;
+    }
+    return list.get(index);
+  }
+
+  @Override
+  public int update(Assignment assignment) {
+    index = indexOf(assignment.getNo());
+    if (index == -1) {
+      return 0;
+    }
+    list.set(index, assignment);
+    saveData();
+    return 1;
+  }
+
+  private int indexOf(int no) {
+    for (int i = 0; i < list.size(); i++) {
+      if (list.get(i).getNo() == no) {
+        return i;
+      }
+    }
+    return -1;
+  }
+}

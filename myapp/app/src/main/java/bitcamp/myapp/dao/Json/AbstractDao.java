@@ -1,5 +1,6 @@
-package bitcamp.myapp.dao;
+package bitcamp.myapp.dao.Json;
 
+import bitcamp.myapp.dao.DaoException;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
@@ -13,7 +14,7 @@ public abstract class AbstractDao<T> {
 
   protected ArrayList<T> list;
   private String filepath;
-  
+
 
   public AbstractDao(String filepath) {
     this.filepath = filepath;
