@@ -1,8 +1,8 @@
 package bitcamp.myapp.dao.network;
 
-import bitcamp.myapp.dao.BoardDao;
+import bitcamp.myapp.dao.AssignmentDao;
 import bitcamp.myapp.dao.DaoException;
-import bitcamp.myapp.vo.Board;
+import bitcamp.myapp.vo.Assignment;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -11,7 +11,7 @@ import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardDaoImpl implements BoardDao {
+public class AssignmentDaoImpl implements AssignmentDao {
 
   String dataName;
   DataInputStream in;
@@ -20,7 +20,7 @@ public class BoardDaoImpl implements BoardDao {
 
   private int lastKey;
 
-  public BoardDaoImpl(String dataName, DataInputStream in, DataOutputStream out) {
+  public AssignmentDaoImpl(String dataName, DataInputStream in, DataOutputStream out) {
     this.dataName = dataName;
     this.in = in;
     this.out = out;
@@ -29,11 +29,11 @@ public class BoardDaoImpl implements BoardDao {
   }
 
   @Override
-  public void add(Board board) {
+  public void add(Assignment assignment) {
     try {
       out.writeUTF(dataName);
       out.writeUTF("add");
-      out.writeUTF(gson.toJson(board));
+      out.writeUTF(gson.toJson(assignment));
 
       String statusCode = in.readUTF();
       String entity = in.readUTF();
@@ -67,7 +67,7 @@ public class BoardDaoImpl implements BoardDao {
   }
 
   @Override
-  public List<Board> findAll() {
+  public List<Assignment> findAll() {
     try {
       out.writeUTF(dataName);
       out.writeUTF("findAll");
@@ -79,8 +79,8 @@ public class BoardDaoImpl implements BoardDao {
         throw new Exception(entity);
       }
 
-      return (List<Board>) gson.fromJson(entity,
-          TypeToken.getParameterized(ArrayList.class, Board.class));
+      return (List<Assignment>) gson.fromJson(entity,
+          TypeToken.getParameterized(ArrayList.class, Assignment.class));
     } catch (Exception e) {
       throw new DaoException(e);
     }
@@ -88,11 +88,12 @@ public class BoardDaoImpl implements BoardDao {
   }
 
   @Override
-  public Board findBy(int no) {
+  public Assignment findBy(int no) {
     try {
       out.writeUTF(dataName);
       out.writeUTF("findBy");
       out.writeUTF(gson.toJson(no));
+      //System.out.println(no);
 
       String statusCode = in.readUTF();
       String entity = in.readUTF();
@@ -100,18 +101,18 @@ public class BoardDaoImpl implements BoardDao {
         throw new Exception(entity);
       }
 
-      return gson.fromJson(entity, Board.class);
+      return gson.fromJson(entity, Assignment.class);
     } catch (Exception e) {
       throw new DaoException(e);
     }
   }
 
   @Override
-  public int update(Board board) {
+  public int update(Assignment ssignment) {
     try {
       out.writeUTF(dataName);
       out.writeUTF("update");
-      out.writeUTF(gson.toJson(board));
+      out.writeUTF(gson.toJson(ssignment));
 
       String statusCode = in.readUTF();
       String entity = in.readUTF();

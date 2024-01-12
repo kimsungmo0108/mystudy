@@ -3,10 +3,10 @@ package bitcamp.myapp;
 import bitcamp.menu.MenuGroup;
 import bitcamp.myapp.dao.AssignmentDao;
 import bitcamp.myapp.dao.BoardDao;
-import bitcamp.myapp.dao.Json.AssignmentDaoImpl;
-import bitcamp.myapp.dao.Json.BoardDaoImpl;
-import bitcamp.myapp.dao.Json.MemberDaoImpl;
 import bitcamp.myapp.dao.MemberDao;
+import bitcamp.myapp.dao.network.AssignmentDaoImpl;
+import bitcamp.myapp.dao.network.BoardDaoImpl;
+import bitcamp.myapp.dao.network.MemberDaoImpl;
 import bitcamp.myapp.handler.HelpHandler;
 import bitcamp.myapp.handler.assignment.AssignmentAddHandler;
 import bitcamp.myapp.handler.assignment.AssignmentDeleteHandler;
@@ -23,39 +23,34 @@ import bitcamp.myapp.handler.member.MemberDeleteHandler;
 import bitcamp.myapp.handler.member.MemberListHandler;
 import bitcamp.myapp.handler.member.MemberModifyHandler;
 import bitcamp.myapp.handler.member.MemberViewHandler;
-import bitcamp.myapp.vo.Board;
 import bitcamp.util.Prompt;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ClientApp {
 
   Prompt prompt = new Prompt(System.in);
 
-  BoardDao boardDao = new BoardDaoImpl("board.json");
-  BoardDao greetingDao = new BoardDaoImpl("greeting.json");
-  AssignmentDao assignmentDao = new AssignmentDaoImpl("assignment.json");
-  MemberDao memberDao = new MemberDaoImpl("member.json");
+  BoardDao boardDao;
+  BoardDao greetingDao;
+  AssignmentDao assignmentDao;
+  MemberDao memberDao;
 
 
   MenuGroup mainMenu;
 
   ClientApp() {
-
+    prepareNetwork();
     prepareMenu();
   }
 
   public static void main(String[] args) {
     System.out.println("[과제관리 시스템]");
+    new ClientApp().run();
+  }
+
+  void prepareNetwork() {
     try {
       // 1) 서버와 연결한 후 연결 정보 준비
       // => new Socket(서버 주소, 포트 번호);
@@ -72,30 +67,17 @@ public class ClientApp {
       DataOutputStream out = new DataOutputStream(socket.getOutputStream());
       System.out.println("입출력 준비 완료!");
 
-//      System.out.println("10초 동안 기다림!");
-//      Thread.sleep(10000);
+      // 네트워크 DAO 구현체 준비
+      boardDao = new BoardDaoImpl("board", in, out);
+      greetingDao = new BoardDaoImpl("greeting", in, out);
+      assignmentDao = new AssignmentDaoImpl("assignment", in, out);
+      memberDao = new MemberDaoImpl("member", in, out);
 
-      out.writeUTF("board");
-      out.writeUTF("findAll");
-      out.writeUTF("");
-      System.out.println("서버에 데이터를 보냈음!");
 
-//      System.out.println("10초 동안 기다림!");
-//      Thread.sleep(10000);
-
-      String response = in.readUTF();
-      ArrayList<Board> list = (ArrayList<Board>) new GsonBuilder().setDateFormat("yyyy-MM-dd")
-          .create().fromJson(response, TypeToken.getParameterized(ArrayList.class, Board.class));
-      for (Board board : list) {
-        System.out.println(board);
-      }
-
-      
     } catch (Exception e) {
       System.out.println("통신 오류!");
       e.printStackTrace();
     }
-    //new ClientApp().run();
   }
 
   void prepareMenu() {
@@ -143,53 +125,4 @@ public class ClientApp {
       }
     }
   }
-
-  void saveData(String filepath, List<?> dataList) {
-    try (BufferedWriter out = new BufferedWriter(new FileWriter(filepath))) {
-
-      // GsonBuilder를 이용해서 날짜 옵션을 설정 후 Gson을 생성 후 dataList 객체를 Json으로 변환 후 리턴
-      out.write(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(dataList));
-
-    } catch (Exception e) {
-      System.out.printf("%s 파일 저장 중 오류 발생!\n", filepath);
-      e.printStackTrace();
-    }
-  }
-
-//  <E> void loadData(String filepath, List<E> dataList) {
-//    try (ObjectInputStream in = new ObjectInputStream(
-//        new BufferedInputStream(new FileInputStream(filepath)))) {
-//
-//      //List<E> list = (List<E>) in.readObject();
-//      //dataList.addAll(list);
-//
-//    } catch (Exception e) {
-//      System.out.printf("%s 파일 로딩 중 오류 발생!\n", filepath);
-//      e.printStackTrace();
-//    }
-//  }
-
-  <E> List<E> loadData(String filepath, Class<E> clazz) {
-
-    // 0) 객체를 저장할 list를 준비한다
-    ArrayList<E> list = new ArrayList<>();
-    try (BufferedReader in = new BufferedReader(new FileReader(filepath))) {
-      // 파일에서 JSON 문자열을 모두 읽어서 버퍼에 저장한다
-      StringBuilder strBuilder = new StringBuilder();
-      String str;
-      while ((str = in.readLine()) != null) {
-        strBuilder.append(str);
-      }
-
-      // 버퍼에 저장된 JSON 문자열을 가지고 컬렉션 객체를 생성한다
-      return (List<E>) new GsonBuilder().setDateFormat("yyyy-MM-dd").create()
-          .fromJson(strBuilder.toString(), TypeToken.getParameterized(ArrayList.class, clazz));
-
-    } catch (Exception e) {
-      System.out.printf("%s 파일 로딩 중 오류 발생!\n", filepath);
-      e.printStackTrace();
-    }
-    return new ArrayList<>();
-  }
-
 }
