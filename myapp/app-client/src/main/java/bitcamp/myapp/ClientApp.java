@@ -23,11 +23,14 @@ import bitcamp.myapp.handler.member.MemberDeleteHandler;
 import bitcamp.myapp.handler.member.MemberListHandler;
 import bitcamp.myapp.handler.member.MemberModifyHandler;
 import bitcamp.myapp.handler.member.MemberViewHandler;
+import bitcamp.myapp.vo.Board;
 import bitcamp.util.Prompt;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.net.Socket;
@@ -64,6 +67,29 @@ public class ClientApp {
       System.out.println("서버 연결 중...");
       Socket socket = new Socket("localhost", 8888);
       System.out.println("서버와 연결되었음!");
+
+      DataInputStream in = new DataInputStream(socket.getInputStream());
+      DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+      System.out.println("입출력 준비 완료!");
+
+//      System.out.println("10초 동안 기다림!");
+//      Thread.sleep(10000);
+
+      out.writeUTF("board");
+      out.writeUTF("findAll");
+      out.writeUTF("");
+      System.out.println("서버에 데이터를 보냈음!");
+
+//      System.out.println("10초 동안 기다림!");
+//      Thread.sleep(10000);
+
+      String response = in.readUTF();
+      ArrayList<Board> list = (ArrayList<Board>) new GsonBuilder().setDateFormat("yyyy-MM-dd")
+          .create().fromJson(response, TypeToken.getParameterized(ArrayList.class, Board.class));
+      for (Board board : list) {
+        System.out.println(board);
+      }
+
       
     } catch (Exception e) {
       System.out.println("통신 오류!");
