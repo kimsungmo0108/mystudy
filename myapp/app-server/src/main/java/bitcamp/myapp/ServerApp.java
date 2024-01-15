@@ -55,7 +55,7 @@ public class ServerApp {
       System.out.println("클라이언트와 연결됨!");
 
       while (processRequest(in, out) != -1) {
-        System.out.println("----------------------------");
+        System.out.println("------------------------------");
       }
       System.out.println("클라이언트 연결 종료!");
 
