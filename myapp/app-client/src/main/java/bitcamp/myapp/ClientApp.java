@@ -31,19 +31,20 @@ import java.net.Socket;
 public class ClientApp {
 
   Prompt prompt = new Prompt(System.in);
-
   BoardDao boardDao;
   BoardDao greetingDao;
   AssignmentDao assignmentDao;
   MemberDao memberDao;
-
-
   MenuGroup mainMenu;
+  Socket socket;
+  DataInputStream in;
+  DataOutputStream out;
 
   ClientApp() {
     prepareNetwork();
     prepareMenu();
   }
+
 
   public static void main(String[] args) {
     System.out.println("[과제관리 시스템]");
@@ -52,27 +53,16 @@ public class ClientApp {
 
   void prepareNetwork() {
     try {
-      // 1) 서버와 연결한 후 연결 정보 준비
-      // => new Socket(서버 주소, 포트 번호);
-      //    - 서버 주소 : IP주소, 도메인명
-      //    - 포트 번호 : 서버 포트 번호
-      // => 로컬 컴퓨터를 가르키는 주소
-      //    - 127.0.0.1
-      //    - 도에미명 : localhost
-      System.out.println("서버 연결 중...");
-      Socket socket = new Socket("localhost", 8888);
+      socket = new Socket("localhost", 8888);
       System.out.println("서버와 연결되었음!");
 
-      DataInputStream in = new DataInputStream(socket.getInputStream());
-      DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-      System.out.println("입출력 준비 완료!");
+      in = new DataInputStream(socket.getInputStream());
+      out = new DataOutputStream(socket.getOutputStream());
 
-      // 네트워크 DAO 구현체 준비
       boardDao = new BoardDaoImpl("board", in, out);
       greetingDao = new BoardDaoImpl("greeting", in, out);
       assignmentDao = new AssignmentDaoImpl("assignment", in, out);
       memberDao = new MemberDaoImpl("member", in, out);
-
 
     } catch (Exception e) {
       System.out.println("통신 오류!");
@@ -119,10 +109,23 @@ public class ClientApp {
       try {
         mainMenu.execute(prompt);
         prompt.close();
+        close();
         break;
       } catch (Exception e) {
         System.out.println("예외 발생!");
       }
+    }
+  }
+
+  void close() {
+    try (Socket socket = this.socket;
+        DataInputStream in = this.in;
+        DataOutputStream out = this.out) {
+      out.writeUTF("quit");
+      System.out.println(in.readUTF());
+    } catch (Exception e) {
+      // 서버와 연결을 끊는 과정에서 예외가 발생한 경우 무시한다
+      // 왜? 따로 처리할 것이 없다.
     }
   }
 }
