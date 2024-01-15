@@ -6,8 +6,7 @@
  */
 
 plugins {
-    // Apply the application plugin to add support for building a CLI application in Java.
-    id 'application'
+    id 'java-library'
 }
 
 repositories {
@@ -26,8 +25,6 @@ dependencies {
 
     // google gson(json) 라이브러리
     implementation 'com.google.code.gson:gson:2.10.1'
-
-    implementation project(':app-common')
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -36,13 +33,6 @@ java {
         languageVersion = JavaLanguageVersion.of(21)
     }
 }
-
-
-application {
-    // Define the main class for the application.
-    mainClass = 'bitcamp.myapp.ServerApp'
-}
-
 
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
@@ -55,10 +45,4 @@ tasks.withType(JavaCompile).configureEach {
     // encoding = 어떤 형식으로 저장되어 있는가?
     // $javac -encoding UTF-8 ..
     options.encoding = 'UTF-8'
-}
-
-// Gradel로 애플리케이션을 실행했을 때
-// 키보드 입력을 표준 입력 스트림으로 연결하는 방법
-run {
-    standardInput = System.in
 }

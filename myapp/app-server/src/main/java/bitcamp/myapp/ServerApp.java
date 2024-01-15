@@ -35,8 +35,7 @@ public class ServerApp {
 
   void run() {
     System.out.println("[과제관리 서버 시스템]");
-    try {
-      ServerSocket serverSocket = new ServerSocket(8888);
+    try (ServerSocket serverSocket = new ServerSocket(8888)) {
       System.out.println("서버 실행!");
       while (true) {
         service(serverSocket.accept());
@@ -48,7 +47,7 @@ public class ServerApp {
     }
   }
 
-  void service(Socket socket) throws Exception {
+  void service(Socket socket) {
     try (Socket s = socket;
         DataInputStream in = new DataInputStream(socket.getInputStream());
         DataOutputStream out = new DataOutputStream(socket.getOutputStream())) {
