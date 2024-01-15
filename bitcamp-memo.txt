@@ -4306,8 +4306,8 @@ compute1(local) → 직접 접근 불가 → compute2(remote)
 → 언어 상관 없이 호출 가능
 → stub을 local에서 자동 생성
 → 서비스 객체를 만드는 측에서 제공한다
-→ skel → 서비스 객체 WSDL(xml) : 서비스 객체가 제공하는 메소드 
-→ 서버에서 WSDL을 받아와서 local의 IDE가 stub을 자동 생성
+→ skel → 서비스 객체 WSDL(Web Services Description Language)(xml) : 서비스 객체가 제공하는 메소드 
+→ 서버에서 WSDL(Web Services Description Language)을 받아와서 local의 IDE가 stub을 자동 생성
 
 ⑤ RESTful
 client << 요청, 응답(http) >> Web Server << 위임, return >> 서비스 객체
