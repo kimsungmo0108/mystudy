@@ -3479,7 +3479,7 @@ in3.read();
 
 2024.01.05(금)
 -------------------------------------------------------------------------------------
-과제 35. 인스턴스를 통째로 입출력하기 = 객체 직렬화(serialize)
+★ 과제 35. 인스턴스를 통째로 입출력하기 = 객체 직렬화(serialize)
 - ObjectInputStream/ObjectOutputStream 사용법
   - java.io.Serializable 인터페이스 사용법
   - transient modifier 사용법
@@ -4261,7 +4261,7 @@ ClientApp <요청, 응답> ServerApp → call → BoardDaoImpl → I/O → JSON 
 
 → Handler ← call/return → <<proxy>>BoardDaoImpl(클라이언트 대행자=stub=원격 객체를 대리한다=proxy객체) 
 <<통신(요청, 응답)>>
-→ ServerApp(서버측 대행자=skeleton) ← call/return → <<real>>BoardDaoImpl(원격객체(remote Object)) → JSON 파일 입출력
+→ ServerApp(서버측 대행자=skeleton) ← call/return → <<real>>BoardDaoImpl(원격객체(remote Object)=service객체) → JSON 파일 입출력
 
 → stub/skeleton = Object Request Broker(ORB)
 → 실제 일을 하는 객체는 remoteObject이다
@@ -4328,11 +4328,20 @@ app-client가 (app-api 만들기) 포함
   - id 'java-library'
 → 원격 객체의 stub을 라이브러리로 만들면 재사용이 쉽다
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.01.16(화)
 -------------------------------------------------------------------------------------
-→
+객체(인스턴스) → 특별한 형식의 데이터(JSON, XML, csv, Java시리얼 포멧 등)
+→ serialize marshaling encoding
+객체(인스턴스) ← 특별한 형식의 데이터(JSON, XML, csv, Java시리얼 포멧 등)
+→ deserialize unmarshaling decoding
+내부 메모리 <=> 외부 메모리
+→ serialize, deserilaize
 -------------------------------------------------------------------------------------
-→
+프록시 객체를 사용 → 객체
+m1(), m2(), m3() 호출 → 객체→ invoke() 호출 → InvocationHandler(실제 일을 수행)
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
