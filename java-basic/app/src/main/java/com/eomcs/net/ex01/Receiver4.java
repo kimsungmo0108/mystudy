@@ -22,13 +22,13 @@ public class Receiver4 {
 
     System.out.println("클라이언트로부터 데이터 수신 중...");
 
-    //1) 파일 크기 읽기
+    // 1) 파일 크기 읽기
     long filesize = in.readLong();
 
-    //2) 파일 이름 읽기
+    // 2) 파일 이름 읽기
     String filename = in.readUTF();
 
-    //3) 파일 데이터 읽기
+    // 3) 파일 데이터 읽기
     File file = new File("temp/ok_" + filename);
     FileOutputStream fileOut = new FileOutputStream(file);
 
@@ -37,7 +37,7 @@ public class Receiver4 {
     }
     System.out.println("클라이언트로부터 데이터 수신 완료!");
 
-    //4) 클라이언트에게 응답하기
+    // 4) 클라이언트에게 응답하기
     out.println("OK!");
 
     in.close();
@@ -48,8 +48,5 @@ public class Receiver4 {
   }
 
 }
-
-
-
 
 
