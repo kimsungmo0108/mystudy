@@ -1,4 +1,4 @@
-package bitcamp.myapp.dao.Json;
+package bitcamp.myapp.dao.json;
 
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
@@ -10,8 +10,8 @@ public class BoardDaoImpl extends AbstractDao<Board> implements BoardDao {
 
   public BoardDaoImpl(String filepath) {
     super(filepath);
+
     // 마지막 게시글의 식별 번호를 알아낸다.
-    // 새 식별 번호는 = 마지막 식별 번호 +1
     lastKey = list.getLast().getNo();
   }
 
@@ -36,7 +36,7 @@ public class BoardDaoImpl extends AbstractDao<Board> implements BoardDao {
 
   @Override
   public List<Board> findAll() {
-    return list.subList(0, list.size());
+    return this.list.subList(0, list.size());
   }
 
   @Override
