@@ -37,7 +37,7 @@ public class Server0210 {
         // 따라서 위 출력 문자열은 클라이언트에 보내지 않는다.
         // 주의!
         // => 단 close()를 호출하면 close() 내부에서 flush()를 실행한다.
-        System.out.println("클라인트에게 데이터를 보냈음.");
+        System.out.println("클라이언트에게 데이터를 보냈음.");
 
       }
       System.out.println("클라이언트와의 연결을 끊었음.");
