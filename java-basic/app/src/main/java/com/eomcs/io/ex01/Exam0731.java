@@ -23,8 +23,7 @@ public class Exam0731 {
     File[] files = dir.listFiles(new FileFilter() {
       @Override
       public boolean accept(File pathname) {
-        return pathname.isDirectory()
-            || (pathname.isFile() && pathname.getName().endsWith(".class"));
+        return pathname.isDirectory() || (pathname.isFile() && pathname.getName().endsWith(".class"));
       }
     });
 
@@ -40,7 +39,7 @@ public class Exam0731 {
         // path가 파일이면 패키지 이름과 파일 이름을 합쳐 출력하고 리턴한다.
         // => 단 파일 이름에서 .class 확장자 명은 제외한다.
         // => 파일 명이 Hello.class 이고 패키지명이 aaa.bbb 라면
-        // 출력할 이름은 aaa.bbb.Hello 이다.
+        //    출력할 이름은 aaa.bbb.Hello 이다.
         System.out.println(packageName + file.getName().replace(".class", ""));
       }
     }
