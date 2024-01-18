@@ -4494,17 +4494,111 @@ getPath() : File에 입력된 경로 리턴
 getAbsolutePath() : File에 입력된 절대 경로 리턴
 getCanonicalPath() : Resolved된 절대 경로 리턴
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.01.18(목)
 -------------------------------------------------------------------------------------
-→
+네트워크
+개인 컴퓨터 → 허브(공유기) → 게이트웨이 → 통신사 → 여러 장치(라우터)를 연결해서 전세계 통신사 연결 → 케이트웨이 → 허브 → 컴퓨터
 -------------------------------------------------------------------------------------
-→
+FileOutPutStream
+→ 1바이트 단위로 파일에 쓴다
+→ 1바이트를 UTF-16BE방식으로 16진수로 변환해서 파일에 쓴다
+FileInPutStream
+→ 1바이트 단위로 파일에서 읽어온다
+→ UTF-16BE방식으로 인코딩된 16진수 1바이트를 파일에서 읽어온다
+
+★ FileOutputStream out = new FileOutputStream("temp/test1.txt");
+out.write('A'); // 0x0041
+out.write('가'); // 0xac00
+out.write(bytes); // 바이트 배열 전체를 출력한다.
+out.write(bytes, 2, 3); // 2번 데이터부터 3 바이트를 출력한다.
+byte[] bytes = str.getBytes(); // 문자집합을 지정하지 않으면 file.encoding에 설정된 문자집합으로 인코딩하여 리턴한다.
+byte[] bytes = str.getBytes("MS949");
+out.write(bytes);
+
+★ FileInputStream in = new FileInputStream("temp/test1.txt");
+System.out.printf("%02x\n", in.read());
+System.out.printf("%02x\n", in.read());
+int count = in.read(buf);
+int count = in.read(buf, 10, 40); // 40바이트를 읽어 10번 방부터 저장한다.
+String str = new String(buf, 0, count);
+String str = new String(buf, 0, count, "CP949"); // MS949 = CP949 
+String str = new String(buf, 0, count, "UTF-16");
 -------------------------------------------------------------------------------------
-→
+FileWriter
+→ 영어는 2바이트(UTF-16BE)를 1바이트(UTF-8)로 인코딩해서 파일에 쓴다
+→ 한글은 2바이트(UTF-16BE)를 3바이트(UTF-8)로 인코딩해서 파일에 쓴다
+FileReader
+→ 영어는 1바이트(UTF-8)를 2바이트(UTF-16BE)로 디코딩해서 파일에서 읽는다
+→ 한글은 3바이트(UTF-8)를 2바이트(UTF-16BE)로 디코딩해서 파일에서 읽는다
+
+★ FileWriter out = new FileWriter("temp/test2.txt");
+out.write(0x7a5f0041);
+Charset charset = Charset.forName("UTF-16BE");
+FileWriter out = new FileWriter("temp/test2.txt", charset);
+char[] chars = new char[] {'A', 'B', 'C', '0', '1', '2', '가', '각', '간', '똘', '똥'};
+out.write(chars); // 문자 배열 전체를 출력한다.
+out.write(chars, 2, 3); // 2번 문자부터 3 개의 문자를 출력한다.
+String str = new String("AB가각");
+out.write(str); 
+
+★ FileReader in = new FileReader("sample/utf8.txt");
+int ch1 = in.read(); 
+Charset charset = Charset.forName("UTF-8");
+FileReader in = new FileReader("sample/utf8.txt", charset);
+char[] buf = new char[100];
+int count = in.read(buf);
+String str = new String(buf, 0, count); // 그래서 String 객체를 만들 때 문자집합을 지정할 필요가 없다.
+int count = in.read(buf, 10, 40); // 40개의 문자를 읽어 10번 방부터 저장한다.
+// FileReader 객체가 읽을 데이터를 저장할 메모리를 준비한다.
+CharBuffer charBuf = CharBuffer.allocate(100);
+
+// 읽은 데이터를 CharBuffer 에 저장한다.
+int count = in.read(charBuf);
+
+// 버퍼의 데이터를 꺼내기 전에 읽은 위치를 0으로 초기화시킨다.
+// - read() 메서드가 파일에서 데이터를 읽어서 버퍼에 채울 때 마다 커서의 위치는 다음으로 이동한다.
+// - 버퍼의 데이터를 읽으려면 커서의 위치를 처음으로 되돌려야 한다.(flip)
+// - flip() 메서드를 호출하여 커서를 처음으로 옮긴다. 그런 후에 버퍼의 텍스를 읽어야 한다.
+charBuf.flip();
+System.out.printf("[%s]\n", charBuf.toString());
+
+// 데코레이터를 붙인다.
+// => 버퍼 기능 + 한 줄 읽기 기능
+BufferedReader in2 = new BufferedReader(in);
+System.out.println(in2.readLine());
 -------------------------------------------------------------------------------------
-→
+인트
+int money = 1_3456_7890; // = 0x080557d2
+  out.write(money >> 24); // 00000008|0557d2
+    out.write(money >> 16); // 00000805|57d2
+    out.write(money >> 8);  // 00080557|d2
+    out.write(money);       // 080557d2
+
+int value = in.read() << 24;   // 00000008 =>   08000000
+    value += (in.read() << 16);    // 00000005 => + 00050000
+    value += (in.read() << 8);     // 00000057 => + 00005700
+    value += in.read();            // 000000d2 => + 000000d2
+    //==========================================>   080557d2
+→ short, int ,long, float, double 타입은 이러한 방식으로 숫자를 읽어와서 변환을 한다
+→ 문자열은 byte 배열을 읽거나 써서 변환한다
 -------------------------------------------------------------------------------------
-→
+상속을 이용한 기능 확장
+DataFileInPutStream/DataFileOutPutStream
+→ FileInPutStrea/FileOutPutStream을 상속
+→ ㅇprimitive type과 String 데이터를 byte로 변환해준다
+→ Data Processing
+→ data seek time을 줄이려고 byte배열로 버퍼를 준비해서 한번에 읽고 쓴다
+
+BufferedFileInPutStream/BufferedFileOutPutStream
+→ FileInPutStrea/FileOutPutStream을 상속
+→ 내부적으로 자체 버퍼를 가지고 있다 data seek time이 줄어든다
+→ read()/write() 메소드를 오버라이딩 해서 버퍼를 이용해서 읽고 쓴다
+→ 버퍼의 데이터를 모두 읽으면 다시 파일에서 왕창 읽어온다
+→ 버퍼가 꽉차면 버퍼의 데이터를 왕창 출력한다
+→ read()/write()를 제어한다 = Data Processing = 데이터 가공
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
