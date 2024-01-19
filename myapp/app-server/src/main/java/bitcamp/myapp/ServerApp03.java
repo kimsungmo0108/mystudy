@@ -15,12 +15,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 
-public class ServerApp {
+public class ServerApp03 {
 
   HashMap<String, Object> daoMap = new HashMap<>();
   Gson gson;
 
-  public ServerApp() {
+  public ServerApp03() {
     daoMap.put("board", new BoardDaoImpl("board.json"));
     daoMap.put("greeting", new BoardDaoImpl("greeting.json"));
     daoMap.put("assignment", new AssignmentDaoImpl("assignment.json"));
@@ -30,7 +30,7 @@ public class ServerApp {
   }
 
   public static void main(String[] args) {
-    new ServerApp().run();
+    new ServerApp03().run();
   }
 
   void run() {
@@ -42,12 +42,16 @@ public class ServerApp {
 
       while (true) {
         Socket socket = serverSocket.accept();
-        new Thread(() -> {
-          try {
-            service(socket);
-          } catch (Exception e) {
-            System.out.println("클라이언트 요청 처리 중 오류 발생!");
-            e.printStackTrace();
+        new Thread(new Runnable() {
+
+          @Override
+          public void run() {
+            try {
+              ServerApp03.this.service(socket);
+            } catch (Exception e) {
+              System.out.println("클라이언트 요청 처리 중 오류 발생!");
+              e.printStackTrace();
+            }
           }
         }).start();
       }
@@ -139,4 +143,3 @@ public class ServerApp {
     return args;
   }
 }
-
