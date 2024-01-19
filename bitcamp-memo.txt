@@ -4552,6 +4552,7 @@ char[] buf = new char[100];
 int count = in.read(buf);
 String str = new String(buf, 0, count); // 그래서 String 객체를 만들 때 문자집합을 지정할 필요가 없다.
 int count = in.read(buf, 10, 40); // 40개의 문자를 읽어 10번 방부터 저장한다.
+
 // FileReader 객체가 읽을 데이터를 저장할 메모리를 준비한다.
 CharBuffer charBuf = CharBuffer.allocate(100);
 
@@ -4618,21 +4619,123 @@ GoF의 Decorator 디자인 패턴
 → 상황에 따라(필요에 따라) 다양한 기능을 붙여서 사용할 수 있다
 → 상속보다 기능 확장이 쉽고 유연하다
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.01.19(금)
 -------------------------------------------------------------------------------------
-→
+Data Sink Stream classes(File Memory process) = concrete component
+<바이트 스트림(InputStream/OutputStream)>
+→ FileInPutStream/FileOutPutStream
+→ ByteArrayInputStream/ByteArrayOuputStream
+→ PipedInputStream/PipedOuputStream
+
+InputStream → FileInputStream
+	    → FilterdInputStream → DataInputStream
+			       → BufferedInputStream
+→ 다른 객체(I/O Stream)에 붙여서 사용할 수 있다
+
+<캐릭터 스트림(Reader/Writer)>
+→ FileReader/FileWriter
+→ CharArrayReader/CharArrayWriter
+→ StringReader/StringWriter
+→ PipedReader/PipedWriter
+→ 바이트 스트림과 다르게 각 클래스가 제품이기 때문에 단독적으로 사용할 수 있다
 -------------------------------------------------------------------------------------
-→
+Data Processing Stream classes(Decorator)
+<바이트 스트림(InputStream/OutputStream)>
+→ DataInputStream/DataOutputStream
+→ BufferedInputStream/BufferedOutputStream
+→ ObjectInputStream/ObjectOutputStream(concrete component/Decorator가능)
+→ PrintStream(concrete component/Decorator가능)
+
+<캐릭터 스트림(Reader/Writer)>
+→ BufferedRead/BufferedWriter
+→ LineNumberReader
+→ PrintWriter(concrete component/Decorator가능)
 -------------------------------------------------------------------------------------
-→
+stateful 통신 방식
+클라이언트            서버
+      |------------------>| 연결
+      |------------------>| 데이터 수신
+      |<------------------| 데이터 전송
+      |------------------>| 데이터 수신
+      |<------------------| 데이터 전송
+      |------------------>| 데이터 수신
+      |<------------------| 데이터 전송
+      |--------x--------->| 끊기
+→ 연결한 후 연결을 끊을 때까지 요청/응답을 계속 수행한다
+→ 클라이언트가 요청하지 않아도 계속 연결된 상태를 유지한다
+→ 단점 : 서버에 메모리를 계속 차지 / 접속 클라이언트의 수가 제한된다
+→ 장점 : 클라이언트 요청에 대한 작업결과를 서버에 유지할 수 있다
+
+stateless 통신 방식
+클라이언트            서버
+     |------------------>| 연결
+     |------------------>| 데이터 수신
+     |<------------------| 데이터 전송
+     |--------x--------->| 끊기
+     |------------------>| 연결
+     |------------------>| 데이터 수신
+     |<------------------| 데이터 전송
+     |--------x--------->| 끊기
+     |------------------>| 연결
+     |------------------>| 데이터 수신
+     |<------------------| 데이터 전송
+     |--------x--------->| 끊기
+→ 요청/응답을 수행한 후 즉시 연결 끊기
+→ 단점 : 요청할 때마다 매번 연결 필요(소요 시간 증가) / 클라이언트와 작업한 내용을 서버에 유지하지 못한다
+→ 장점 : 서버 메모리를 덜 차지 / stateful 방식보다 더 많은 클라이언트 연결을 허용한다
+→ 웹은 stateless 방식이다
 -------------------------------------------------------------------------------------
-→
+stateful / single Thread
+서버측 작업자 → new ServerSocket(); → Socket s = ss.accept(); → 입출력 반복 통신
+클라이언트1 → new Socket(); → 입출력 반복 통신
+클라이언트2 / 클라이언트3 
+→ 클라이언트1이 연결을 끊을 때까지 순서대로 기다려야 한다
+→ 왜? 서버측의 작업자가 1명이니까!
 -------------------------------------------------------------------------------------
-→
+접속한 클라이언트의 IP 주소 알아내기
+InetAddress inetAddr = socket.getInetAddress();
+System.out.printf("접속자: %s\n", inetAddr.getHostAddress());
+→ 서버에 누가 접속 했는지 알 수 있다
 -------------------------------------------------------------------------------------
-→
+고객 포인트 정보 관리 예
+고객1 → 주문1 → 가게(포인트 적립) → 주문2 → 가게(포인트 적립)
+고객2 → 주문1 → 가게(포인트 적립) → 주문2 → 가게(포인트 적립)
+→ 고객n이 주문n을 할 때마다 고객n에 해당하는 id(전화번호)에 포인트가 개별로 적립된다
 -------------------------------------------------------------------------------------
-→
+stateless 방식에서 클라이언트를 구분하고 클라이언트의 작업 결과를 유지하는 방법!
+클라이언트            서버
+     |------------------>| 연결
+     |------------------>| 데이터 수신(clientId=0, 연산자=+, 값=100)
+     |<------------------| 데이터 전송(clientId=2713, 결과값=100)
+     |--------x--------->| 끊기
+     |------------------>| 연결
+     |------------------>| 데이터 수신(clientId=2713, 연산자=-, 값=20)
+     |<------------------| 데이터 전송(clientId=2713, 결과값=80)
+     |--------x--------->| 끊기
+→ clientId로 기존에 저장된 결과를 찾아서 계산을 추가한다
+
+★ 서버
+// 각 클라이언트의 작업 결과를 보관할 맵 객체
+// => Map<clientId, result>
+static Map<Long, Integer> resultMap = new HashMap<>();
+// 클라이언트를 위한 기존 값 꺼내기
+Integer obj = resultMap.get(clientId);
+
+// 만약 신규 고객이면 clientId를 신규발급한다
+clientId = System.currentTimeMillis(); // 이 코드는 시간을 Id로 사용했다
+
+// 계산 결과를 resultMap에 보관한다.
+resultMap.put(clientId, result);
+
+★ 클라이언트
+// => 서버에서 보낸 클라이언트 아이디를 읽는다.
+clientId = in.readLong();
+
+// => 서버에서 보낸 결과를 읽는다.
+System.out.println(in.readUTF());
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
