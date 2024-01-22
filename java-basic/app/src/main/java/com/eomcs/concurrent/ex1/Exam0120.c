@@ -10,7 +10,7 @@ int main() {
   
   for (i = 0; i < 10000; i++) {
     printf("[%d] ==> %d\n", processId, i);
-    int temp = rand() * rand();
+    int temp = rand() * rand(); // 실행 시간 지연을 통해 CPU 사용을 다른 프로세스에게 넘기도록 한다.
   }
   
   return 0;
