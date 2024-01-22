@@ -36,7 +36,7 @@ public class ServerApp01 {
   void run() {
     System.out.println("[과제관리 서버시스템]");
 
-    try (ServerSocket serverSocket = new ServerSocket(8889)) {
+    try (ServerSocket serverSocket = new ServerSocket(8882029)) {
 
       System.out.println("서버 실행!");
 

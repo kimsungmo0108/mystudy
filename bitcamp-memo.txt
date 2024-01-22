@@ -4782,8 +4782,406 @@ t.start();
   → 부모 스레드에 실행을 분리
   → t.run() 호출 → r.run() 호출
 -------------------------------------------------------------------------------------
-과제 44. 
+과제 44. 여러 클라이언트 요청을 동시에 처리하기: Thread 적용
+- 멀티태스킹의 메커니즘 이해
+  - 프로세스 스케쥴링: Round Robin 방식, Priority + Aging 방식
+  - 컨텍스트 스위칭 개념
+  - 프로세스 복제(fork)방식과 스레드 방식 비교
+  - 임계영역(Critical Region, Critical Section): 세마포어(Semaphore)와 뮤텍스(Mutex)
+- 스레드의 구동원리와 사용법
+  - 스레드의 라이프사이클 이해
+  - Thread 클래스와 Runnable 인터페이스 사용법
+-------------------------------------------------------------------------------------
 
+
+
+2024.01.22(월)
+-------------------------------------------------------------------------------------
+connection-oriented / connectionless
+① connection-oriented = TCP
+클라이언트            서버
+     |------------------>| 연결
+     |-------------------| 서버에서 소켓 생성
+     |<---------------->| 데이터 송수신
+
+② connectionless = UDP
+클라이언트            서버
+DatagramSocket 
+→ DatagramPacket(byte[]=데이터, 데이터 길이, IP주소, 포트번호) 
+→ send() call 
+→ 전송 
+→ 실행 중이든 아니든 상관없이 서버에 전송
+
+// 보낼 데이터를 패킷에 담는다.
+// => 패킷 = 데이터 + 데이터크기 + 받는이의 주소 + 받는이의 포트번호
+DatagramPacket packet = new DatagramPacket(
+        bytes, // 데이터가 저장된 바이트 배열
+        bytes.length, // 전송할 데이터 개수
+        InetAddress.getByName("localhost"), // 데이터를 받을 상대편 주소
+        port // 포트번호
+        );
+InetAddress.getByName("도메인명")
+→ DNS 서버에 IP 주소 문의
+→ 도메인명을 이용해서 IP주소를 검색한다
+→ 주소를 리턴 받아서 InetAddress 객체의 IP주소를 담아서 객체를 리턴한다 = 팩토리 메소드
+
+DatagramPacket → send() → DatagramSocket → Hub → Gateway → 여러 router 통해서 → Gateway → Hub → computer에 전달 or 없으면 버린다
+→ 목적지 주소 및 포트에 해당하는 App이 실행중에 있으면 전달 or 실행중이 아니라면 버린다
+
+클라이언트               서버
+DatagramSocket <=> DatagramSocket(port)
+<client> byte[] = 데이터 ◇→ DatagramPacket → send()
+<server> receive() → DatagramPacket ◇→ byte[] = 빈 배열
+→ 개발자가 포트 번호 부여 
+-------------------------------------------------------------------------------------
+★ Server(connectionless)
+// 데이터 송수신을 담당할 소켓을 먼저 준비한다.
+// => 보내는 쪽이나 받는 쪽이나 같은 소켓 클래스를 사용한다.
+//    서버 소켓이 따로 없다.
+// => 받는 쪽에서는 소켓을 생성할 때 포트번호를 설정한다.
+DatagramSocket socket = new DatagramSocket(8888);
+
+// 받은 데이터를 저장할 버퍼 준비
+byte[] buf = new byte[8196];
+
+// 빈 패킷 준비
+DatagramPacket emptyPacket = new DatagramPacket(buf, buf.length);
+
+// 빈 패킷을 사용하여 클라이언트가 보낸 데이터를 받는다.
+// => 데이터를 받을 때까지 리턴하지 않는다.
+socket.receive(emptyPacket);
+System.out.println("데이터를 받았음!");
+
+socket.close();
+keyScan.close();
+
+// 빈 패킷에 저장된 클라이언트가 보낸 데이터를 꺼낸다.
+// 패킷에 저장된 UTF-8로 인코딩된 바이트 배열을 가지고 String 객체(UTF-16)를 만든다.
+
+// 1) 패킷 객체에 보관된 바이트 배열을 꺼낸다.
+byte[] bytes = emptyPacket.getData();
+
+// getData()가 리턴한 배열은 DatagramPacket 을 만들 당시 넘겨준 배열이다.
+System.out.println(buf == bytes);
+
+// 2) 바이트 배열에 보관된 데이터의 개수를 알아낸다.
+int len = emptyPacket.getLength();
+
+// 3) 클라이언트에서 받은 바이트 배열을 가지고 String 객체를 생성한다.
+String message = new String(bytes, 0, len, "UTF-8");
+
+// 실무에서는 다음과 같이 로컬 변수를 사용하지 않고 직접 패킷 객체를 사용하는 방식으로 코딩한다.
+//    String message = new String(//
+//        emptyPacket.getData(), // ==> buf, 패킷에서 바이트 배열을 꺼낸다.
+//        0, // 버퍼에서 데이터를 꺼낼 때 0번째부터 꺼낸다.
+//        emptyPacket.getLength(), // 패킷에서 받은 바이트의 개수만큼 데이터를 꺼낸다.
+//        "UTF-8" // 바이트 배열로 인코딩된 문자표의 이름을 지정한다.
+//        );
+
+System.out.println(message);
+-------------------------------------------------------------------------------------
+★ Client(connectionless)
+// connectionless 방식으로 통신을 수행할 소켓 생성
+// - 클라이언트 쪽은 포트 번호를 지정하지 않는다.
+// - 물론 OS가 자동으로 부여할 것이다.
+DatagramSocket socket = new DatagramSocket();
+
+// 보낼 데이터를 바이트 배열로 준비
+// String message = new String("Hello"); // Heap에 String 객체 생성
+// String message = "Hello"; // constant pool에 String 객체 생성
+// byte[] bytes = message.getBytes("UTF-8");
+byte[] bytes = "Hello".getBytes("UTF-8");
+
+// 보낼 데이터를 패킷에 담는다.
+// => 패킷 = 데이터 + 데이터크기 + 받는이의 주소 + 받는이의 포트번호
+DatagramPacket packet = new DatagramPacket(bytes, // 데이터가 저장된 바이트 배열
+  bytes.length, // 전송할 데이터 개수
+  InetAddress.getByName("localhost"), // 데이터를 받을 상대편 주소
+  8888 // 포트번호
+);
+
+// 데이터 전송
+socket.send(packet);
+System.out.println("데이터 전송 완료!");
+
+// 자원해제
+socket.close();
+
+// 상대편이 네트웍에 연결되었는지 따지지 않고 무조건 데이터를 보낸다.
+// 만약 상대편이 연결되어 있지 않다면, 보낸 데이터는 그 쪽 네트웍에서 버려진다.
+// => 데이터 송수신을 보장하지 않는다.
+-------------------------------------------------------------------------------------
+Connection-Oriented 
+예 : HTTP(stateless)
+client <=> server
+→ HTTP(Hyper text TransFer Protocol) Hyper text = 다른 문서의 연결정보를 포함
+
+client
+→ 요청 라인 + 요청 헤더 + 보내는 데이터
+예) 
+GET / HTTP/1.1
+Host : 상대편 주소
+
+server
+→ 상대 라인 + 응답 헤더 + 응답 데이터
+예)
+HTTP/1.1 200 ok
+Content-Type : Text/html; charset-8
+응답 데이터 
+
+Web
+HTTP Client(=Web Browser) <=> HTTP Server(=Web Server)
+→ HTTP를 요청 / 응답
+→ (GUI)chrome, edge, safari, firefox, opera, whail, (CLI)wget, curl
+→ apache http server, iis, nginx
+예) FTP client <FTP> FTP server, SMTP client <SMTP> SMTP server
+-------------------------------------------------------------------------------------
+★ client(connection-oriented)
+// HTTP 요청 프로토콜에 따라 서버에 데이터 전송
+// => macOS에서 JVM을 실행할 때, println()은 문자열 뒤에 0a(LF) 코드만 붙인다.
+// => 이를 해결하려면, 다음과 같이 명확하게 CRLF 코드를 붙여라.
+//
+out.print("GET / HTTP/1.1\r\n");
+out.print("Host: www.rpm9.com\r\n");
+out.print("\r\n");
+out.flush();
+
+// HTTP 응답 프로토콜에 따라 서버가 보낸 데이터를 수신
+while (true) {
+  try {
+    System.out.println(in.nextLine());
+  } catch (Exception e) {
+    break;  
+  }
+}
+-------------------------------------------------------------------------------------
+★ server(connection-oriented)
+ServerSocket ss = new ServerSocket(8888);
+System.out.println("서버 실행!");
+
+while (true) {
+  Socket socket = ss.accept();
+  Scanner in = new Scanner(socket.getInputStream());
+  PrintStream out = new PrintStream(socket.getOutputStream());
+
+  // 클라이언트가 보낸 데이터를 HTTP 요청 프로토콜에 맞춰 읽는다.
+  while (true) {
+    String str = in.nextLine();
+    System.out.println(str);
+    if (str.equals(""))
+    break;
+}
+
+// HTTP 응답 프로토콜에 따라 클라이언트에게 데이터를 보낸다.
+// => macOS에서 JVM을 실행할 때, println()은 문자열 뒤에 0a(LF) 코드만 붙인다.
+// => 이를 해결하려면, 다음과 같이 명확하게 CRLF 코드를 붙여라.
+//
+out.print("HTTP/1.1 200 OK\r\n");
+out.print("Content-Type: text/html; charset=UTF-8\r\n");
+out.print("\r\n");
+out.print("<html><body><h1>안녕!-강사</h1></body></html>\r\n");
+-------------------------------------------------------------------------------------
+★ 종단간 암호(공개키 / 개인키)
+→ 메시지를 처음부터 끝까지 평문으로 저장하지 않고 암호화하는 안전한 통신 방법
+
+A ----------> B
+public key : 자물쇠
+private key : 열쇠
+A → 인증서버 → B의 공개키 → A
+A → B의 공개키(A의 공개키) 잠근다 → B에게 전송 → B의 개인키로 B의 공개키를 해제 → A의 공개키 획득
+A → B의 공개키(Data=연산 할 데이터) 잠근다 → B의 개인키로 Data(연산 할 데이터) 해제 후 가공 → Data(결과 데이터) 
+B → A의 공개키(Data=결과 데이터) 잠근다 → A에게 전송 → A의 공개키로 해제한다 → Data=결과 데이터 획득
+→ 공개키로 잠그고 개인키로 해제한다
+-------------------------------------------------------------------------------------
+URI (URL / URN)
+URI = Uniform Resource Identifier → 인터넷에 있는 자원을 나타내는 유일한 주소이다.
+→ URL(= Uniform Resource Locator) → http://naver.com/:80/search?~~~~~~
+→ URN(= Uniform Resource Name) → urn:isbn:04517501
+-------------------------------------------------------------------------------------
+★ URL(Uniform Resource Locator) - URL을 다루는 클래스
+// 웹 상에서 자원의 위치를 표현하는 방법
+// => [프로토콜]://서버주소:포트번호/자원의경로?파라미터명=값&파라미터명=값
+// - 프로토콜: http(80), https(443), ftp(21/20) 등
+// - 서버주소: IP 주소(192.168.0.1), 도메인명(www.bitcamp.co.kr)
+// - 포트번호: 80 또는 443(생략할 수 있다), 8080(프록시 서버) 등
+// - 자원의경로: /index.html, /board/list.jsp 등
+// - 서버에 보내는 파라미터(Query String): 파라미터명=값&파라미터명=값
+//
+// 자원
+// - 정적 자원(static)
+//   - 요청할 때 마다 결과 콘텐트가 변경되지 않는 자원. 즉 파일을 가리킨다.
+//   - 예) HTML, GIF, JPEG, PNG, CSS, JavaScript, TXT 등의 파일
+// - 동적 자원(dynamic)
+//   - 요청할 때 마다 결과 콘텐트가 변할 수 있는 자원. 
+//   - 메일 조회, 게시물 변경, 주문 등의 웹 프로그램을 가리킨다.
+//   - 예) index.php, index.jsp, /board/list 등
+//
+URL url = new URL("https://search.naver.com:443/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=bitcamp");
+
+// URL 분석
+System.out.printf("프로토콜: %s\n", url.getProtocol());
+System.out.printf("서버주소: %s\n", url.getHost());
+System.out.printf("포트번호: %d\n", url.getPort()); // 지정하지 않으면 -1 리턴. 실제 접속할 때는 기본 포트번호 사용.
+System.out.printf("자원경로: %s\n", url.getPath());
+System.out.printf("서버에 보내는 파라미터: %s\n", url.getQuery());
+
+// 
+URL url = new URI("https://tools.ietf.org/html/rfc2616#section-5.1").toURL();
+System.out.printf("참조경로(내부위치): %s\n", url.getRef());
+
+// 로컬 자원의 위치를 URL로 표현하는 방법
+// file://자원의 경로
+// - 자원의 경로
+// /드라이브명:/디렉토리 또는 파일 경로 (Windows)
+// /루트디렉토리/디렉토리 또는 파일 경로 (Linux/macOS/Unix)
+URL url = new URI("file:///c:/Users/user/git/bitcamp-study/Hello.java").toURL();
+URL url = new URI("file:///Users/eomjinyoung/git/bitcamp-study/Hello.java").toURL();
+-------------------------------------------------------------------------------------
+URL
+https://naver.com:443/search.naver?where=nexearch&query=bitcamp
+https → protocol = schem
+naver.com → host address
+443 → port
+/search.naver → path
+? 뒤 나머지 → query string(qs)
+
+http = 80
+https = 443
+→ 기본 포트번호(생략 가능)
+-------------------------------------------------------------------------------------
+URL 객체 활용
+// URL 클래스를 이용하면 HTTP 프로토콜을 신경쓰지 않고
+// HTTP 요청을 수행할 수 있다.
+// 특히 HTTPS까지도 처리할 수 있다.
+
+// => URL 주소를 검증하고 준비한다.
+URL url = new URI("https://sports.news.naver.com/index").toURL();
+
+// => 서버와 연결하고 HTTP 요청을 수행한다.
+// => 그런 후에 웹서버의 응답 데이터를 읽어들일 도구를 준비한다.
+InputStream in = url.openStream();
+
+// => 서버가 보낸 데이터를 한 줄씩 읽기 위해 데코레이터를 붙인다.
+BufferedReader in2 = new BufferedReader(new InputStreamReader(in));
+
+
+// => URL 주소를 준비한다.
+URL url = new URL("https://sports.news.naver.com/index");
+
+// => URL 정보를 가지고 HTTP 요청을 수행할 객체를 얻는다.
+URLConnection con = url.openConnection();
+
+// => 웹서버와 연결한 후 HTTP 요청한다.
+con.connect();
+
+// URL.openStream()을 사용하는 것 보다 이점?
+- 응답 헤더의 다양한 값을 추출할 수 있다.
+System.out.printf("Content-Type: %s\n", con.getContentType());
+System.out.printf("Content-Length: %d\n", con.getContentLength());
+System.out.printf("Content-Encoding: %s\n", con.getContentEncoding());
+
+// - 직접 헤더 이름을 사용해서 헤더 값을 추출할 수 있다.
+System.out.printf("Content-Type: %s\n", con.getHeaderField("Content-Type"));
+System.out.printf("Server: %s\n", con.getHeaderField("Server"));
+System.out.println();
+
+// => 웹서버의 응답 데이터를 읽어들일 도구를 리턴한다.
+InputStream in = con.getInputStream();
+
+// => 서버가 보낸 데이터를 한 줄씩 읽기 위해 데코레이터를 붙인다.
+BufferedReader in2 = new BufferedReader(new InputStreamReader(in));
+
+while (true) {
+  String str = in2.readLine();
+  if (str == null)
+  break;
+
+  System.out.println(str);
+}
+-------------------------------------------------------------------------------------
+★ Base64 인코딩 ★
+    String str = "AB";
+
+    byte[] bytes = str.getBytes("UTF-8");
+    for (byte b : bytes) {
+      System.out.printf("%x ", b);
+    }
+    System.out.println();
+
+    System.out.println("------------------------------");
+
+    // => 바이너리 데이터를 문자화시킨다.
+    // => 바이너리 값을 6비트식 잘라서(2의 6승) 
+    //    64진수(0 ~ 63)으로 만든 후 Base64 표에 정의된 대로
+    //    해당 값을 문자로 변환한다.
+    // => 보통 바이너리 데이터를 텍스트로 전송하고 싶을 때 많이 사용한다.
+    // => "ABC012가간" 문자열
+    //    414243303132EAB080EAB081(UTF-8 코드)
+    //    4142 ==> 0100000101000010... (2진수)
+    //    010000 010100 0010... (6비트씩 자른 것)
+    //    6비트로 자른 것을 다시 10진수로 표현하면 ==> 16 20 ...
+    //    16을 Base64 코드표에 따라 문자로 바꾸면 ==> Q
+    //    20을 Base64 코드표에 따라 문자로 바꾸면 ==> U
+    //    ...
+    //    이런 식으로 문자열을 Base64로 바꾸면 결과는 다음과 같다.
+    //    QUJDMDEy6rCA6rCB6rCE
+    Encoder encoder = Base64.getEncoder();
+    byte[] base64Bytes = encoder.encode(bytes);
+    System.out.println(new String(base64Bytes));
+
+    System.out.println("------------------------------");
+
+    // Base64 디코딩
+    // => Base64 코드를 원래의 바이너리 값으로 변환한다.
+    //
+    Decoder decoder = Base64.getDecoder();
+    byte[] bytes2 = decoder.decode(base64Bytes);
+    System.out.println(new String(bytes2, "UTF-8"));
+
+데이터(ABC012가각) → Base64 인코딩 → Base64 디코딩 → 데이터 
+→ 원래 데이터 : ABC012가각 
+→ UTF-16 : 0041 0042 0043 0030 0031 0032 AC00 AC01
+→ UTF-8 : 41 42 43 30 31 32 EAB080 EAB081
+→ 2진수 : 01000001 01000010 01000011 .....
+→ 2진수를 6비트로 쪼갠다 : 010000/01 0100/0010 01/000011/ .....
+→ 10진수 : 16 20 9 3 .....
+→ Base64 : Q U J D ..... → 영어 대소문자, 숫자, +, /
+→ 어떤 데이터를 Base64로 인코딩
+→ 6비트 크기를 갖는 데이터로서 어떤 네트워크 환경에서도 송수신 할 수 있다
+→ 강점 : 데이터를 문자화한다(인코딩 방법 = 포맷)
+→ 사용처 
+  → 바이너리 데이터를 텍스트에 포함해서 전송, 수신, 저장하고 싶을 때!!!!!
+-------------------------------------------------------------------------------------
+Base64 응용
+URL : 프로토콜://호스트주소:포트번호/경로?파라미터=값&파라미터=값 .....
+→ URL은 텍스트다! 
+→ URL에 바이너리 데이터를 포함할 수 없다
+→ http://blog.naver.com/add?title=""&content=""&file=""
+→ file=photo.jpeg(바이너리 데이터) → URL에 포함 불가능
+→ photo.jpeg(바이너리 데이터) → Base64로 인코딩 → 영어대소문자, 숫자, +, /로 변환 후 포함 → 문자이기 때문에 가능
+→ 바이너리 데이터를 문자화한다(인코딩 방법 = 포맷)
+→ 사용처 
+  → 바이너리 데이터를 텍스트에 포함해서 전송, 수신, 저장하고 싶을 때!!!!!
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------

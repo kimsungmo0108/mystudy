@@ -18,16 +18,16 @@ import java.util.Scanner;
 //
 public class HttpClient {
   public static void main(String[] args) throws Exception {
-    Socket socket = new Socket("corners.auction.co.kr", 80);
+    Socket socket = new Socket("www.rpm9.com", 80);
     PrintStream out = new PrintStream(socket.getOutputStream());
     Scanner in = new Scanner(socket.getInputStream());
 
     // HTTP 요청 프로토콜에 따라 서버에 데이터 전송
     // => macOS에서 JVM을 실행할 때, println()은 문자열 뒤에 0a(LF) 코드만 붙인다.
     // => 이를 해결하려면, 다음과 같이 명확하게 CRLF 코드를 붙여라.
-    // 
-    out.print("GET /AllKill/AllDay.aspx?SelectedItemno=C266641719 HTTP/1.1\r\n");
-    out.print("Host: corners.auction.co.kr\r\n");
+    //
+    out.print("GET / HTTP/1.1\r\n");
+    out.print("Host: www.rpm9.com\r\n");
     out.print("\r\n");
     out.flush();
 
@@ -55,8 +55,10 @@ public class HttpClient {
 // sec-ch-ua: "\\Not;A\"Brand";v="99", "Google Chrome";v="85", "Chromium";v="85"
 // sec-ch-ua-mobile: ?0
 // Upgrade-Insecure-Requests: 1
-// User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36
-// Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+// User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)
+// Chrome/85.0.4183.121 Safari/537.36
+// Accept:
+// text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
 // Sec-Fetch-Site: none
 // Sec-Fetch-Mode: navigate
 // Sec-Fetch-User: ?1
