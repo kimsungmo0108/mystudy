@@ -5257,21 +5257,181 @@ VPC(Virtual Private Cloud)
 ⑤ Linux Server
 → bitcampncp-vpc-server1
 -------------------------------------------------------------------------------------
-→
+java 스레드
+$java Hello
+java → JVM
+<<process>JVM (Heap, Method Area) 
+→ <<Thread>>main(실행위치정보) (stack) 
+→ main() call -------------> 종료
+		└> new Thread().start(); → <<Thread>>MyThread1(실행위치정보) (stack) → run() -------------> 종료
+		└> new Thread().start(); → <<Thread>>MyThread2(실행위치정보) (stack) → run() -------------> 종료
+
+→ 다른 실행 흐름
+→ 병행으로 진행
+→ 인스턴스(Heap)은 스레드끼리 공유
+→ main Thread = parent Thread
+→ MyThread1 = child Thread
 -------------------------------------------------------------------------------------
-→
+스레드 만드는 방법
+
+① 상속
+class MyThread extends Thread{
+  run(){
+    → run() 메소드 오버라이딩
+    → 병행으로 실행시킬 코드를 둔다
+  } 
+}
+new MyThread().start();
+
+② 인터페이스 구현
+interface Runnable{
+  void run();
+}
+
+new Thread(new Runnable() {
+  @Override
+  public void run() {
+    → run() 메소드 오버라이딩
+    → 병행으로 실행시킬 코드를 둔다
+  }
+}).start();
+→ 인터페이스 구현을 람다 문법으로 바꿀 수 있어서 더 많이 쓰인다	
 -------------------------------------------------------------------------------------
-→
+JAM의 기본 스레드
+→ 기본적으로 <<Thread>>main를 갖고 있다
+
+JVM → System/
+             → main/
+                  → main스레드
+	→ InnocuousThreadGroup
+	→ Reference Handler
+   	→ Finalizer
+   	→ Signal Dispatcher
+   	→ Attach Listener
+   	→ Notification Thread
+
+
+// 현재 스레드의 이름
+Thread main = Thread.currentThread();
+System.out.println("실행 흐름명 = " + t.getName());
+
+// 스레드는 그룹에 소속되기도 한다.
+// 현재 스레드의 소속 그룹을 알고 싶다면?
+ThreadGroup group = main.getThreadGroup();
+System.out.println("그룹명 = " + group.getName());
+
+// 스레드 그룹에 소속된 스레드 목록을 알고 싶다면?
+Thread[] arr = new Thread[100];
+int count = mainGroup.enumerate(arr, false);
+// 두 번째 파라미터 값을 false로 지정하면,
+// 하위 그룹에 소속된 스레드들은 제외한다.
+// 즉, 현재 그룹에 소속된 스레드 목록만 가져오라는 뜻!
+
+System.out.println("main 그룹에 소속된 스레드들:");
+for (int i = 0; i < count; i++)
+  System.out.println("   => " + arr[i].getName());
+
+// 스레드 그룹에 소속된 하위 그룹을 알고 싶다면?
+ThreadGroup[] groups = new ThreadGroup[100];
+int count = mainGroup.enumerate(groups, false);
+// 두 번째 파라미터 값을 false로 지정하면,
+// 하위 그룹에 소속된 그룹들은 제외한다.
+// 즉, 현재 그룹에 소속된 하위 그룹의 목록만 가져오라는 뜻!
+
+System.out.println("main 그룹에 소속된 하위 그룹들:");
+for (int i = 0; i < count; i++)
+  System.out.println("   => " + groups[i].getName());
+
+// 스레드 그룹의 부모 그룹을 알고 싶다면?
+ThreadGroup parentGroup = mainGroup.getParent();
+System.out.printf("main 스레드 그룹의 부모: %s\n", parentGroup.getName());
+
+// "system" 그룹의 부모 그룹은?
+ThreadGroup grandparentGroup = parentGroup.getParent();
+if (grandparentGroup != null) {
+  System.out.printf("%s 스레드 그룹의 부모: %s\n", 
+    parentGroup.getName(), 
+    grandparentGroup.getName());
+}
+
+// System 스레드 그룹의 자식 그룹들
+ThreadGroup[] groups = new ThreadGroup[100];
+int count = systemGroup.enumerate(groups, false);
+
+System.out.println("system 스레드 그룹의 자식 그룹들:");
+for (int i = 0; i < count; i++) {
+  System.out.println("   =>" + groups[i].getName());
+}
+
+// System 스레드 그룹에 소속된 스레드들
+Thread[] arr = new Thread[100];
+int count = systemGroup.enumerate(arr, false);
+
+System.out.println("system 스레드 그룹에 소속된 스레드들:");
+for (int i = 0; i < count; i++) {
+  System.out.println("   =>" + arr[i].getName());
+}
 -------------------------------------------------------------------------------------
-→
+멀티태스킹
+→ 동시에 여러 작업을 실행하는 것(병행 처리 = concurrenry)
+    → 별도의 cpu로 실행 = 완전한 동시 실행
+    → 하나의 cpu로 돌아가면서 실행 = 현실!
+        → 여러 프로세스를 왔다갔다 하면서 실행
+        → 가능한 이유는 cpu가 매우 빠르다
+CPU
+→ process 
+→ process 
+→ process 
 -------------------------------------------------------------------------------------
-→
+CPU Scheduling
+→ 여러 프로세스를 돌아가면서 실행하는 규칙
+→ OS가 관리
+
+① Round-Robin(windows)
+→ 일정 시간을 돌아가면서 실행한다
+CPU
+→ A process → 0.01초
+→ B process → 0.01초
+→ C process → 0.01초
+
+② priority + aging(unix/linux)
+→ 우선순위가 높은 프로세스를 더 자주 실행
+CPU
+→ A process(1순위) → 4번 실행
+→ B process(3순위) → 1번 실행
+→ C process(2순위) → 2번 실행
 -------------------------------------------------------------------------------------
-→
+context switching
+→ 실행 정보 교환
+→ 너무 자주 교환하면 명령을 실행하는 시간보다 context switching 하는데 시간을 다 낭비하게 된다
+→ 컨텍스트 스위칭 시간을 최적화 하는게 중요하다!
+→ OS가 고민할 문제다!!
+
+cpu 
+→ a 실행 → a의 실행 상태 저장 
+→ b 실행 → b의 실행 상태 저장
+→ a의 실행 상태 로딩 → 이어서 실행 → a의 실행 상태 저장
+→ b의 실행 상태 로딩 → 이어서 실행 → b의 실행 상태 저장
 -------------------------------------------------------------------------------------
-→
+★ 스레드 주의사항
+// CPU 사용을 스레드에게 배분할 때, 스레드를 생성한 순서대로 배분하지는 않는다.
+// OS의 CPU 스케줄링 정책에 따라 스레드가 실행된다.
+// 즉 JVM에서 스레드를 실행하는 것이 아니라 OS가 실행한다.
+// 결론!
+// => 똑 같은 자바의 스레드 코드가 OS에 따라 실행 순서가 달라질 수 있다.
+//
+// 우선 순위로 조정하면 되지 않나요?
+// => Windows OS의 경우 우선 순위(priority) 값이 실행 순서나 실행 회수에 큰 영향을 끼치지 않는다.
+//    그래서 우선 순위의 값을 조정하여 스레드의 실행 회수를 조정하려 해서는 안된다.
+// => 왜? OS에 따라 실행 정책이 다르기 때문이다.
+// => 그냥 특정 코드를 동시에 실행하고 싶을 때 스레드를 사용한다고 생각하라!
+// 모든 스레드가 끝날 때까지 프로그램은 종료 되지 않는다 
+// => 메인 스레드가 끝났다고 해도 다른 스레드가 실행 중이라면 프로그램 종료가 아니다!!
 -------------------------------------------------------------------------------------
-→
+익명 클래스
+→ 이름이 없는 클래스
+→ 일회성으로 사용되는 간단한 클래스를 정의할 때 유용한 기능
+→ 인터페이스를 구현하거나 클래스를 상속할 때 사용
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
