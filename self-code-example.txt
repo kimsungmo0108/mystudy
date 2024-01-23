@@ -774,7 +774,80 @@ System.out.printf("포트번호: %d\n", url.getPort()); // 지정하지 않으�
 System.out.printf("자원경로: %s\n", url.getPath());
 System.out.printf("서버에 보내는 파라미터: %s\n", url.getQuery());
 -----------------------------------------------------------------
+JAM의 기본 스레드
+→ 기본적으로 <<Thread>>main를 갖고 있다
 
+JVM → System/
+             → main/
+                  → main스레드
+	→ InnocuousThreadGroup
+	→ Reference Handler
+   	→ Finalizer
+   	→ Signal Dispatcher
+   	→ Attach Listener
+   	→ Notification Thread
+
+
+// 현재 스레드의 이름
+Thread main = Thread.currentThread();
+System.out.println("실행 흐름명 = " + t.getName());
+
+// 스레드는 그룹에 소속되기도 한다.
+// 현재 스레드의 소속 그룹을 알고 싶다면?
+ThreadGroup group = main.getThreadGroup();
+System.out.println("그룹명 = " + group.getName());
+
+// 스레드 그룹에 소속된 스레드 목록을 알고 싶다면?
+Thread[] arr = new Thread[100];
+int count = mainGroup.enumerate(arr, false);
+// 두 번째 파라미터 값을 false로 지정하면,
+// 하위 그룹에 소속된 스레드들은 제외한다.
+// 즉, 현재 그룹에 소속된 스레드 목록만 가져오라는 뜻!
+
+System.out.println("main 그룹에 소속된 스레드들:");
+for (int i = 0; i < count; i++)
+  System.out.println("   => " + arr[i].getName());
+
+// 스레드 그룹에 소속된 하위 그룹을 알고 싶다면?
+ThreadGroup[] groups = new ThreadGroup[100];
+int count = mainGroup.enumerate(groups, false);
+// 두 번째 파라미터 값을 false로 지정하면,
+// 하위 그룹에 소속된 그룹들은 제외한다.
+// 즉, 현재 그룹에 소속된 하위 그룹의 목록만 가져오라는 뜻!
+
+System.out.println("main 그룹에 소속된 하위 그룹들:");
+for (int i = 0; i < count; i++)
+  System.out.println("   => " + groups[i].getName());
+
+// 스레드 그룹의 부모 그룹을 알고 싶다면?
+ThreadGroup parentGroup = mainGroup.getParent();
+System.out.printf("main 스레드 그룹의 부모: %s\n", parentGroup.getName());
+
+// "system" 그룹의 부모 그룹은?
+ThreadGroup grandparentGroup = parentGroup.getParent();
+if (grandparentGroup != null) {
+  System.out.printf("%s 스레드 그룹의 부모: %s\n", 
+    parentGroup.getName(), 
+    grandparentGroup.getName());
+}
+
+// System 스레드 그룹의 자식 그룹들
+ThreadGroup[] groups = new ThreadGroup[100];
+int count = systemGroup.enumerate(groups, false);
+
+System.out.println("system 스레드 그룹의 자식 그룹들:");
+for (int i = 0; i < count; i++) {
+  System.out.println("   =>" + groups[i].getName());
+}
+
+// System 스레드 그룹에 소속된 스레드들
+Thread[] arr = new Thread[100];
+int count = systemGroup.enumerate(arr, false);
+
+System.out.println("system 스레드 그룹에 소속된 스레드들:");
+for (int i = 0; i < count; i++) {
+  System.out.println("   =>" + arr[i].getName());
+}
 -----------------------------------------------------------------
 
 -----------------------------------------------------------------
