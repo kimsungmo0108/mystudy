@@ -5667,6 +5667,10 @@ Pooling 기법 적용
 → 객체 생성에 비용(시간, 메모리)이 큰 경우 사용한다
 -------------------------------------------------------------------------------------
 ★ java의 ThreadPool → ExecutorService ★
+→ Executors.newFixedThreadPool();
+→ Executors.newCachedThreadPool();
+→ Executors.newSingleThreadPool();
+
 ★ 1) 불변 스레드 풀
 Executors.newFixedThreadPool(3) → executorService 
 Runnable 구현 객체를 생성자에 넣어준다 → executorService.excute() → 스레드 생성 → Thread.start() → run() → pool에 보관
@@ -5796,7 +5800,7 @@ System.out.println("--------------------------------");
 // - shutdownNow()
 // 진행 중인 작업은 완료하고, 대기 중인 작업은 취소하고 그 목록을 리턴한다.
 -------------------------------------------------------------------------------------
-스레드풀 종료 대기
+★ 스레드풀 종료 대기
 → main 스레드를 유지하고 싶을 때 사용한다
 
 // 스레드풀의 모든 스레드가 종료되면 즉시 true를 리턴한다.
