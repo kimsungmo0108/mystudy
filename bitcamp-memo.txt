@@ -5812,17 +5812,100 @@ if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
   System.out.println("모든 작업을 종료하였다.");
 }
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.01.26(금)
 -------------------------------------------------------------------------------------
-→
+과제 47. DBMS 도입하기
+- DBMS 설치 및 사용법
+- SQL 및 JDBC Driver 개념과 사용법
+- 회원 및 게시판 테이블 정의 및 예제 데이터 입력 SQL 준비
+- DBMS와 연동하여 작업하는 DAO 구현
 -------------------------------------------------------------------------------------
-→
+Database Management System
+DBMS <관리> Database(파일 저장소)
+→ 데이터 정의
+→ 업데이트
+→ 검색
+→ 관리
+  → 사용자 등록/모니터링
+  → 데이터 보안
+  → 성능 모니터링
+  → 데이터 무결성 유지
+  → 동시성 제어
+  → 오류 제어
 -------------------------------------------------------------------------------------
-→
+★ DBMS와 통신
+Oracle, SQLServer=MS가 만듦, DB2=IBM이 만듦, MySQL=Oracle이 만듦, postgreSQL, 
+(Altibase, Tibero, Cubrid 한국에서 만듦)
+
+App <call/return> <Vendor API=Native API> = 각 회사가 제공한다
+App <call/return> Oracle client API <DBMS 전용 프로토콜을 이용해 요청/응답> OracleDBMS
+App <call/return> SQLServer client API <DBMS 전용 프로토콜을 이용해 요청/응답> SQLServer
+App <call/return> MySQL client API <DBMS 전용 프로토콜을 이용해 요청/응답> MySQL
+
+→ c/c++로 만들었다
+→ DBMS 마다 API 사용법이 다르다
+  → 프로그래밍의 일관성이 없다
+→ DBMS 마다 따로 App 작성 = 전용 App이 필요하다
+→ 개발비 증가
+→ 전용 DBMS client API(function=method)가 DBMS와 직접 통신
 -------------------------------------------------------------------------------------
-→
+★ ODBC(Open Database Connectivity)
+
+App <call/return> ODBC Driver <통신> Vendor API=Native API <통신> DBMS
+App <call/return> ODBC API(규칙=명세) <= call/return => <Vendor API=Native API> = 각 회사가 제공한다
+App <call/return> Orcle ODBC 구현체 <= call/return => Oracle client API <= DBMS 전용 프로토콜을 이용해 요청/응답 => OracleDBMS
+App <call/return> SQLServer ODBC 구현체 <= call/return => SQLServer client API <= DBMS 전용 프로토콜을 이용해 요청/응답 => SQLServer
+App <call/return> MySQl ODBC 구현체 <= call/return => MySQL client API <= DBMS 전용 프로토콜을 이용해 요청/응답 => MySQL
+
+→ 호출 규칙이 동일하기 때문에 App을 한번만 작성하면된다
+→ c/c++로 만들었다 = java App으로는 호출 불가능하다
 -------------------------------------------------------------------------------------
-→
+★ JDBC Driver (Java Database Connectivity Dreiver)
+→ jaca.sql.*    javax.sql.*
+
+① Type1 드라이버
+java App < call/return > JDBC Driver < call/return > ODBC Driver <통신> Vendor API=Native API <통신> DBMS
+java App < call/return > JDBC Driver < call/return > Orcle ODBC 구현체 <= call/return => Oracle client API <= DBMS 전용 프로토콜을 이용해 요청/응답 => OracleDBMS
+				      └>	SQLServer ODBC 구현체 <= call/return => SQLServer client API <= DBMS 전용 프로토콜을 이용해 요청/응답 => SQLServer
+				      └>	MySQl ODBC 구현체 <= call/return => MySQL client API <= DBMS 전용 프로토콜을 이용해 요청/응답 => MySQL
+→ ODBC-JDBD Bridge
+→ JRE에 기본 포함
+→ local에 설치된 ODBC 드라이버를 사용
+→ 실행속도 느리다
+
+② Type2 드라이버 = Native API call
+java App <call/return> JDBC Driver <call/return> Vendor API=Native API <통신> DBMS
+java App <= call/return => Oracle JDBC Driver <= call/return => Oracle client API <= DBMS 전용 프로토콜을 이용해 요청/응답 => OracleDBMS
+		└> SQLServer JDBC Driver <= call/return => SQLServer client API <= DBMS 전용 프로토콜을 이용해 요청/응답 => SQLServer
+	             └> MySQL JDBC Driver <= call/return => MySQL client API <= DBMS 전용 프로토콜을 이용해 요청/응답 => MySQL
+→ Vendor에서 다운로드 해야함
+→ local에 설치된 Native API를 사용
+→ Type1 보다 속도 빠르다
+→ DBMS를 교체하면 로컬에 설치된 JDBC 드라이버도 교체해야한다
+
+★ ③ Type4 드라이버 = native 드라이버
+java App <call/return> JDBC Driver <통신> DBMS
+java App <= call/return => Oracle JDBC Driver <= DBMS 전용 프로토콜을 이용해 요청/응답 => OracleDBMS
+		└> SQLServer JDBC Driver <= DBMS 전용 프로토콜을 이용해 요청/응답 => SQLServer
+		└> MySQL JDBC Driver <= DBMS 전용 프로토콜을 이용해 요청/응답 => MySQL
+→ Vendor에서 다운로드 해야함
+→ local에서 c/c++ API 설치 불필요
+→ 순수 자바 드라이버(pure Java)
+→ DBMS를 교체하면 로컬에 설치된 JDBC 드라이버도 교체해야한다
+
+④ Type3 드라이버 = network 드라이버
+                        <local> 			|                  <Middleware>                     |	<Server>
+java App <call/return> 중계서버 JDBC 드라이버 <통신> 중계서버 <call/return> JDBC Driver <통신> DBMS
+java App <= call/return => 중계서버 JDBC 드라이버 <통신> 중계서버 <call/return> Oracle JDBC Driver <= DBMS 전용 프로토콜을 이용해 요청/응답 => OracleDBMS
+		                                                                       └> SQLServer JDBC Driver <= DBMS 전용 프로토콜을 이용해 요청/응답 => SQLServer
+		                                                                       └> MySQL JDBC Driver <= DBMS 전용 프로토콜을 이용해 요청/응답 => MySQL
+→ 3rd-party에 다운로드
+→ 미들웨어 서버 구매 비용 발생
+→ 특정 DBMS에 종속이 안됨
+→ DBMS 교체 → 미들웨어 서버측만 JDBC 드라이버 파일을 교체하면된다
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
