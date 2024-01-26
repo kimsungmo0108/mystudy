@@ -5920,7 +5920,17 @@ DriverManager.register(driver);
 Connection con = DriverManager.getConnection(url, user, password);
 Connection con = DriverManager.getConnection("jdbc:mysql://localhost/studydb", "study", "1111");
 -------------------------------------------------------------------------------------
-→
+DBMS 사용하기
+
+① 직접사용
+user <= 입력/출력 => MySQL client(mysql.exe) <= 명령어 전달/응답 => MySQL Server(mysqld.exe) → 처리
+→ c/s Architecture
+→ 입력할 때 SQL 문법으로 입력
+→ 명령어 전달할 때 SQL 문법으로 전달
+
+② App에서 사용
+user <= 입력/출력 => App <= call/return => JDBC Driver(mysql-connector-j.jar) <= 명령어 전달/응답 => MySQL Server → 처리
+→ App이 SQL 명령어로 JDBC Driver를 호출한다
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
