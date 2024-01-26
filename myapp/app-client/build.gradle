@@ -22,14 +22,17 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     // This dependency is used by the application.
-    implementation 'com.google.guava:guava:32.1.1-jre'
+    //implementation 'com.google.guava:guava:32.1.1-jre'
 
     // google gson(json) 라이브러리
     implementation 'com.google.code.gson:gson:2.10.1'
 
-    implementation project(':app-common')
+    //implementation project(':app-common')
 
-    implementation project(':app-api')
+    //implementation project(':app-api')
+
+    // MySQL 드라이버
+    implementation 'com.mysql:mysql-connector-j:8.3.0'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

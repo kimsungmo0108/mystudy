@@ -5907,7 +5907,18 @@ java App <= call/return => 중계서버 JDBC 드라이버 <통신> 중계서버 
 → 특정 DBMS에 종속이 안됨
 → DBMS 교체 → 미들웨어 서버측만 JDBC 드라이버 파일을 교체하면된다
 -------------------------------------------------------------------------------------
-→
+JDBC API 프로그래밍
+
+① JDBC Driver 준비
+→ java.sql.Driver 구현체를 생성하여 DriverManager에 등록한다
+→ Service Provider 명세에 따라 JDBC Driver 파일에 들어있는 설정대로 Driver 객체를 자동으로 생성하고 등록한다
+Driver diver = new com.mysql.jdbc.Driver();
+DriverManager.register(driver);
+→ 생략 가능!
+
+② DriverManager를 통해 DBMS 연결을 요청
+Connection con = DriverManager.getConnection(url, user, password);
+Connection con = DriverManager.getConnection("jdbc:mysql://localhost/studydb", "study", "1111");
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------

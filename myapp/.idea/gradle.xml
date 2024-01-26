@@ -10,15 +10,11 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app-api" />
             <option value="$PROJECT_DIR$/app-client" />
-            <option value="$PROJECT_DIR$/app-common" />
-            <option value="$PROJECT_DIR$/app-server" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
-    <option name="offlineMode" value="true" />
   </component>
 </project>
