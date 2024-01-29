@@ -40,7 +40,7 @@ public class AssignmentDaoImpl implements AssignmentDao {
           String.format("delete from assignments where assignment_no=%d", no));
 
     } catch (Exception e) {
-      throw new DaoException("데이터 입력 오류", e);
+      throw new DaoException("데이터 삭제 오류", e);
     }
   }
 
