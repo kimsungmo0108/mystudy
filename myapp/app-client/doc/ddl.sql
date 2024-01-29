@@ -49,3 +49,8 @@ update boards set
 where board_no = 3;
 
 delete from boards where board_no=3;
+
+alter table boards add column category int  not null;
+
+update boards set category=1;
+

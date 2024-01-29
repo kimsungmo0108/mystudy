@@ -53,7 +53,6 @@ public class MemberDaoImpl implements MemberDao {
         member.setNo(rs.getInt("member_no"));
         member.setEmail(rs.getString("email"));
         member.setName(rs.getString("name"));
-        member.setPassword(rs.getString("password"));
         member.setCreatedDate(rs.getDate("created_date"));
 
         list.add(member);
@@ -75,7 +74,6 @@ public class MemberDaoImpl implements MemberDao {
         member.setNo(rs.getInt("member_no"));
         member.setEmail(rs.getString("email"));
         member.setName(rs.getString("name"));
-        member.setPassword(rs.getString("password"));
         member.setCreatedDate(rs.getDate("created_date"));
 
         return member;
