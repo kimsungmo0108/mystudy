@@ -5,32 +5,53 @@ public class Main {
     java.util.Scanner sc = new java.util.Scanner(System.in);
     String str = sc.nextLine();
     int count = 0;
+    for (int i = 0; i < str.length(); i++) {
+      char ch = str.charAt(i);
 
-    for (int i = 0; i < str.length();) {
-      if (str.charAt(i) == 'c') {
-        if (str.charAt(i + 1) == '=' || str.charAt(i + 1) == '-') {
-          i += 2;
-        } else {
-          i++;
+      if (ch == 'c') {
+        if (i < str.length() - 1) {
+          if (str.charAt(i + 1) == '=') {
+            i++;
+          } else if (str.charAt(i + 1) == '-') {
+            i++;
+          }
         }
-      } else if (str.charAt(i) == 'd') {
-        if (str.charAt(i + 1) == 'z' && str.charAt(i + 2) == '=') {
-          i += 3;
-        } else if (str.charAt(i + 1) == '-') {
-          i += 2;
-        } else {
-          i++;
+      } else if (ch == 'd') {
+        if (i < str.length() - 1) {
+          if (str.charAt(i + 1) == 'z') {
+            if (i < str.length() - 2) {
+              if (str.charAt(i + 2) == '=') {
+                i += 2;
+              }
+            }
+          } else if (str.charAt(i + 1) == '-') {
+            i++;
+          }
         }
-      } else if (str.charAt(i) == 'l' && str.charAt(i + 1) == 'j') {
-        i += 2;
-      } else if (str.charAt(i) == 'n' && str.charAt(i + 1) == 'j') {
-        i += 2;
-      } else if (str.charAt(i) == 's' && str.charAt(i + 1) == '=') {
-        i += 2;
-      } else if (str.charAt(i) == 'z' && str.charAt(i + 1) == '=') {
-        i += 2;
-      } else {
-        i++;
+      } else if (ch == 'l') {
+        if (i < str.length() - 1) {
+          if (str.charAt(i + 1) == 'j') {
+            i++;
+          }
+        }
+      } else if (ch == 'n') {
+        if (i < str.length() - 1) {
+          if (str.charAt(i + 1) == 'j') {
+            i++;
+          }
+        }
+      } else if (ch == 's') {
+        if (i < str.length() - 1) {
+          if (str.charAt(i + 1) == '=') {
+            i++;
+          }
+        }
+      } else if (ch == 'z') {
+        if (i < str.length() - 1) {
+          if (str.charAt(i + 1) == '=') {
+            i++;
+          }
+        }
       }
       count++;
     }
