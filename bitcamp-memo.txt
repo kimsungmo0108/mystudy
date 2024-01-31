@@ -6197,11 +6197,70 @@ from table_constraints t1
 update 테이블 set 컬럼=값 ;
 update 테이블 set 컬럼=값 where 조건;
 -------------------------------------------------------------------------------------
-→
+
+
+
+0224.01.31(수)
 -------------------------------------------------------------------------------------
-→
+sql 활용
+## autocommit
+mysql은 autocommit의 기본 값이 true이다.
+따라서 명령창에서 SQL을 실행하면 바로 실제 테이블에 적용된다.
+수동으로 처리하고 싶다면 autocommit을 false로 설정하라!
+
+> set autocommit=false;
+
+
+insert/update/delete을 수행한 후 승인을 해야만 실제 테이블에 적용된다.
+
+> commmit;
+
+
+마지막 commit 상태로 되돌리고 싶다면,
+
+> rollback;
 -------------------------------------------------------------------------------------
-→
+Transaction(트랜잭션) 
+→ 한 단위로 묶은 작업
+
+실제 테이블
+  12, 'xxx'
+  13, 'yyy'
+  14, 'zzz'
+set autocommit = false;
+→ insert → 임시 DB에 insert가 저장된다
+→ update → 임시 DB에 update가 저장된다
+→ delete  → 임시 DB에 delete가 저장된다
+→ select → 실제 테이블의 데이터 + 임시작업 결과를 보여준다
+→ rollback → 임시 DB에 보관된 모든 작업결과를 취소한다, 마지막으로 commit 상태로 되돌려 준다
+→ commit → 임시DB에 보관된 모든 작업결과를 실제 테이블에 적용된다
+→ ★ 여러 개의 작업을 묶어 한 단위로 다룰 수 있다
+→ ★ Thread(스레드)별로 임시 DB를 관리한다
+
+set autocommit = false;
+client1 < Thread 연결 > DBMS
+→ select
+  12, 'xxx'
+  13, 'yyy'
+  14, 'zzz'
+  18, 'kkk'
+  19, 'mmm' 출력
+임시 DB
+
+set autocommit = false;
+client2 < Thread 연결 > DBMS
+→ insert → 임시 DB에 insert가 저장된다 
+→ insert → 임시 DB에 insert가 저장된다 
+임시 DB
+  18, 'kkk'
+  19, 'mmm'
+→ commit → 실제 테이블에 적용
+실제 테이블
+  12, 'xxx'
+  13, 'yyy'
+  14, 'zzz'
+  18, 'kkk'
+  19, 'mmm'
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
