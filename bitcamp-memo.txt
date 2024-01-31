@@ -6210,11 +6210,9 @@ mysql은 autocommit의 기본 값이 true이다.
 
 > set autocommit=false;
 
-
 insert/update/delete을 수행한 후 승인을 해야만 실제 테이블에 적용된다.
 
 > commmit;
-
 
 마지막 commit 상태로 되돌리고 싶다면,
 
@@ -6222,6 +6220,13 @@ insert/update/delete을 수행한 후 승인을 해야만 실제 테이블에 �
 -------------------------------------------------------------------------------------
 Transaction(트랜잭션) 
 → 한 단위로 묶은 작업
+→ 하나의 업무가 여러 개의 작업으로 이루어진 경우
+→ 한 단위로 다룰 수 있도록 여러 작업을 묶는 것
+  → 주문업무(주문등록, 결제등록, 배송등록)
+  → 주문업무(주문등록, 결제등록, 배송등록)
+  → 주문업무(주문등록, 결제등록, 배송등록)
+  → 하나의 작업이라도 실패하면 업무 미완성으로 보고 이전에 수행했던 작업도 모두 취소한다 = rollback
+  → 모든 작업이 성공했으므로 업무가 완성되었다 = commit
 
 실제 테이블
   12, 'xxx'
@@ -6262,17 +6267,302 @@ client2 < Thread 연결 > DBMS
   18, 'kkk'
   19, 'mmm'
 -------------------------------------------------------------------------------------
-→
+select → projection/selection
+no name class working tel
+1  aaa               Y
+2  bbb              N
+3  ccc                Y
+4  ddd              N
+5  eee               Y
+projection = 컬럼 지정
+select no, name → 결과 데이터로 추출할 컬럼 선택 
+from test1 → 참조할 테이블
+selection = 데이터 지정
+where working='Y'; → 결과 데이터를 조건에 맞춰 선택	
 -------------------------------------------------------------------------------------
-→
+가상의 컬럼 값을 조회하기
+select no, concat(name,'(',class,')') from test1;
+no  concat(name,'(',class,')')
+1  aaa(java101)
+2  aaa(java102)
+
+### 조회하는 컬럼에 별명 붙이기
+- 별명을 붙이지 않으면 원래의 컬럼명이 조회 결과의 컬럼이름으로 사용된다.
+- 위의 예제처럼 복잡한 식으로 표현한 컬럼인 경우 컬럼명도 그 식이 된다.
+- 이런 경우 별명을 붙이면 조회 결과를 보기 쉽다.
+
+
+/* 컬럼에 별명 붙이기*/
+select 컬럼명 [as] 별명 ...
+select
+    no as num,
+    concat(name,'(',class,')') as title
+from test1;
+
+/* as를 생략해도 된다.*/
+select
+    no num,
+    concat(name,'(',class,')') title
+from test1;
 -------------------------------------------------------------------------------------
-→
+/* 주의!
+ * where 절을 통해 결과 데이터를 먼저 선택(selection)한 다음
+ * 결과 데이터에서 가져올 컬럼을 선택(projection)한다.
+ * 따라서 실행 순서는:
+ * from ==> join ==> on ==> where ==> group by ==> having ==> select ==> order by ==> limit
+ */
+고객
+번호  이름  나이  성별
+1  홍길동  20  남
+2  유관순  18  여
+3  임꺽정  30  남
+4  안중근  40  남
+5  조수미  50  여
+6  신혜선  30  여
+
+주문
+제품번호  제품명  가격  고객번호  수량
+100  aaa  20000  1  2
+101  bbb  3000  1  3
+102  ccc  31000  2  2
+103  ddd  2700  3  5
+104  eee  5000  5  10
+
+select client.no, name, p_name, concat(price*quantity) from client join order1 on client.no=order1.c_no where order1.price>=10000 order by order1.price desc;
+select 번호, 이름, 제품명, 총액
+from 고객 join 주문 on 고객.번호=주문.고객번호 
+where 주문.가격>=10000
+order by 주문.가격 desc;
+
+실행 순서
+
+1) from → join 
+→ Cartesion join(=cross join)을 한다
+→ Cartesion join(=cross join)은 모든 경우의 수를 구한다 = 30가지의 경우를 구한다
+
+2) on 고객.번호=주문.고객번호
+→ 조건에 해당하는 튜플만 남긴다
+→ inner join
+번호  이름  나이  성별  제품번호  제품명  가격  고객번호 수량
+1  홍길동  20  남  100  aaa  20000  1  2
+1  홍길동  20  남  101  bbb  3000  1  3
+2  유관순  18  여  102  ccc  31000  2  2
+3  임꺽정  30  남  103  ddd  2700  3  5
+5  조수미  50  여 104  eee  5000  5  10
+
+3) where 주문.가격>=10000
+번호  이름  나이  성별  제품번호  제품명  가격  고객번호 수량
+1  홍길동  20  남  100  aaa  20000  1  2
+2  유관순  18  여  102  ccc  31000  2  2
+
+4) select 번호, 이름, 제품명, (수량*가격) as 총액
+→ 컬럼을 지정한다
+→ 총액이라는 가상 컬럼을 만든다
+총액
+40000
+62000
+
+5) order by 가격 desc;
+→ 컬럼 가격에 대해서 내림차순으로 정렬시킨다
+
+6) return
+번호  이름  제품명  총액
+2  유관순  ccc  62000
+1  홍길동  aaa  40000
 -------------------------------------------------------------------------------------
-→
+★ 기타 명령어
+/* 재직자가 아닌 사람만 조회하라!*/
+select no, name, class, working
+from test1
+where not working = 'Y';
+
+select no, name, class, working
+from test1
+where working != 'Y';
+
+select no, name, class, working
+from test1
+where working <> 'Y';
+/* 전화 번호가 있는 학생만 조회하라!*/
+/* => 다음과 같이 null에 != 연산자를 사용하면 조건이 맞지 않는다.*/
+select *
+from test1
+where tel != null;
+
+/* => null인지 여부를 가릴 때는 is 또는 is not 연산자를 사용하라!*/
+select *
+from test1
+where tel is not null;
+
+select *
+from test1
+where not tel is null;
+
+/* 전화 번호가 없는 학생만 조회하라!*/
+/* => null인지 여부를 가릴 때는 = 연산자가 아닌 is 연산자를 사용해야 한다.*/
+select *
+from test1
+where tel = null; /* 실패 */
+
+select *
+from test1
+where tel is null; /* OK */
+
+### 사칙연산
+- +, -, *, /, % 연산자를 사용할 수 있다.
+
+select (4 + 5), (4 - 5), (4 * 5), (4 / 5), (4 % 5);
+
+### 비교연산
+- =, !=, >, >=, <, <=, <>
+
+select (4=5), (4!=5), (4>5), (4>=5), (4<5), (4<=5), (4<>5);
+
+### between 값1 and 값2
+- 두 값 사이(두 값도 포함)에 있는지 검사한다.
+
+select 5 between 3 and 5;
+
+### like
+- 문자열을 비교할 때 사용한다.
+
+/* class 이름에 java를 포함한 모든 학생 조회하기
+   이 경우 조회 속도가 느리다.*/
+select *
+from test1
+where class like '%java%';
+
+- 날짜 값 비교하기
+
+/* 특정 날짜의 게시글 찾기 */
+select *
+from test1
+where regdt = '2022-6-17';
+
+/* 특정 기간의 게시글 조회 */
+select *
+from test1
+where regdt between '2022-11-1' and '2022-12-31';
+
+select *
+from test1
+where regdt >= '2022-11-1' and regdt <= '2022-12-31';
+
+- 날짜를 다루는 연산자와 함수
+
+/* 현재 날짜 및 시간 알아내기 */
+select now();
+
+/* 현재 날짜 알아내기 */
+select curdate();
+
+/* 현재 시간 알아내기 */
+select curtime();
+
+/* 주어진 날짜, 시간에서 날짜만 뽑거나 시간만 뽑기 */
+select regdt, date(regdt), time(regdt) from test1;
+
+/* 특정 날짜에 시,분,초,일,월,년을 추가하거나 빼기*/
+date_add(날짜데이터, interval 값 단위);
+date_sub(날짜데이터, interval 값 단위);
+
+select date_add(now(), interval 11 day);
+select date_sub(now(), interval 11 day);
+
+/* 두 날짜 사이의 간격을 알아내기 */
+datediff(날짜1, 날짜2);
+select datediff(curdate(), '2023-2-10');
+
+/* 날짜에서 특정 형식으로 값을 추출하기 */
+date_format(날짜, 형식)
+select regdt, date_format(regdt, '%m/%e/%Y') from test1; /* 09/7/2022 */
+select regdt, date_format(regdt, '%M/%d/%y') from test1; /* September/07/17 */
+select regdt, date_format(regdt, '%W %w %a') from test1; /* Thursday 4 Thu */
+select regdt, date_format(regdt, '%M %b') from test1; /* September Sep */
+select now(), date_format(now(), '%p %h %H %l'); /* PM 01 13 1 */
+select now(), date_format(now(), '%i %s'); /* 05 45 */
+
+/* 문자열을 날짜 값으로 바꾸기 */
+select str_to_date('11/22/2022', '%m/%d/%Y');
+select str_to_date('2022.2.12', '%Y.%m.%d');
+
+
+/* 날짜 값을 저장할 때 기본 형식은 yyyy-MM-dd이다. */
+insert into test1 (title, regdt) values('aaaa', '2022-11-22');
+
+/* 다음 형식의 문자열을 날짜 값으로 지정할 수 없다.*/
+insert into test1 (title, regdt) values('bbbb', '11/22/2022');
+
+/* 특정 형식으로 입력된 날짜를 date 타입의 컬럼 값으로 변환하면 입력할 수 있다.*/
+insert into test1 (title, regdt) values('bbbb', str_to_date('11/22/2022', '%m/%d/%Y'));
 -------------------------------------------------------------------------------------
-→
--------------------------------------------------------------------------------------
-→
+Foreign key(참조 키)
+
+게시글과 첨부파일
+→ 파일은 HDD에 저장하고
+→ DB에는 파일 경로를 저장한다
+→ 첨부파일은 스토리지에 저장한다( AWS S3, Azure Blob storage, NCP object Storage )
+
+고민해볼 사항!
+- 첨부 파일의 개수를 5 개로 정해 놓았다.
+- 따라서 최대 5개의 첨부 파일만 테이블에 저장할 수 있다.
+- 첨부파일이 없더라도 5개의 컬럼은 메모리를 차지한다.
+
+실무에서 원하는 것!
+- 첨부 파일의 개수에 제한을 받고 싶지 않다.
+- 첨부 파일 개수만큼만 값을 저장하고 싶다.
+
+이렇게 같은 데이터를 저장할 컬럼이 중복된 경우에는,
+- 중복 컬럼을 별도의 테이블로 분리한다.
+- 중복 컬럼의 값이 어느 테이블의 어느 데이터의 값인지 지정한다.
+
+
+## 게시글과 첨부파일의 정보를 여러 개의 테이블에 분산 저장하기
+board 
+no  title  content  regdate  file1  file2  file3
+1  aaa                            a.pdf
+2  bbb                           b1.pdf  b2.pdf  b3.pdf
+3  ccc                            c1.pdf
+4  ddd                           d1.gif  d2.gif  d3.gif  d4.gif
+→ 중복 컬럼이 있을 경우 분리한다 = 제1정규화
+board 
+no(pk)  title  content  regdate
+attached_file
+file_no(pk)  path  board_no(fk)
+
+board-|---------o|<-attached_file
+(부모 테이블)        (자식 테이블)
+
+board
+no  title  content  regdate
+1  aaa  ~  ~                          
+2  bbb  ~  ~                      
+3  ccc  ~  ~                        
+4  ddd  ~  ~       
+                
+attached_file
+file_no  path  board_no
+101  a.pdf  1
+102  b1.pdf  2
+103  b2.pdf  2
+104  b3.pdf  2
+105  c1.pdf  3
+106  d1.gif  4
+107  d2.gif  4
+108  d3.gif  4
+109  d4.gif  4
+
+다른 테이블의 PK를 참조하는 컬럼으로 선언한다.
+
+★ alter table 테이블명 add constraint 제약조건이름 foreign key (컬럼명) references 테이블명(컬럼명);
+
+예)
+/* 기존에 테이블에 무효한 데이터가 있을 수 있기 때문에 먼저 테이블의 데이터를 지운다.*/
+delete from test2;
+
+/* fk 컬럼을 설정하기 전에 무효한 데이터를 삭제해야 한다. */
+alter table test2
+    add constraint test2_bno_fk foreign key (bno) references test1(no);
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
