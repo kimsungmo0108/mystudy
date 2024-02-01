@@ -8,9 +8,6 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
-
-    id 'java'
-    id 'eclipse'
 }
 
 repositories {
@@ -25,10 +22,17 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     // This dependency is used by the application.
-    implementation 'com.google.guava:guava:32.1.1-jre'
+    //implementation 'com.google.guava:guava:32.1.1-jre'
 
     // google gson(json) 라이브러리
     implementation 'com.google.code.gson:gson:2.10.1'
+
+    //implementation project(':app-common')
+
+    //implementation project(':app-api')
+
+    // MySQL 드라이버
+    implementation 'com.mysql:mysql-connector-j:8.3.0'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -41,7 +45,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'membership.App'
+    mainClass = 'bitcamp.myapp.ClientApp'
 }
 
 
@@ -58,17 +62,6 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
-// eclipse 프로젝트 이름을 설정하기
-eclipse {
-    project {
-        name = "membership"
-    }
-    jdt {
-        sourceCompatibility = 21
-        targetCompatibility = 21
-        javaRuntimeName = "JavaSE-21"
-    }
-}
 // Gradel로 애플리케이션을 실행했을 때
 // 키보드 입력을 표준 입력 스트림으로 연결하는 방법
 run {
