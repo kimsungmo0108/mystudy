@@ -6227,6 +6227,7 @@ Transaction(트랜잭션)
   → 주문업무(주문등록, 결제등록, 배송등록)
   → 하나의 작업이라도 실패하면 업무 미완성으로 보고 이전에 수행했던 작업도 모두 취소한다 = rollback
   → 모든 작업이 성공했으므로 업무가 완성되었다 = commit
+  → 임시 DB에 저장될 수 있다
 
 실제 테이블
   12, 'xxx'
@@ -6304,13 +6305,17 @@ select
     no num,
     concat(name,'(',class,')') title
 from test1;
+
+★ select와 insert
+insert into test1(no, name) select bno, cname from test2 where addr='seoul';
 -------------------------------------------------------------------------------------
 /* 주의!
  * where 절을 통해 결과 데이터를 먼저 선택(selection)한 다음
  * 결과 데이터에서 가져올 컬럼을 선택(projection)한다.
  * 따라서 실행 순서는:
- * from ==> join ==> on ==> where ==> group by ==> having ==> select ==> order by ==> limit
+ ★ from ==> join ==> on ==> where ==> group by ==> select ==> having ==> order by ==> limit
  */
+==> DBMS 마다 실행순서가 조금씩 다르다 각 실행순서를 확인 하면서 코드를 짜야한다
 고객
 번호  이름  나이  성별
 1  홍길동  20  남
@@ -6563,6 +6568,208 @@ delete from test2;
 /* fk 컬럼을 설정하기 전에 무효한 데이터를 삭제해야 한다. */
 alter table test2
     add constraint test2_bno_fk foreign key (bno) references test1(no);
+-------------------------------------------------------------------------------------
+
+
+
+2024.02.01(목)
+-------------------------------------------------------------------------------------
+Entity Relationship
+
+1) 1 : 0 or 1
+회원-|-----o|-학생
+pk            fk=key(pk, unique)
+1 홍길동      1 인류학	
+→ 식별(identifying) 관계
+→ FK = PK
+→ FK : 관계를 가리킨다, PK : 식별자로 사용된다
+→ primary key로 사용되는 foreign key
+
+
+2) 1 : 다(0 or 1이상)
+매니저-|----o|<-강의
+pk               pk        fk    
+2 대리          100 자바 2
+3 주임          101 자바 3
+4 주임          102 AI 2
+                   103 파이썬 2
+→ 비식별(non-identifying)관계
+→ fk != key (pk, unique)
+→ foreign key가 일반 컬럼
+-------------------------------------------------------------------------------------
+select 활용
+
+/* distinct 와 all */
+/* 모든 데이터를 가져온다.*/
+select all loc from room;
+
+/* all은 생략할 수 있다*/
+select loc from room;
+
+/★ 중복 값을 한 개만 추출할 때 distinct 를 붙인다.*/
+select distinct loc from room;  
+
+/* 컬럼이 2 개 이상일 때 그 컬럼들의 값이 중복될 경우만 한 개로 간주한다.*/
+select distinct loc, name from room;
+
+select concat(name, '(', loc, ')') title
+from room;
+
+/* count()를 호출할 때 컬럼 이름을 지정하면 
+   해당 컬럼의 값이 null 이 아닌 데이터만 카운트한다. */
+select count(mno) cnt
+from lect;
+
+/* union 과 union all */
+
+/* select 결과 합치기
+   union : 중복 값 자동 제거*/
+select distinct bank from stnt
+union
+select distinct bank from tcher;
+
+/* union all: 중복 값 제거 안함*/
+select distinct bank from stnt
+union all
+select distinct bank from tcher;
+
+/* 차집합
+   mysql 은 차집합 문법을 지원하지 않는다.
+   따라서 다음과 기존의 SQL 문법을 사용해서 처리해야 한다.
+*/
+select distinct bank
+from stnt
+where not bank in (select distinct bank from tcher);
+
+/* 교집합
+   mysql 은 교집합 문법을 지원하지 않는다.
+   따라서 다음과 기존의 SQL 문법을 사용해서 처리해야 한다.
+*/
+select distinct bank
+from stnt
+where bank in (select distinct bank from tcher);
+-------------------------------------------------------------------------------------
+-- 실행 순서: from -> where -> select -> order by
+-- 1) from 또는 join : 테이블의 전체 데이터 또는 조인 데이터 
+-- 2) where : 조건에 따라 결과로 뽑을 데이터를 selection 한다.
+-- 3) group by : 조건에 따라 뽑은 데이터를 특정 컬럼을 기준으로 데이터를 묶는다.
+-- 4) having : 그룹으로 묶은 데이터를 조건에 따라 선별한다.
+-- 5) select : 최종 결과로 뽑을 컬럼을 표시(projection)한다. 표현식으로 계산한 컬럼도 포함시킨다.
+-- 6) order by : select 절에서 추가한 임의 컬럼이나 테이블 컬럼을 기준으로 정렬한다.
+-- 7) limit : 결과 데이터에서 지정한 범위의 데이터를 선택한다.
+-- 8) 결과 추출: 7번을 수행한 결과 데이터에서 5번에 표시된 컬럼만 추출한다.
+-------------------------------------------------------------------------------------
+/* 조인
+=> 서로 관련된 테이블의 데이터를 연결하여 추출하는 방법
+=> 기법
+1) CROSS 조인(=Cartesian product)
+2) NATURAL 조인
+3) JOIN ~ USING(컬럼명)
+4) [INNER] JOIN ~ ON
+5) OUTER JOIN
+*/
+-- cross join 고전 문법 */
+select board1.bno, title, content, fno, filepath, attach_file1.bno
+from board1, attach_file1;
+
+-- 컬럼명 앞에 테이블명을 붙이면 너무 길다.
+-- 테이블에 별명을 부여하고 그 별명을 사용하여 컬럼을 지정하라.
+select b.bno, title, content, fno, filepath, a.bno
+from board1 as b cross join attach_file1 as a;
+
+-- as는 생략 가능
+select b.bno, title, content, fno, filepath, a.bno
+from board1 b cross join attach_file1 a;
+
+-- 고전 문법
+select b.bno, title, content, fno, filepath, a.bno
+from board1 b, attach_file1 a;
+-------------------------------------------------------------------------------------
+NATURAL 조인
+--    같은 이름을 가진 컬럼 값을 기준으로 레코드를 연결한다.
+select b.bno, title, content, fno, filepath, a.bno
+from board1 b natural join attach_file1 a;
+  
+-- 고전 문법
+select b.bno, title, content, fno, filepath, a.bno
+from board1 b, attach_file1 a
+where b.bno = a.bno;
+
+-- natural join 의 문제점
+-- 가. 두 테이블의 조인 기준이 되는 컬럼 이름이 다를 때 연결되지 못한다.
+-- 나. 상관 없는 컬럼과 이름이 같을 때 잘못 연결된다.
+-- 다. 같은 이름의 컬럼이 여러 개 있을 경우 잘못 연결된다.
+--    모든 컬럼의 값이 일치할 경우에만 연결되기 때문이다.
+
+-- 가. 두 테이블의 조인 기준이 되는 컬럼 이름이 다를 때:
+-- natural join의 기준이 되는 같은 이름을 가진 컬럼이 양 테이블에 존재하지 않는다.
+-- => cross join 처럼 실행된다.
+select no, title, content, fno, filepath, bno
+from board2 b natural join attach_file2 a;
+
+-- 고전 문법 : 
+-- 고전 문법에서는 where 절의 조건으로 두 테이블의 조인 기준이 되는 컬럼 값을 검사하기 때문에 
+-- 실행 결과는 정상적으로 나온다.
+select no, title, content, fno, filepath, bno
+from board2 b, attach_file2 a
+where b.no = a.bno;
+
+-- 나. 같은 이름을 가진 컬럼이 있지만 서로 상관(PK와 FK 관계)이 없는 컬럼일 때:
+-- board3의 no와 attach_file3의 no는 PK/FK 관계가 아니다.
+-- 그럼에도 불구하고 이름이 같기 때문에 이 컬럼을 기준으로 데이터를 연결한다.
+select b.no, title, content, a.no, filepath, bno
+from board3 b natural join attach_file3 a;
+
+-- 다. 같은 이름을 가진 컬럼이 여러 개 있을 때:
+-- board4와 attach_file4에 같은 이름을 가진 컬럼이 여러 개 있다.
+-- 해당 컬럼들의 값이 같을 때만 두 테이블의 데이터를 연결한다.
+-- 따라서 실행 결과 데이터는 없을 것이다.
+select b.bno, b.title, content, a.fno, a.title, a.bno
+from board4 b natural join attach_file4 a;
+-------------------------------------------------------------------------------------
+JOIN ~ USING
+--    같은 이름을 가진 컬럼이 여러 개 있을 경우 USING을 사용하여 컬럼을 명시할 수 있다.
+select b.bno, b.title, content, a.fno, a.title, a.bno
+from board4 b join attach_file4 a using (bno);
+
+-- 두 테이블의 데이터를 연결할 때 기준이 되는 컬럼이 이름이 같지 않다.
+-- 이런 경우 using을 사용할 수 없다. 실행 오류!
+select no, title, content, fno, filepath, bno
+from board5 b join attach_file5 a using (bno);
+-------------------------------------------------------------------------------------
+JOIN ~ ON(=INNER JOIN)
+-- 조인 조건을 on에 명시할 수 있다.
+select no, title, content, fno, filepath, bno
+from board5 b join attach_file5 a on b.no=a.bno;
+
+-- 조건에 일치하는 경우에만 두 테이블의 데이터를 연결한다.
+-- 이런 조인을 'inner join' 이라 부른다.
+-- SQL 문에서도 inner join 이라 기술할 수 있다.
+-- 물론 inner를 생략할 수도 있다.
+select no, title, content, fno, filepath, bno
+from board5 b inner join attach_file5 a on b.no=a.bno;
+-------------------------------------------------------------------------------------
+OUTER JOIN
+--    조인 조건에 일치하는 데이터가 없더라도 두 테이블 중에서 한 테이블의 데이터를 
+--    결과로 포함시키는 명령이다.
+--    문법:
+--         select  컬럼명, 컬럼명, ...
+--         from 테이블1 t1 [left|right] outer join 테이블2 t2 on t1.컬럼=t2컬럼
+--    left outer join => 왼쪽 테이블의 데이터는 반드시 포함시키라는 뜻이다.
+--    right outer join => 오른쪽 테이블의 데이터를 반드시 포함시키는 뜻이다.
+--  
+select no, title, content, fno, filepath, bno
+from board5 b [{(left, right)}] outer join attach_file5 a on b.no=a.bno
+order by no desc;
+-------------------------------------------------------------------------------------
+/* 서브 쿼리
+=> 쿼리문 안에 쿼리문을 실행하는 기법
+=> 성능 문제를 생각하면서 사용해야 한다.
+*/
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
