@@ -35,7 +35,7 @@ public class MemberDaoImpl implements MemberDao {
               member.getName(),
               member.getPassword(),
               member.getAddr(),
-              member.getTel() ));
+              member.getTel()));
       // sha2('%s',256)
     } catch (Exception e) {
       throw new DaoException("데이터 입력 오류", e);
@@ -73,7 +73,7 @@ public class MemberDaoImpl implements MemberDao {
         member.setEmail(rs.getString("email"));
         member.setName(rs.getString("name"));
         member.setCreatedDate(rs.getDate("created_date"));
-        member.setCreatedTime(rs.getTime("created_time"));
+        member.setCreatedTime(rs.getTime("created_date"));
         member.setAddr(rs.getString("addr"));
         member.setTel(rs.getString("tel"));
 
@@ -101,7 +101,7 @@ public class MemberDaoImpl implements MemberDao {
         member.setTel(rs.getString("tel"));
         member.setPassword(rs.getString("password"));
         member.setCreatedDate(rs.getDate("created_date"));
-        member.setCreatedTime(rs.getTime("created_time"));
+        member.setCreatedTime(rs.getTime("created_date"));
 
         return member;
       }
