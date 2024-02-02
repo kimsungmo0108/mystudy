@@ -18,6 +18,7 @@ public class App {
   Prompt prompt = new Prompt(System.in);
   MemberDao memberDao;
   MenuGroup mainMenu;
+  String superRoot = "1111";
 
   App() {
     prepareDatabase();
@@ -35,7 +36,7 @@ public class App {
       Connection con = DriverManager.getConnection(
           "jdbc:mysql://db-ld2ag-kr.vpc-pub-cdb.ntruss.com/studydb", "study", "Bitcamp!@#123");
 
-      memberDao = new MemberDaoImpl(con);
+      memberDao = new MemberDaoImpl(con, prompt);
 
     } catch (Exception e) {
       System.out.println("통신 오류!");
@@ -51,7 +52,7 @@ public class App {
     memberMenu.addItem("조회", new MemberViewHandler(memberDao, prompt));
     memberMenu.addItem("변경", new MemberModifyHandler(memberDao, prompt));
     memberMenu.addItem("삭제", new MemberDeleteHandler(memberDao, prompt));
-    memberMenu.addItem("목록", new MemberListHandler(memberDao, prompt));
+    memberMenu.addItem("목록", new MemberListHandler(memberDao, prompt, superRoot));
     
   }
 

@@ -27,6 +27,7 @@ public class MenuItem extends AbstractMenu {
         this.menuHandler.action(this);
       } catch (Exception e) {
         System.out.println("실행 오류!");
+        e.printStackTrace();
       }
     }
   }
