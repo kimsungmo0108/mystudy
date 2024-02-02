@@ -27,7 +27,7 @@ public class App {
 
 
   public static void main(String[] args) {
-    System.out.println("[과제관리 시스템]");
+    System.out.println("[회원관리 시스템]");
     new App().run();
   }
 
