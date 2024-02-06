@@ -6822,17 +6822,99 @@ DB모델링 - 포함관계와 배타적 관계
 - 비슷한 종류의 컬럼들을 묶어 새 타입으로 정의한다.
 - 이점: 타입을 변경할 때 한 번에 여러 컬럼을 변경할 수 있어서 유지보수에 좋다.
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.02.06(화)
 -------------------------------------------------------------------------------------
-→
+JDBC 프로그래밍
+
+JDBC API
+→ 자바에서 제공하는 인터페이스 및 클래스
+→ java.sql.x, java.sql.x
+
+JDBC Driver
+→ vendor에서 제공하는 인터페이스 구현체 및 보조 클래스
+
+API → 구현체
+<<interface>> Driver → 구현체 → com.mysql.cj.jdbc.Driver
+<<interface>> Connection → 구현체 → com.mysql.cj.jdbc.ConnectionImpl
+<<interface>> Statement → 구현체 → com.mysql.cj.jdbc.StatementImpl
+<<interface>> PreparedStatement → 구현체 
+<<interface>> ResultSet → 구현체
+
+① Driver
+② DriverManager
+③ Connection
+④ Statement
+⑤ ResultSet 
+⑥ PreparedStatement
+⑦ Transaction : commit/rollback
+⑧ Connection pool : DataSource
+
+JDBC 구현체 간의 관계
+connect(URL, 기타정보) → Driver 구현체 생성 → Connection 구현체 생성 → Statement 구현체 생성 → ResultSet 구현체 생성
+→ connect를 직접 사용하지 말 것!
+DriverManager.getConnection() → connection.createStatement() → statement.executeQuery() → rs.next()/rs.getxxx()
 -------------------------------------------------------------------------------------
-→
+Driver 와 DriverManager
+1) Driver 구현체 등록
+Driver의 인스턴스 생성 → 등록 → <<concrete>> DriverManager → Driver 구현체 목록을 가지고 있다(JDBC URL, Driver 인스턴스)
+DriverManager.registerDriver(객체);
+DriverManager.getDriver("JDBC URL");
+→ 드라이버를 가라키는 주소
+
+드라이버 자동 로딩!!
+// 그럼에도 MariaDB Driver를 찾을 수 있다!
+// 왜?
+// - JVM은 프로그램을 실행할 때 
+//   'service-provider loading' 절차에 따라
+//   .jar 파일에 있는 특정 클래스를 찾아 로딩하거나 객체를 자동으로 생성한다.
+// - JDBC의 경우도 이 규칙을 따른다.
+//   DriverManager의 getDriver()를 호출할 때 
+//   'service-provider loading' 규칙에 따라 .jar 파일에서 
+//   Driver 구현체를 찾아 자동으로 로딩한다.
+=> java.sql.Driver 클래스의 서비스 제공자를 찾아 로딩한다.
+=> jar 파일 안에 META-INF/services/java.sql.Driver 파일을 찾는다.
 -------------------------------------------------------------------------------------
-→
+Connection
+DriverManager.getConnection(JDBC URL, Id, Pwd) → Driver 객체.connect() → new xxxConnection()
+→ JDBC URL에 지정된 Driver를 찾아서 connect 호출
+→ Driver 구현체 → Connection 객체 생성 → DBMS와 Connection 구현체와 연결
+→ Connection 객체를 리턴한다
+자원해제
+→ 파일과 마찬가지로 DBMS에 연결한 후 더이상 사용하지 않으면 연결을 해제해야한다
+→ close()를 호출하지 않으면 서버쪽에서는 일정 기간(timeout) 동안 커넥션을 유지한다
+→ 꼭 해줘야한다 con.close();
+→ autocloseable 구현체여서 try-with-resources 문법 사용 가능
 -------------------------------------------------------------------------------------
-→
+Statement
+connection 객체.createStatement() → Statement 구현체 리턴
+
+SQL 실행
+statement 객체.executeUpdate(insert, update, dlete 등) → DBMS에게 작업 요청 
+→ 결과를 응답 → 적용된 레코드 수 리턴
+statement 객체.executeQuery(select) → DBMS에게 작업 요청
+→ 결과를 응답 → ResultSet 구현체 생성 → ResultSet 구현체 리턴
+ResultSet 구현체 → 서버에서 결과를 가져오는 일을 할 객체
+
+// 용어정리
+// "DML(Data Manipulation Language)"
+// => insert, update, delete 처럼 데이터를 조작하는 sql 명령을 말한다.
+// "DQL(Data Query Language)"
+// => select처럼 data를 조회하는 sql 명령을 말한다.
 -------------------------------------------------------------------------------------
-→
+ResultSet
+rs객체 → 통신 DBMS → 응답 → rs객체에게 컬럼 값, 응답여부 리턴
+ResultSet 객체.next() → DBMS에게 레코드를 꺼내달라고 요청 → DBMS는 1개의 레코드를 꺼내서 응답한다
+→ 서버에서 받은 레코드의 컬럼 값을 보관 → 레코드를 가져온 여부를 리턴
+
+rs객체.getxxx(컬럼번호 또는 컬럼 이름) 
+→ DBMS에 설정된 컬럼의 값을 xxx타입으로 리턴한다
+// => int, number: getInt()
+// => char, varchar, text: getString()
+// => date, time, datetime: getDate(), getTime()
+// => float: getFloat()
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
