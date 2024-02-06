@@ -6862,7 +6862,7 @@ Driver 와 DriverManager
 Driver의 인스턴스 생성 → 등록 → <<concrete>> DriverManager → Driver 구현체 목록을 가지고 있다(JDBC URL, Driver 인스턴스)
 DriverManager.registerDriver(객체);
 DriverManager.getDriver("JDBC URL");
-→ 드라이버를 가라키는 주소
+→ 드라이버를 가리키는 주소
 
 드라이버 자동 로딩!!
 // 그럼에도 MariaDB Driver를 찾을 수 있다!
@@ -6876,6 +6876,8 @@ DriverManager.getDriver("JDBC URL");
 //   Driver 구현체를 찾아 자동으로 로딩한다.
 => java.sql.Driver 클래스의 서비스 제공자를 찾아 로딩한다.
 => jar 파일 안에 META-INF/services/java.sql.Driver 파일을 찾는다.
+Connection con = DriverManager.getConnection(URL, id, pwd);
+→ 드라이버를 자동 로딩 하고 driver.connect()를 호출해서 connection 객체를 리턴
 -------------------------------------------------------------------------------------
 Connection
 DriverManager.getConnection(JDBC URL, Id, Pwd) → Driver 객체.connect() → new xxxConnection()
