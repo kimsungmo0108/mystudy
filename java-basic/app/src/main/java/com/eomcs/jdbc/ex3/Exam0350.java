@@ -16,10 +16,10 @@ public class Exam0350 {
       no = keyScan.nextLine();
     }
 
-    try (Connection con = DriverManager.getConnection(
-        "jdbc:mariadb://localhost:3306/studydb?user=study&password=1111");
-        PreparedStatement stmt = con.prepareStatement(
-            "delete from x_board where board_id=?")) {
+    try (
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/studydb", "study",
+            "Bitcamp!@#123");
+        PreparedStatement stmt = con.prepareStatement("delete from x_board where board_id=?")) {
 
       stmt.setString(1, no);
       int count = stmt.executeUpdate();

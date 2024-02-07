@@ -34,16 +34,16 @@ public class Exam0220 {
       }
     }
 
-    try (Connection con = DriverManager.getConnection( //
-        "jdbc:mariadb://localhost:3306/studydb?user=study&password=1111");
+    try (
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/studydb", "study",
+            "Bitcamp!@#123");
 
         // => 게시글을 입력할 때 자동 생성된 PK 값을 받겠다고 설정한다.
         PreparedStatement boardStmt = con.prepareStatement(
-            "insert into x_board(title,contents) values(?,?)",
-            Statement.RETURN_GENERATED_KEYS);
+            "insert into x_board(title,contents) values(?,?)", Statement.RETURN_GENERATED_KEYS);
 
-        PreparedStatement fileStmt = con.prepareStatement(
-            "insert into x_board_file(file_path,board_id) values(?,?)")) {
+        PreparedStatement fileStmt =
+            con.prepareStatement("insert into x_board_file(file_path,board_id) values(?,?)")) {
 
       // 여러 개의 데이터 변경 작업을 한 단위로 묶어 수행해야 한다면,
       // commit 할 때까지 실제 테이블에 적용하지 않도록
@@ -61,7 +61,7 @@ public class Exam0220 {
       //
       // 1) 트랜잭션 시작 - 커넥션 객체의 오토커밋을 false로 지정한다.
       // 이후부터 이 커넥션으로 실행하는 모든 SQL은
-      // commit을 요청하기 전에는 테이블에 그 결과를 적용하지 않고 
+      // commit을 요청하기 전에는 테이블에 그 결과를 적용하지 않고
       // 임시 데이터베이스에 따로 보관한다.
       con.setAutoCommit(false);
 
@@ -96,8 +96,8 @@ public class Exam0220 {
       // 클라이언트와의 연결이 끊어지면 스레드는 임시 데이터베이스에 보관된 데이터를 버린다.
       // 따라서 연결을 끊기 전에 작업한 내용을 적용하고 싶다면,
       // 반드시 commit을 요청해야 한다.
-      // 클라이언트로부터 commit 요청이 들어오면 
-      // 그 클라이언트와 연결된 스레드는 임시 데이터베이스에 보관된 데이터 변경 결과를 
+      // 클라이언트로부터 commit 요청이 들어오면
+      // 그 클라이언트와 연결된 스레드는 임시 데이터베이스에 보관된 데이터 변경 결과를
       // 실제 테이블에 적용한다.
 
     } catch (Exception e) {
@@ -106,14 +106,14 @@ public class Exam0220 {
       // 만약에 입력 도중에 실패했다면,
       // 현재까지 작업한 결과를 모두 취소하라고 DBMS에게 통보한다.
       // => commit()을 호출하지 않고 커넥션 객체를 닫으면,
-      //    DBMS는 그 커넥션을 통해 수행했던 모든 작업 결과를 취소한다.
+      // DBMS는 그 커넥션을 통해 수행했던 모든 작업 결과를 취소한다.
       // => 따라서 따로 커넥션 객체에 대해 rollback() 을 호출할 필요는 없다.
       //
       // => 만약 커넥션을 공유하는 상황이라면,
-      //    명시적으로 작업 취소(rollback)를 명령해야 한다.
+      // 명시적으로 작업 취소(rollback)를 명령해야 한다.
       // => 왜냐하면 같은 커넥션으로 다른 작업을 처리하는 경우에
-      //    이전에 수행한 작업이 취소되지 않고 남아 있어서
-      //    새 작업에 영향을 주기 때문이다.
+      // 이전에 수행한 작업이 취소되지 않고 남아 있어서
+      // 새 작업에 영향을 주기 때문이다.
       // 결론,
       // => 예외가 발생하면 rollback()을 명시적으로 호출하라!!!!!!
     }

@@ -33,16 +33,17 @@ public class Exam0110 {
       }
     }
 
-    try (Connection con = DriverManager.getConnection( //
-        "jdbc:mariadb://localhost:3306/studydb?user=study&password=1111");
+    try (
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/studydb", "study",
+            "Bitcamp!@#123");
 
         // 게시글 입력 처리 객체
-        PreparedStatement boardStmt = con.prepareStatement(
-            "insert into x_board(title,contents) values(?,?)");
+        PreparedStatement boardStmt =
+            con.prepareStatement("insert into x_board(title,contents) values(?,?)");
 
         // 첨부파일 입력 처리 객체
-        PreparedStatement fileStmt = con.prepareStatement(
-            "insert into x_board_file(file_path,board_id) values(?,?)")) {
+        PreparedStatement fileStmt =
+            con.prepareStatement("insert into x_board_file(file_path,board_id) values(?,?)")) {
 
       // 게시글 입력
       boardStmt.setString(1, title);
@@ -63,7 +64,7 @@ public class Exam0110 {
         //
         // 해결책!
         // - 데이터를 입력할 때 자동 생성된 PK 값을 알 수 있다면
-        //   이 문제를 해결할 수 있다.
+        // 이 문제를 해결할 수 있다.
         // - 다음 예제를 확인해보라!
         //
         fileStmt.executeUpdate();

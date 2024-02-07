@@ -6831,6 +6831,7 @@ JDBC 프로그래밍
 
 JDBC API
 → 자바에서 제공하는 인터페이스 및 클래스
+→ DB 프로그래밍에서 사용하는 객체 규칙
 → java.sql.x, java.sql.x
 
 JDBC Driver
@@ -6918,17 +6919,46 @@ rs객체.getxxx(컬럼번호 또는 컬럼 이름)
 // => date, time, datetime: getDate(), getTime()
 // => float: getFloat()
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.02.07(수)
 -------------------------------------------------------------------------------------
-→
+DB 모델링
+→ 데이터 중복을 최소화하고 구조를 최적화한다
+→ 일관성, 무결성, 효율성을 향상시킨다
+→ 데이터 저장 공간을 절얄할 수 있다
 -------------------------------------------------------------------------------------
-→
+PreparedStatement
+→ 값을 가지고 SQL을 만드는 것이 아니다 = Dynamic SQL
+→ SQL문과 값을 분리하여 실행한다
+
+PreparedStatement pstmt = con.prepareStatement("insert into x_board(title, contents) values(?,?)");
+?,? → in-parameter
+→ 주어진 SQL문을 값과 분리하여 DBMS가 이해할 수 있는 형식으로 미리 변환(compile)한다
+→ 값은 다로 DBMS에 전달한다
+
+값을 설정하는 방법
+pstmt.setxxx(1,'aaa');
+→ in-parameter 타입에 맞춰서 적절한 메소드 호출
+→ in-parameter 순서, 값
 -------------------------------------------------------------------------------------
-→
+// => 게시글을 입력할 때 자동 생성된 PK 값을 받겠다고 설정한다.
+PreparedStatement boardStmt = con.prepareStatement(
+	"insert into x_board(title,contents) values(?,?)", Statement.RETURN_GENERATED_KEYS);
+// 위에서 입력한 게시글의 PK 값을 알아내기
+ResultSet keyRS = boardStmt.getGeneratedKeys();
+keyRS.next(); // PK가 들어있는 레코드를 한 개 가져온다.
+// int boardId = keyRS.getInt("board_id"); // PK 값이 들어있는 레코드에서 컬럼 값을 꺼낸다. MariaDB에서 오류 발생!
+int boardId = keyRS.getInt(1);
 -------------------------------------------------------------------------------------
-→
+트랜잭션
+→ 여러 개의 변경 작업을 수행하기 위해서 autocommit을 false로 설정해야한다
+con.setAutoCommit(false);
+con.commit;
+con.rollback;
 -------------------------------------------------------------------------------------
-→
+과제 48. 
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
