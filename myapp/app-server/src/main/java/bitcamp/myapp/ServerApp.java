@@ -37,8 +37,7 @@ import java.util.concurrent.Executors;
 public class ServerApp {
 
   ExecutorService executorService = Executors.newCachedThreadPool();
-
-  Prompt prompt = new Prompt(System.in);
+  
 
   BoardDao boardDao;
   BoardDao greetingDao;
@@ -127,14 +126,14 @@ public class ServerApp {
     try (Socket s = socket;
         DataOutputStream out = new DataOutputStream(s.getOutputStream());
         DataInputStream in = new DataInputStream(s.getInputStream());
-        Prompt netPrompt = new Prompt(in, out)) {
+        Prompt prompt = new Prompt(in, out)) {
 
       while (true) {
         try {
-          mainMenu.execute(netPrompt);
-          netPrompt.print("[[quit!]]");
-          netPrompt.end();
-          netPrompt.close();
+          mainMenu.execute(prompt);
+          prompt.print("[[quit!]]");
+          prompt.end();
+          prompt.close();
           break;
         } catch (Exception e) {
           System.out.println("예외 발생!");
