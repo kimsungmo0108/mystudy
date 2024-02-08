@@ -56,7 +56,7 @@ public class ServerApp {
     try {
       Connection con = DriverManager.getConnection(
           //"jdbc:mysql://localhost/studydb", "study", "Bitcamp!@#123");
-          "jdbc:mysql://db-ld27b-kr.vpc-pub-cdb.ntruss.com/studydb", "study", "Bitcamp!@#123");
+          "jdbc:mysql://db-ld2ag-kr.vpc-pub-cdb.ntruss.com/studydb", "study", "Bitcamp!@#123");
 
       boardDao = new BoardDaoImpl(con, 1);
       greetingDao = new BoardDaoImpl(con, 2);
@@ -80,11 +80,11 @@ public class ServerApp {
     assignmentMenu.addItem("목록", new AssignmentListHandler(assignmentDao, prompt));
 
     MenuGroup boardMenu = mainMenu.addGroup("게시글");
-    boardMenu.addItem("등록", new BoardAddHandler(boardDao, prompt));
-    boardMenu.addItem("조회", new BoardViewHandler(boardDao, prompt));
-    boardMenu.addItem("변경", new BoardModifyHandler(boardDao, prompt));
-    boardMenu.addItem("삭제", new BoardDeleteHandler(boardDao, prompt));
-    boardMenu.addItem("목록", new BoardListHandler(boardDao, prompt));
+    boardMenu.addItem("등록", new BoardAddHandler(boardDao));
+    boardMenu.addItem("조회", new BoardViewHandler(boardDao));
+    boardMenu.addItem("변경", new BoardModifyHandler(boardDao));
+    boardMenu.addItem("삭제", new BoardDeleteHandler(boardDao));
+    boardMenu.addItem("목록", new BoardListHandler(boardDao));
 
     MenuGroup memberMenu = mainMenu.addGroup("회원");
     memberMenu.addItem("등록", new MemberAddHandler(memberDao, prompt));
@@ -94,11 +94,11 @@ public class ServerApp {
     memberMenu.addItem("목록", new MemberListHandler(memberDao, prompt));
 
     MenuGroup greetingMenu = mainMenu.addGroup("가입인사");
-    greetingMenu.addItem("등록", new BoardAddHandler(greetingDao, prompt));
-    greetingMenu.addItem("조회", new BoardViewHandler(greetingDao, prompt));
-    greetingMenu.addItem("변경", new BoardModifyHandler(greetingDao, prompt));
-    greetingMenu.addItem("삭제", new BoardDeleteHandler(greetingDao, prompt));
-    greetingMenu.addItem("목록", new BoardListHandler(greetingDao, prompt));
+    greetingMenu.addItem("등록", new BoardAddHandler(greetingDao));
+    greetingMenu.addItem("조회", new BoardViewHandler(greetingDao));
+    greetingMenu.addItem("변경", new BoardModifyHandler(greetingDao));
+    greetingMenu.addItem("삭제", new BoardDeleteHandler(greetingDao));
+    greetingMenu.addItem("목록", new BoardListHandler(greetingDao));
 
     mainMenu.addItem("도움말", new HelpHandler(prompt));
   }
@@ -120,31 +120,26 @@ public class ServerApp {
   void processRequest(Socket socket) {
     try (Socket s = socket;
         DataOutputStream out = new DataOutputStream(s.getOutputStream());
-        DataInputStream in = new DataInputStream(s.getInputStream())) {
+        DataInputStream in = new DataInputStream(s.getInputStream());
+        Prompt netPrompt = new Prompt(in, out)) {
 
-      out.writeUTF("[과제관리 시스템]");
-      String request = in.readUTF();
-      if (request.equals("quit")) {
-        out.writeUTF("[[quit!]]");
+      while (true) {
+        try {
+          mainMenu.execute(netPrompt);
+          netPrompt.print("[[quit!]]");
+          netPrompt.end();
+          netPrompt.close();
+          break;
+        } catch (Exception e) {
+          System.out.println("예외 발생!");
+          e.printStackTrace();
+        }
       }
-      System.out.println(request);
 
     } catch (Exception e) {
       System.out.println("클라이언 통신 오류!");
       e.printStackTrace();
     }
   }
-
-//  void run() {
-//    while (true) {
-//      try {
-//        mainMenu.execute(prompt);
-//        prompt.close();
-//        break;
-//      } catch (Exception e) {
-//        System.out.println("예외 발생!");
-//      }
-//    }
-//  }
 
 }
