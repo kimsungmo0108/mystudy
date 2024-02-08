@@ -58,7 +58,7 @@ public class Prompt implements AutoCloseable {
     try {
       printf(str, args);
       end();
-      return input();
+      return in.readUTF();
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -80,26 +80,6 @@ public class Prompt implements AutoCloseable {
     return Date.valueOf(this.input(str, args));
   }
 
-  public String input() throws Exception {
-
-    return in.readUTF();
-  }
-
-  public int inputInt() throws Exception {
-    return Integer.parseInt(this.input());
-  }
-
-  public float inputFloat() throws Exception {
-    return Float.parseFloat(this.input());
-  }
-
-  public boolean inputBoolean() throws Exception {
-    return Boolean.parseBoolean(this.input());
-  }
-
-  public Date inputDate() throws Exception {
-    return Date.valueOf(this.input());
-  }
 
   public void close() throws IOException {
     writer.close();
