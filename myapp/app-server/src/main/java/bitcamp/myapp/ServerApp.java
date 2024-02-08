@@ -7,6 +7,7 @@ import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.dao.mysql.AssignmentDaoImpl;
 import bitcamp.myapp.dao.mysql.BoardDaoImpl;
 import bitcamp.myapp.dao.mysql.MemberDaoImpl;
+import bitcamp.myapp.handler.AboutHandler;
 import bitcamp.myapp.handler.HelpHandler;
 import bitcamp.myapp.handler.assignment.AssignmentAddHandler;
 import bitcamp.myapp.handler.assignment.AssignmentDeleteHandler;
@@ -101,6 +102,7 @@ public class ServerApp {
     greetingMenu.addItem("목록", new BoardListHandler(greetingDao));
 
     mainMenu.addItem("도움말", new HelpHandler());
+    mainMenu.addItem("...대하여", new AboutHandler());
   }
 
   void run() {
