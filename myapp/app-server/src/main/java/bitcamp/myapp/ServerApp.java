@@ -31,8 +31,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ServerApp {
+
+  ExecutorService executorService = Executors.newCachedThreadPool();
 
   Prompt prompt = new Prompt(System.in);
 
@@ -110,7 +114,7 @@ public class ServerApp {
 
       while (true) {
         Socket socket = serverSocket.accept();
-        processRequest(socket);
+        executorService.execute(() -> processRequest(socket));
       }
 
     } catch (Exception e) {
