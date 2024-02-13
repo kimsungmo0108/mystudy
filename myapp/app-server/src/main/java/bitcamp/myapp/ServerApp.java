@@ -25,12 +25,11 @@ import bitcamp.myapp.handler.member.MemberListHandler;
 import bitcamp.myapp.handler.member.MemberModifyHandler;
 import bitcamp.myapp.handler.member.MemberViewHandler;
 import bitcamp.util.Prompt;
+import bitcamp.util.ThreadConnection;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -58,14 +57,17 @@ public class ServerApp {
 
   void prepareDatabase() {
     try {
-      Connection con = DriverManager.getConnection(
-          //"jdbc:mysql://localhost/studydb", "study", "Bitcamp!@#123");
+//      Connection con = DriverManager.getConnection(
+//          //"jdbc:mysql://localhost/studydb", "study", "Bitcamp!@#123");
+//          "jdbc:mysql://db-ld2ag-kr.vpc-pub-cdb.ntruss.com/studydb", "study", "Bitcamp!@#123");
+
+      ThreadConnection threadConnection = new ThreadConnection(
           "jdbc:mysql://db-ld2ag-kr.vpc-pub-cdb.ntruss.com/studydb", "study", "Bitcamp!@#123");
 
-      boardDao = new BoardDaoImpl(1);
-      greetingDao = new BoardDaoImpl(2);
-      assignmentDao = new AssignmentDaoImpl();
-      memberDao = new MemberDaoImpl(con);
+      boardDao = new BoardDaoImpl(threadConnection, 1);
+      greetingDao = new BoardDaoImpl(threadConnection, 2);
+      assignmentDao = new AssignmentDaoImpl(threadConnection);
+      memberDao = new MemberDaoImpl(threadConnection);
 
     } catch (Exception e) {
       System.out.println("통신 오류!");
