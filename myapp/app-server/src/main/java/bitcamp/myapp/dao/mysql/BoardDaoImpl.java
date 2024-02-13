@@ -13,10 +13,10 @@ import java.util.List;
 public class BoardDaoImpl implements BoardDao {
 
   int category;
-  DBConnectionPool DBConnectionPool;
+  DBConnectionPool connectionPool;
 
-  public BoardDaoImpl(DBConnectionPool DBConnectionPool, int category) {
-    this.DBConnectionPool = DBConnectionPool;
+  public BoardDaoImpl(DBConnectionPool connectionPool, int category) {
+    this.connectionPool = connectionPool;
     this.category = category;
   }
 
@@ -24,7 +24,7 @@ public class BoardDaoImpl implements BoardDao {
   public void add(Board board) {
     Connection con = null;
     try {
-      con = DBConnectionPool.getConnection();
+      con = connectionPool.getConnection();
       try (PreparedStatement pstmt = con.prepareStatement(
           "insert into boards(title,content,writer,category) values(?,?,?,?)")) {
 
@@ -44,7 +44,7 @@ public class BoardDaoImpl implements BoardDao {
   public int delete(int no) {
     Connection con = null;
     try {
-      con = DBConnectionPool.getConnection();
+      con = connectionPool.getConnection();
       try (PreparedStatement pstmt = con.prepareStatement(
           "delete from boards where board_no=?")) {
 
@@ -62,7 +62,7 @@ public class BoardDaoImpl implements BoardDao {
   public List<Board> findAll() {
     Connection con = null;
     try {
-      con = DBConnectionPool.getConnection();
+      con = connectionPool.getConnection();
       try (PreparedStatement pstmt = con.prepareStatement(
           "select board_no, title, writer, created_date"
               + " from boards where category=? order by board_no desc")) {
@@ -95,7 +95,7 @@ public class BoardDaoImpl implements BoardDao {
   public Board findBy(int no) {
     Connection con = null;
     try {
-      con = DBConnectionPool.getConnection();
+      con = connectionPool.getConnection();
       try (PreparedStatement pstmt = con.prepareStatement(
           "select * from boards where board_no=?")) {
 
@@ -125,7 +125,7 @@ public class BoardDaoImpl implements BoardDao {
   public int update(Board board) {
     Connection con = null;
     try {
-      con = DBConnectionPool.getConnection();
+      con = connectionPool.getConnection();
       try (PreparedStatement pstmt = con.prepareStatement(
           "update boards set title=?, content=?, writer=? where board_no=?")) {
 

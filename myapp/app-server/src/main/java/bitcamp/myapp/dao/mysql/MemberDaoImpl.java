@@ -13,17 +13,17 @@ import java.util.List;
 
 public class MemberDaoImpl implements MemberDao {
 
-  DBConnectionPool DBConnectionPool;
+  DBConnectionPool connectionPool;
 
-  public MemberDaoImpl(DBConnectionPool DBConnectionPool) {
-    this.DBConnectionPool = DBConnectionPool;
+  public MemberDaoImpl(DBConnectionPool connectionPool) {
+    this.connectionPool = connectionPool;
   }
 
   @Override
   public void add(Member member) {
     Connection con = null;
     try {
-      con = DBConnectionPool.getConnection();
+      con = connectionPool.getConnection();
       try (PreparedStatement pstmt = con.prepareStatement(
           "insert into members(email,name,password) values(?,?,sha2(?,256))")) {
         pstmt.setString(1, member.getEmail());
@@ -41,7 +41,7 @@ public class MemberDaoImpl implements MemberDao {
   public int delete(int no) {
     Connection con = null;
     try {
-      con = DBConnectionPool.getConnection();
+      con = connectionPool.getConnection();
 
       try (PreparedStatement pstmt = con.prepareStatement(
           "delete from members where member_no=?")) {
@@ -58,7 +58,7 @@ public class MemberDaoImpl implements MemberDao {
   public List<Member> findAll() {
     Connection con = null;
     try {
-      con = DBConnectionPool.getConnection();
+      con = connectionPool.getConnection();
       try (PreparedStatement pstmt = con.prepareStatement(
           "select member_no, email, name, created_date from members");
           ResultSet rs = pstmt.executeQuery();) {
@@ -86,7 +86,7 @@ public class MemberDaoImpl implements MemberDao {
   public Member findBy(int no) {
     Connection con = null;
     try {
-      con = DBConnectionPool.getConnection();
+      con = connectionPool.getConnection();
 
       try (PreparedStatement pstmt = con.prepareStatement(
           "select member_no, email, name, created_date from members where member_no=?")) {
@@ -113,7 +113,7 @@ public class MemberDaoImpl implements MemberDao {
   public int update(Member member) {
     Connection con = null;
     try {
-      con = DBConnectionPool.getConnection();
+      con = connectionPool.getConnection();
 
       try (PreparedStatement pstmt = con.prepareStatement(
           "update members set email=?, name=?, password=sha2(?,256) where member_no=?")) {
