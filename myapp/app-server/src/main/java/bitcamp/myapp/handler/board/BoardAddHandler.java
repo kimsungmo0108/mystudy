@@ -4,7 +4,6 @@ import bitcamp.menu.AbstractMenuHandler;
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
 import bitcamp.util.Prompt;
-import java.util.Date;
 
 public class BoardAddHandler extends AbstractMenuHandler {
 
@@ -20,7 +19,6 @@ public class BoardAddHandler extends AbstractMenuHandler {
     board.setTitle(prompt.input("제목? "));
     board.setContent(prompt.input("내용? "));
     board.setWriter(prompt.input("작성자? "));
-    board.setCreatedDate(new Date());
 
     boardDao.add(board);
   }

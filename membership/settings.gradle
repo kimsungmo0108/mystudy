@@ -12,3 +12,5 @@ plugins {
 
 rootProject.name = 'membership'
 include('app')
+include('app-server')
+include('app-client')

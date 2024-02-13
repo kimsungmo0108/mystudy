@@ -45,7 +45,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'membership.App'
+    mainClass = 'membership.ClientApp'
 }
 
 

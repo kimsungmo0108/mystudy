@@ -37,7 +37,7 @@ import java.util.concurrent.Executors;
 public class ServerApp {
 
   ExecutorService executorService = Executors.newCachedThreadPool();
-  
+
 
   BoardDao boardDao;
   BoardDao greetingDao;
@@ -62,9 +62,9 @@ public class ServerApp {
           //"jdbc:mysql://localhost/studydb", "study", "Bitcamp!@#123");
           "jdbc:mysql://db-ld2ag-kr.vpc-pub-cdb.ntruss.com/studydb", "study", "Bitcamp!@#123");
 
-      boardDao = new BoardDaoImpl(con, 1);
-      greetingDao = new BoardDaoImpl(con, 2);
-      assignmentDao = new AssignmentDaoImpl(con);
+      boardDao = new BoardDaoImpl(1);
+      greetingDao = new BoardDaoImpl(2);
+      assignmentDao = new AssignmentDaoImpl();
       memberDao = new MemberDaoImpl(con);
 
     } catch (Exception e) {
