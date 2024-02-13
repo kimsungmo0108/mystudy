@@ -27,7 +27,7 @@ public class AssignmentAddHandler extends AbstractMenuHandler {
       assignment.setDeadline(prompt.inputDate("제출 마감일?(예: 2023-12-25) "));
 
       Connection con = threadConnection.get();
-      
+      con.setAutoCommit(false);
       assignmentDao.add(assignment);
       con.rollback();
 
