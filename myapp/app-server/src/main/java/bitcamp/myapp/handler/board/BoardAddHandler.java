@@ -3,52 +3,40 @@ package bitcamp.myapp.handler.board;
 import bitcamp.menu.AbstractMenuHandler;
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
-import bitcamp.util.DBConnectionPool;
 import bitcamp.util.Prompt;
-import java.sql.Connection;
+import bitcamp.util.TransactionManager;
 
 public class BoardAddHandler extends AbstractMenuHandler {
 
-  DBConnectionPool connectionPool;
+  private TransactionManager txManager;
   private BoardDao boardDao;
 
-  public BoardAddHandler(DBConnectionPool connectionPool, BoardDao boardDao) {
+  public BoardAddHandler(TransactionManager txManager, BoardDao boardDao) {
     this.boardDao = boardDao;
-    this.connectionPool = connectionPool;
+    this.txManager = txManager;
   }
 
   @Override
   protected void action(Prompt prompt) {
-    Board board = new Board();
-    board.setTitle(prompt.input("제목? "));
-    board.setContent(prompt.input("내용? "));
-    board.setWriter(prompt.input("작성자? "));
-
-    Connection con = null;
     try {
-      con = connectionPool.getConnection();
-      con.setAutoCommit(false);
+      Board board = new Board();
+      board.setTitle(prompt.input("제목? "));
+      board.setContent(prompt.input("내용? "));
+      board.setWriter(prompt.input("작성자? "));
+
+      txManager.startTransaction();
 
       boardDao.add(board);
       boardDao.add(board);
-
-      Thread.sleep(10000);
-
       boardDao.add(board);
 
-      con.commit();
+      txManager.commit();
     } catch (Exception e) {
       try {
-        con.rollback();
+        txManager.rollback();
       } catch (Exception e2) {
+        prompt.println("게시글 입력 중 오류 발생!");
       }
-    } finally {
-      try {
-        // Connection은 다른 작업할 때 다시 사용해야 하기 때문에 원래 상태로 되돌린다.
-        con.setAutoCommit(true);
-      } catch (Exception e2) {
-      }
-      connectionPool.returnConnection(con);
     }
   }
 }
