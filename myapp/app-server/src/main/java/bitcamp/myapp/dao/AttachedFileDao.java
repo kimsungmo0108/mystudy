@@ -15,5 +15,6 @@ public interface AttachedFileDao {
 
   List<AttachedFile> findAllByBoardNo(int boardNo);
 
+  int update(AttachedFile file);
 
 }

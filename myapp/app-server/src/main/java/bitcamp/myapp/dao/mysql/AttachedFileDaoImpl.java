@@ -89,23 +89,44 @@ public class AttachedFileDaoImpl implements AttachedFileDao {
   public List<AttachedFile> findAllByBoardNo(int boardNo) {
     try (Connection con = connectionPool.getConnection();
         PreparedStatement pstmt = con.prepareStatement(
-            "select file_no, file_path, board_no from board_files where board_no = ? order by file_no asc");
-        ResultSet rs = pstmt.executeQuery()) {
+            "select file_no, file_path, board_no from board_files where board_no=? order by file_no asc")) {
 
-      ArrayList<AttachedFile> list = new ArrayList<>();
+      pstmt.setInt(1, boardNo);
 
-      while (rs.next()) {
-        AttachedFile file = new AttachedFile();
-        file.setNo(rs.getInt("file_no"));
-        file.setFilePath(rs.getString("file_path"));
-        file.setBoardNo(rs.getInt("board_no"));
+      try (ResultSet rs = pstmt.executeQuery()) {
 
-        list.add(file);
+        ArrayList<AttachedFile> list = new ArrayList<>();
+
+        while (rs.next()) {
+          AttachedFile file = new AttachedFile();
+          file.setNo(rs.getInt("file_no"));
+          file.setFilePath(rs.getString("file_path"));
+          file.setBoardNo(rs.getInt("board_no"));
+
+          list.add(file);
+        }
+        return list;
       }
-      return list;
 
     } catch (Exception e) {
       throw new DaoException("데이터 가져오기 오류", e);
     }
   }
+
+  @Override
+  public int update(AttachedFile file) {
+    try (Connection con = connectionPool.getConnection();
+        PreparedStatement pstmt = con.prepareStatement(
+            "update board_files set file_path=? where file_no=? and board_no=?")) {
+      pstmt.setString(1, file.getFilePath());
+      pstmt.setInt(2, file.getNo());
+      pstmt.setInt(3, file.getBoardNo());
+
+      return pstmt.executeUpdate();
+
+    } catch (Exception e) {
+      throw new DaoException("데이터 변경 오류", e);
+    }
+  }
+
 }

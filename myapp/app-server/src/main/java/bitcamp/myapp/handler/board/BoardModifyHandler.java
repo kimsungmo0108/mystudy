@@ -1,18 +1,22 @@
 package bitcamp.myapp.handler.board;
 
 import bitcamp.menu.AbstractMenuHandler;
+import bitcamp.myapp.dao.AttachedFileDao;
 import bitcamp.myapp.dao.BoardDao;
+import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import bitcamp.util.Prompt;
+import java.util.List;
 
 public class BoardModifyHandler extends AbstractMenuHandler {
 
   private BoardDao boardDao;
+  private AttachedFileDao attachedFileDao;
 
 
-  public BoardModifyHandler(BoardDao boardDao) {
+  public BoardModifyHandler(BoardDao boardDao, AttachedFileDao attachedFileDao) {
     this.boardDao = boardDao;
-
+    this.attachedFileDao = attachedFileDao;
   }
 
   @Override
@@ -27,12 +31,36 @@ public class BoardModifyHandler extends AbstractMenuHandler {
         return;
       }
 
+      List<AttachedFile> files = attachedFileDao.findAllByBoardNo(no);
+
       Board board = new Board();
-      board.setNo(oldBoard.getNo()); // 기존 게시글의 번호를 그대로 설정한다.
+      board.setNo(oldBoard.getNo());
       board.setTitle(prompt.input("제목(%s)? ", oldBoard.getTitle()));
       board.setContent(prompt.input("내용(%s)? ", oldBoard.getContent()));
       board.setWriter(prompt.input("작성자(%s)? ", oldBoard.getWriter()));
+      if (prompt.inputBoolean("파일 변경(true/false) ")) {
+        int scenario = prompt.inputInt("1. 변경\n2. 삭제\n번호? ");
+        int count = 1;
+        switch (scenario) {
+          case 1:
+            prompt.println("[변경]");
+            for (AttachedFile file : files) {
+              file.setFilePath(prompt.input("파일%d %s? ", count++, file.getFilePath()));
+              file.setNo(file.getNo());
+              file.setBoardNo(file.getBoardNo());
+              attachedFileDao.update(file);
+            }
+            break;
+          case 2:
+            prompt.println("[삭제]");
+            int fileNo = prompt.inputInt("파일 번호? ");
+            attachedFileDao.delete(fileNo);
+
+            break;
+        }
+      }
       board.setCreatedDate(oldBoard.getCreatedDate());
+      board.setFiles(files);
 
       boardDao.update(board);
       prompt.println("게시글을 변경했습니다.");
