@@ -38,7 +38,7 @@ public class ClientApp {
         if(response.equals("[[quit!]]")){
           break;
         }
-
+        System.out.print(response);
         String input = prompt.input("");
         out.writeUTF(input);
 

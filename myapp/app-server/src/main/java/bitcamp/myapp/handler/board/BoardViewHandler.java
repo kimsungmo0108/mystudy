@@ -3,25 +3,19 @@ package bitcamp.myapp.handler.board;
 import bitcamp.menu.AbstractMenuHandler;
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
-import bitcamp.util.DBConnectionPool;
 import bitcamp.util.Prompt;
-import java.sql.Connection;
 
 public class BoardViewHandler extends AbstractMenuHandler {
 
   private BoardDao boardDao;
-  private DBConnectionPool connectionPool;
 
-  public BoardViewHandler(DBConnectionPool connectionPool, BoardDao boardDao) {
+  public BoardViewHandler(BoardDao boardDao) {
     this.boardDao = boardDao;
-    this.connectionPool = connectionPool;
   }
 
   @Override
   protected void action(Prompt prompt) {
-    Connection con = null;
     try {
-      con = connectionPool.getConnection();
       int no = prompt.inputInt("번호? ");
 
       Board board = boardDao.findBy(no);
@@ -37,8 +31,6 @@ public class BoardViewHandler extends AbstractMenuHandler {
       prompt.printf("작성일: %1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS\n", board.getCreatedDate());
     } catch (Exception e) {
       prompt.println("조회 오류!");
-    } finally {
-      connectionPool.returnConnection(con);
     }
   }
 }

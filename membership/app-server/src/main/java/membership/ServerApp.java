@@ -82,7 +82,7 @@ public class ServerApp {
       }
 
     } catch (Exception e) {
-      System.out.println("클라이언 통신 오류!");
+      System.out.println("클라이언트 통신 오류!");
       e.printStackTrace();
     }
   }

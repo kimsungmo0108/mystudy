@@ -2,10 +2,9 @@ package bitcamp.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class DBConnectionPool {
+public class DBConnectionPool implements ConnectionPool {
 
   // 스레드 전용 커넥선 저장소
   private static final ThreadLocal<Connection> connectionThreadLocal = new ThreadLocal<>();
@@ -21,7 +20,7 @@ public class DBConnectionPool {
     this.password = password;
   }
 
-  public Connection getConnection() throws SQLException {
+  public Connection getConnection() throws Exception {
     // 현재 스레드에 보관중인 Connection 객체를 꺼낸다.
     Connection con = connectionThreadLocal.get();
     if (con == null) {
@@ -35,7 +34,7 @@ public class DBConnectionPool {
       } else {
         // 스레드 풀에도 놀고있는 Connection이 없다면,
         // 새로 Connection을 만든다.
-        con = DriverManager.getConnection(jdbcUrl, username, password);
+        con = new ConnectionProxy(DriverManager.getConnection(jdbcUrl, username, password), this);
         System.out.printf("%s: DB 커넥션 생성\n", Thread.currentThread().getName());
       }
 
@@ -56,6 +55,6 @@ public class DBConnectionPool {
     connections.add(con);
 
     System.out.printf("%s: DB 커넥션을 커넥션풀에 반환\n", Thread.currentThread().getName());
-  
+
   }
 }
