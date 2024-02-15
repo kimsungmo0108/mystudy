@@ -7072,11 +7072,32 @@ DB 커넥션과 프록시 패턴
 →
 -------------------------------------------------------------------------------------
 Servlet Container
+Servlet Container <생성, 실행, 소멸> JAVA class(javax.servlet.Servlet 구현체)
+
+Servlet
 Servlet → Server App. + let(작은 것) 
 → 작은 서버 App (예 : 인사관리시스템=서버App) 
 → 서버 App의 작은 기능 => servlet
+
+<<interface>>Servlet <----- <<concrete>>HelloWorld(인터페이스 메소드구현 + 배치정보 설정 @WebServlet(경로))
+배치정보 → 클라이언트가 서블릿 실행을 요청할 때 사용할 경로
+
+init() → 객체 생성 후 호출됨
+service() → 요청이 들어올 때마다 호출됨
+destroy() → app 종료할 때 호출됨
+→ 서블릿 생명주기 메소드
+getServletInfo()
+getServletConfig()
+
+caller = 서블릿 컨테이너
+callee = app 클래스
 -------------------------------------------------------------------------------------
-→
+Web Browser
+plain text → Web Browser → 단순 출력
+HTML → Web Browser → HTML 문법에 맞춰 렌더링
+PDF → Web Browser → PDF 뷰어를 실행
+JPEG, GIF → Web Browser → 이미지 출력
+zip → Web Browser → 다운로드
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
