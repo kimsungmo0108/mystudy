@@ -14,4 +14,8 @@ public class Session {
   public Object getAttribute(String name) {
     return attrMap.get(name);
   }
+
+  public void invalidate() {
+    attrMap.clear();
+  }
 }
