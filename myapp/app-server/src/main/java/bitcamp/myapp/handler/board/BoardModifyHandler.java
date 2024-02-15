@@ -39,16 +39,20 @@ public class BoardModifyHandler extends AbstractMenuHandler {
       board.setContent(prompt.input("내용(%s)? ", oldBoard.getContent()));
       board.setWriter(prompt.input("작성자(%s)? ", oldBoard.getWriter()));
       if (prompt.inputBoolean("파일 변경(true/false) ")) {
-        int scenario = prompt.inputInt("1. 변경\n2. 삭제\n번호? ");
+        int scenario = prompt.inputInt("1. 추가\n2. 삭제\n번호? ");
         int count = 1;
         switch (scenario) {
           case 1:
-            prompt.println("[변경]");
-            for (AttachedFile file : files) {
-              file.setFilePath(prompt.input("파일%d %s? ", count++, file.getFilePath()));
-              file.setNo(file.getNo());
-              file.setBoardNo(file.getBoardNo());
-              attachedFileDao.update(file);
+            prompt.println("[추가]");
+            while (true) {
+              String filepath = prompt.input("파일?(종료는 그냥 엔터)");
+              if (filepath.length() == 0) {
+                break;
+              }
+              AttachedFile file = new AttachedFile();
+              file.setBoardNo(oldBoard.getNo());
+              file.setFilePath(filepath);
+              attachedFileDao.add(file);
             }
             break;
           case 2:

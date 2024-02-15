@@ -113,20 +113,20 @@ public class AttachedFileDaoImpl implements AttachedFileDao {
     }
   }
 
-  @Override
-  public int update(AttachedFile file) {
-    try (Connection con = connectionPool.getConnection();
-        PreparedStatement pstmt = con.prepareStatement(
-            "update board_files set file_path=? where file_no=? and board_no=?")) {
-      pstmt.setString(1, file.getFilePath());
-      pstmt.setInt(2, file.getNo());
-      pstmt.setInt(3, file.getBoardNo());
-
-      return pstmt.executeUpdate();
-
-    } catch (Exception e) {
-      throw new DaoException("데이터 변경 오류", e);
-    }
-  }
+//  @Override
+//  public int update(AttachedFile file) {
+//    try (Connection con = connectionPool.getConnection();
+//        PreparedStatement pstmt = con.prepareStatement(
+//            "update board_files set file_path=? where file_no=? and board_no=?")) {
+//      pstmt.setString(1, file.getFilePath());
+//      pstmt.setInt(2, file.getNo());
+//      pstmt.setInt(3, file.getBoardNo());
+//
+//      return pstmt.executeUpdate();
+//
+//    } catch (Exception e) {
+//      throw new DaoException("데이터 변경 오류", e);
+//    }
+//  }
 
 }
