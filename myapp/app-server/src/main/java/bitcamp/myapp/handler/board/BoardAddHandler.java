@@ -5,6 +5,7 @@ import bitcamp.myapp.dao.AttachedFileDao;
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
+import bitcamp.myapp.vo.Member;
 import bitcamp.util.Prompt;
 import bitcamp.util.TransactionManager;
 import java.util.ArrayList;
@@ -25,9 +26,15 @@ public class BoardAddHandler extends AbstractMenuHandler {
   @Override
   protected void action(Prompt prompt) {
     Board board = new Board();
+    Member loginUser = (Member) prompt.getSession().getAttribute("loginUser");
+    if (loginUser != null) {
+      board.setWriter(loginUser);
+    } else {
+      prompt.println("로그인하시기 바랍니다.");
+      return;
+    }
     board.setTitle(prompt.input("제목? "));
     board.setContent(prompt.input("내용? "));
-    board.setWriter(prompt.input("작성자? "));
 
     ArrayList<AttachedFile> files = new ArrayList<>();
     while (true) {

@@ -34,7 +34,7 @@ public class BoardViewHandler extends AbstractMenuHandler {
       prompt.printf("번호: %d\n", board.getNo());
       prompt.printf("제목: %s\n", board.getTitle());
       prompt.printf("내용: %s\n", board.getContent());
-      prompt.printf("작성자: %s\n", board.getWriter());
+      prompt.printf("작성자: %s\n", board.getWriter().getName());
       prompt.printf("작성일: %1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS\n", board.getCreatedDate());
       prompt.println("첨부파일: ");
 

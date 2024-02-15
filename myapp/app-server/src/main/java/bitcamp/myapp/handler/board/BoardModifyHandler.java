@@ -5,6 +5,7 @@ import bitcamp.myapp.dao.AttachedFileDao;
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
+import bitcamp.myapp.vo.Member;
 import bitcamp.util.Prompt;
 import java.util.List;
 
@@ -21,6 +22,13 @@ public class BoardModifyHandler extends AbstractMenuHandler {
 
   @Override
   protected void action(Prompt prompt) {
+
+    Member loginUser = (Member) prompt.getSession().getAttribute("loginUser");
+    if (loginUser == null) {
+      prompt.println("로그인하시기 바랍니다.");
+      return;
+    }
+
     try {
 
       int no = prompt.inputInt("번호? ");
@@ -29,13 +37,16 @@ public class BoardModifyHandler extends AbstractMenuHandler {
       if (oldBoard == null) {
         prompt.println("게시글 번호가 유효하지 않습니다.");
         return;
+      } else if (oldBoard.getWriter().getNo() != loginUser.getNo()) {
+        prompt.println("게시글 변경 권한이 없습니다.");
+        return;
       }
 
       Board board = new Board();
       board.setNo(oldBoard.getNo());
       board.setTitle(prompt.input("제목(%s)? ", oldBoard.getTitle()));
       board.setContent(prompt.input("내용(%s)? ", oldBoard.getContent()));
-      board.setWriter(prompt.input("작성자(%s)? ", oldBoard.getWriter()));
+      board.setWriter(loginUser);
 
       prompt.printf("첨부파일\n");
       List<AttachedFile> files = attachedFileDao.findAllByBoardNo(no);

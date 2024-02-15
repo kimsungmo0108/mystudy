@@ -67,9 +67,9 @@ public class ServerApp {
 //      Connection con = DriverManager.getConnection(
 //          //"jdbc:mysql://localhost/studydb", "study", "Bitcamp!@#123");
 //          "jdbc:mysql://db-ld2ag-kr.vpc-pub-cdb.ntruss.com/studydb", "study", "Bitcamp!@#123");
-
+//db-ld2ag-kr.vpc-pub-cdb.ntruss.com
       connectionPool = new DBConnectionPool(
-          "jdbc:mysql://db-ld2ag-kr.vpc-pub-cdb.ntruss.com/studydb", "study", "Bitcamp!@#123");
+          "jdbc:mysql://localhost/studydb", "study", "Bitcamp!@#123");
       txManager = new TransactionManager(connectionPool);
 
       boardDao = new BoardDaoImpl(connectionPool, 1);
