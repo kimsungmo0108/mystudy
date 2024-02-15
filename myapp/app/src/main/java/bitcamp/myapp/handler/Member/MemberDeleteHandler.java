@@ -8,16 +8,23 @@ public class MemberDeleteHandler extends AbstractMenuHandler {
 
   private MemberDao memberDao;
 
-  public MemberDeleteHandler(MemberDao memberDao, Prompt prompt) {
-    super(prompt);
+  public MemberDeleteHandler(MemberDao memberDao) {
     this.memberDao = memberDao;
+
   }
 
   @Override
-  protected void action() {
+  protected void action(Prompt prompt) {
+    try {
 
-    int index = this.prompt.inputInt("번호? ");
-    this.memberDao.delete(index);
+      int no = prompt.inputInt("번호? ");
+      if (memberDao.delete(no) == -1) {
+        prompt.printf("회원 번호가 유효하지 않습니다!");
+      } else {
+        prompt.println("회원을 삭제했습니다.");
+      }
+    } catch (Exception e) {
+      prompt.println("삭제 오류!");
+    }
   }
 }
-

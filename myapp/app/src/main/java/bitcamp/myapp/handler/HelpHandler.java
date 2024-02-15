@@ -5,16 +5,9 @@ import bitcamp.util.Prompt;
 
 public class HelpHandler extends AbstractMenuHandler {
 
-  public HelpHandler(Prompt prompt) {
-    super(prompt);
-  }
-
-//  public HelpHandler(Prompt prompt, Stack<String> breadcrumb) {
-//    super(prompt);
-//  }
-
   @Override
-  public void action() {
-    System.out.println("도움말입니다.");
+  protected void action(Prompt prompt) {
+    prompt.println("도움말입니다.");
   }
+
 }

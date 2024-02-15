@@ -5,15 +5,14 @@ import java.util.List;
 
 public interface AssignmentDao {
 
+  void add(Assignment assignment);
 
-  public void add(Assignment assignment);
+  int delete(int no);
 
-  public int delete(int no);
+  List<Assignment> findAll();
 
-  public List<Assignment> findAll();
+  Assignment findBy(int no);
 
-  public Assignment findBy(int no);
-
-  public int update(Assignment assignment);
+  int update(Assignment assignment);
 
 }
