@@ -40,7 +40,6 @@ public class BoardModifyHandler extends AbstractMenuHandler {
       board.setWriter(prompt.input("작성자(%s)? ", oldBoard.getWriter()));
       if (prompt.inputBoolean("파일 변경(true/false) ")) {
         int scenario = prompt.inputInt("1. 추가\n2. 삭제\n번호? ");
-        int count = 1;
         switch (scenario) {
           case 1:
             prompt.println("[추가]");
