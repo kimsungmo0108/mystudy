@@ -31,34 +31,41 @@ public class BoardModifyHandler extends AbstractMenuHandler {
         return;
       }
 
-      List<AttachedFile> files = attachedFileDao.findAllByBoardNo(no);
-
       Board board = new Board();
       board.setNo(oldBoard.getNo());
       board.setTitle(prompt.input("제목(%s)? ", oldBoard.getTitle()));
       board.setContent(prompt.input("내용(%s)? ", oldBoard.getContent()));
       board.setWriter(prompt.input("작성자(%s)? ", oldBoard.getWriter()));
+
+      prompt.printf("첨부파일\n");
+      List<AttachedFile> files = attachedFileDao.findAllByBoardNo(no);
+      for (AttachedFile f : files) {
+        prompt.printf("%d. %s\n", f.getNo(), f.getFilePath());
+      }
+
       if (prompt.inputBoolean("파일 변경(true/false) ")) {
         int scenario = prompt.inputInt("1. 추가\n2. 삭제\n번호? ");
         switch (scenario) {
           case 1:
             prompt.println("[추가]");
             while (true) {
-              String filepath = prompt.input("파일?(종료는 그냥 엔터)");
+              String filepath = prompt.input("파일?(종료는 그냥 엔터) ");
               if (filepath.length() == 0) {
                 break;
               }
-              AttachedFile file = new AttachedFile();
-              file.setBoardNo(oldBoard.getNo());
-              file.setFilePath(filepath);
+              AttachedFile file = new AttachedFile().boardNo(oldBoard.getNo()).filePath(filepath);
               attachedFileDao.add(file);
             }
             break;
           case 2:
             prompt.println("[삭제]");
-            int fileNo = prompt.inputInt("파일 번호? ");
-            attachedFileDao.delete(fileNo);
-
+            while (true) {
+              int fileNo = prompt.inputInt("파일 번호? ");
+              if (fileNo == 0) {
+                break;
+              }
+              attachedFileDao.delete(fileNo);
+            }
             break;
         }
       }

@@ -1,5 +1,7 @@
 package bitcamp.menu;
 
+import bitcamp.myapp.vo.Member;
+import bitcamp.util.AnsiEscape;
 import bitcamp.util.Prompt;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -23,14 +25,13 @@ public class MenuGroup extends AbstractMenu {
   @Override // 인터페이스나 수퍼 클래스의 메서드를 정의하겠다고 컴파일러에게 알린다.
   public void execute(Prompt prompt) throws Exception {
 
-    // 메뉴를 실행할 때 메뉴의 제목을 breadcrumb 경로에 추가한다.
     prompt.pushPath(this.title);
 
     this.printMenu(prompt);
 
     while (true) {
 
-      String input = prompt.input("%s> ", prompt.getFullPath());
+      String input = prompt.input("%s%s> ", getLoginUsername(prompt), prompt.getFullPath());
 
       if (input.equals("menu")) {
         this.printMenu(prompt);
@@ -55,6 +56,16 @@ public class MenuGroup extends AbstractMenu {
 
     // 메뉴를 나갈 때 breadcrumb 메뉴 경로에서 메뉴 제목을 제거한다.
     prompt.popPath();
+
+  }
+
+  private String getLoginUsername(Prompt prompt) {
+    Member loginUser = (Member) prompt.getSession().getAttribute("loginUser");
+    if (loginUser != null) {
+      return AnsiEscape.ANSI_RED + loginUser.getName() + ":" + AnsiEscape.ANSI_CLEAR;
+    } else {
+      return "";
+    }
 
   }
 
