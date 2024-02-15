@@ -7069,7 +7069,17 @@ DB 커넥션과 프록시 패턴
 - 로그인 정보를 가지고 관련 데이터를 다루는 방법
   - 게시글 입력할 때 로그인 사용자 번호를 입력하기
 -------------------------------------------------------------------------------------
-→
+웹 애플리케이션 서버 아키텍처
+클라이언트 <> 서버 <> DBMS					   <┐	
+	        └> Tomcat Server(web server <> servlet container) <call/return> App
+└> 웹 브라우저 <HTTP> Tomcat Server(web server)
+-------------------------------------------------------------------------------------
+Tomcat Server
+<HTTP 요청/응답> web server <요청 위임> servlet container <call/return> java app(동적 자원)
+		     ↓↑
+	           정적 자원 서비스
+정적 자원 서비스 → 요청에 따라 응답결과가 항시 같다 → src/main/webapp
+동적 자원 → 서비스 할 때마다 결과가 달라질수 있다 → build/classes/java/main
 -------------------------------------------------------------------------------------
 Servlet Container
 Servlet Container <생성, 실행, 소멸> JAVA class(javax.servlet.Servlet 구현체)
