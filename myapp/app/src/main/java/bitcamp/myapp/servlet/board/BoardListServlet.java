@@ -41,7 +41,6 @@ public class BoardListServlet extends GenericServlet {
     out.println("<a href='/board/form.html'>새 글</a>");
 
     try {
-      //out.printf("%-4s\t%-20s\t%10s\t%10s\t%s\n", "No", "Title", "Writer", "Date", "Files");
       out.println("<table border='1'>");
       out.println("   <thead>");
       out.println("   <tr> <th>번호</th> <th>제목</th> <th>작성자</th> <th>등록일</th> <th>첨부파일</th> </tr>");

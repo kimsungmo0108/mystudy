@@ -55,28 +55,40 @@ public class BoardViewServlet extends HttpServlet {
       }
 
       List<AttachedFile> files = attachedFileDao.findAllByBoardNo(no);
-      out.printf("<form>\n");
+      out.printf("<form action='/board/update'>\n");
       out.printf(" <div>\n");
-      out.printf("  제목: <input name = ' title' type = ' text' value='%s'>\n", board.getTitle());
+      out.printf("  번호: <input readonly name = 'no' type = 'text' value='%s'>\n", board.getNo());
+      out.printf("  </div>\n");
+      out.printf(" <div>\n");
+      out.printf("  제목: <input name = 'title' type = 'text' value='%s'>\n", board.getTitle());
       out.printf("  </div>\n");
       out.printf("  <div>\n");
-      out.printf("  내용: <textarea name = ' content'>%s</textarea>\n", board.getContent());
+      out.printf("  내용: <textarea name = 'content'>%s</textarea>\n", board.getContent());
+      out.printf("  </div>\n");
+      out.printf(" <div>\n");
+      out.printf("  작성자: <input readonly type = 'text' value='%s'>\n", board.getWriter().getName());
       out.printf("  </div>\n");
       out.printf("  <div>\n");
-      out.printf("  첨부파일: <input multiple name = ' files'' type = 'file'>\n");
+      out.printf("  첨부파일: <input multiple name = 'files' type = 'file'>\n");
       out.printf("  <ul>\n");
       for (AttachedFile file : files) {
-        out.printf("    <li>%s</li>\n", file.getFilePath());
+        out.printf("    <li>%s <a href='/board/file/delete?no=%d'>삭제</a></li>\n",
+            file.getFilePath(),
+            file.getNo());
       }
       out.printf("  </ul>\n");
       out.printf("  </div>\n");
       out.printf("  <div>\n");
-      out.printf("  <button> 변경 </button>\n");
+      out.printf("  <button> 변경 </button>");
+      out.printf("  <a href='/board/delete?no=%d'>삭제</a>\n", no);
       out.printf("  </div>\n");
       out.printf("</form>\n");
 
     } catch (Exception e) {
       out.println("<p>조회 오류!</p>");
+      out.println("<pre>");
+      e.printStackTrace(out);
+      out.println("</pre>");
     }
     out.println("</body>");
     out.println("</html>");

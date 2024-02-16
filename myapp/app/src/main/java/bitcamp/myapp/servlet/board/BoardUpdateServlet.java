@@ -18,14 +18,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/board/add")
-public class BoardAddServlet extends HttpServlet {
+@WebServlet("/board/update")
+public class BoardUpdateServlet extends HttpServlet {
 
   private TransactionManager txManager;
   private BoardDao boardDao;
   private AttachedFileDao attachedFileDao;
 
-  public BoardAddServlet() {
+  public BoardUpdateServlet() {
     DBConnectionPool connectionPool = new DBConnectionPool(
         "jdbc:mysql://localhost/studydb", "study", "Bitcamp!@#123");
     this.boardDao = new BoardDaoImpl(connectionPool, 1);
@@ -48,18 +48,26 @@ public class BoardAddServlet extends HttpServlet {
     out.println("<body>");
     out.println("<h1>게시글</h1>");
 
-    Board board = new Board();
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
-    if (loginUser != null) {
-      board.setWriter(loginUser);
-    } else {
+    if (loginUser == null) {
       out.println("<p>로그인하시기 바랍니다.</p>");
       out.println("</body>");
       out.println("</html>");
       return;
     }
+
+    int no = Integer.parseInt(request.getParameter("no"));
+    Board board = boardDao.findBy(no);
+    if (board == null) {
+      out.println("<p>게시글 번호가 유효하지 않습니다.</p>");
+      out.println("</body>");
+      out.println("</html>");
+      return;
+    }
+
     board.setTitle(request.getParameter("title"));
     board.setContent(request.getParameter("content"));
+    board.setWriter(loginUser);
 
     ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
 
@@ -76,7 +84,7 @@ public class BoardAddServlet extends HttpServlet {
     try {
       txManager.startTransaction();
 
-      boardDao.add(board);
+      boardDao.update(board);
 
       if (attachedFiles.size() > 0) {
         // 첨부파일 객체에 게시글 번호 저장
@@ -87,9 +95,9 @@ public class BoardAddServlet extends HttpServlet {
       }
 
       txManager.commit();
-      out.println("<p>게시글을 등록했습니다.</p>");
+      out.println("<p>게시글을 변경했습니다.</p>");
     } catch (Exception e) {
-      out.println("<p>게시글 입력 중 오류 발생!</p>");
+      out.println("<p>게시글 변경 중 오류 발생!</p>");
       out.println("<pre>");
       e.printStackTrace(out);
       out.println("</pre>");
