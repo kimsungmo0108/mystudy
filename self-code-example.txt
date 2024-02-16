@@ -991,10 +991,78 @@ if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
   System.out.println("모든 작업을 종료하였다.");
 }
 -----------------------------------------------------------------
------------------------------------------------------------------
+PreparedStatement
+→ 값을 가지고 SQL을 만드는 것이 아니다 = Dynamic SQL
+→ SQL문과 값을 분리하여 실행한다
 
------------------------------------------------------------------
+PreparedStatement pstmt = con.prepareStatement("insert into x_board(title, contents) values(?,?)");
+?,? → in-parameter
+→ 주어진 SQL문을 값과 분리하여 DBMS가 이해할 수 있는 형식으로 미리 변환(compile)한다
+→ 값은 다로 DBMS에 전달한다
 
+값을 설정하는 방법
+pstmt.setxxx(1,'aaa');
+→ in-parameter 타입에 맞춰서 적절한 메소드 호출
+→ in-parameter 순서, 값
+-----------------------------------------------------------------
+// => 게시글을 입력할 때 자동 생성된 PK 값을 받겠다고 설정한다.
+PreparedStatement boardStmt = con.prepareStatement(
+	"insert into x_board(title,contents) values(?,?)", Statement.RETURN_GENERATED_KEYS);
+// 위에서 입력한 게시글의 PK 값을 알아내기
+ResultSet keyRS = boardStmt.getGeneratedKeys();
+keyRS.next(); // PK가 들어있는 레코드를 한 개 가져온다.
+// int boardId = keyRS.getInt("board_id"); // PK 값이 들어있는 레코드에서 컬럼 값을 꺼낸다. MariaDB에서 오류 발생!
+int boardId = keyRS.getInt(1);
+-----------------------------------------------------------------
+StringWriter
+→ 출력하는 문자열을 내부 버퍼에 유지
+print("aaa");
+print("bbb");
+print("ccc");
+→ 버퍼에 보관(aaa, bbb, ccc)
+new PrintWriter(new StringWriter());
+-----------------------------------------------------------------
+자바에서 톰캣 서버 동작
+
+// 톰캣 서버를 구동시키는 객체 준비
+Tomcat tomcat = new Tomcat();
+
+// 서버의 포트 번호 설정
+tomcat.setPort(8888);
+
+// 톰캣 서버를 실행하는 동안 사용할 임시 폴더 지정
+tomcat.setBaseDir("./temp");
+
+// 톰캣 서버의 연결 정보를 설정
+Connector connector = tomcat.getConnector();
+connector.setURIEncoding("UTF-8");
+
+// 톰캣 서버에 배포할 웹 애플리케이션의 환경 정보 준비
+StandardContext ctx = (StandardContext) tomcat.addWebapp(
+  "/", // 컨텍스트 경로(웹 애플리케이션 경로)
+  new File("./src/main/webapp").getAbsolutePath() // 웹 애플리케이션 파일이 있는 실제 경로
+);
+ctx.setReloadable(true);
+
+// 웹 애플리케이션 기타 정보 설정
+WebResourceRoot resources = new StandardRoot(ctx);
+
+// 웹 애플리케이션의 서블릿 클래스 등록
+resources.addPreResources(new DirResourceSet(
+  resources, // 루트 웹 애플리케이션 정보
+  "/WEB-INF/classes", // 서블릿 클래스 파일의 위치 정보
+  new File("build/classes/java/main").getAbsolutePath(), // 서블릿 클래스 파일이 있는 실제 경로
+  "/" // 웹 애플리케이션 내부 경로
+));
+
+// 웹 애플리케이션 설정 정보를 웹 애플리케이션 환경 정보에 등록
+ctx.setResources(resources);
+
+// 톰캣 서버 구동
+tomcat.start();
+
+// 톰캣 서버를 구동한 후 종료될 때까지 JVM을 끝내지 말고 기다린다.
+tomcat.getServer().await();
 -----------------------------------------------------------------
 
 -----------------------------------------------------------------

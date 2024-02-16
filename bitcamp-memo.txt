@@ -7151,17 +7151,111 @@ tomcat.start();
 // 톰캣 서버를 구동한 후 종료될 때까지 JVM을 끝내지 말고 기다린다.
 tomcat.getServer().await();
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.02.16(금)
 -------------------------------------------------------------------------------------
-→
+Servlet Container가 관리하는 객체(Component)
+
+ServletContext / HttpSession / ServletRequest → [Servlet Container] → Servlet / filter / listener
+
+ServletContext 
+- 웹 애플리케이션 당 1개
+- 서블릿, 필터, 리스너가 공유하는 저장소
+- DB 커넥션 객체, DAO 객체, 트랜잭션 관리 객체
+HttpSerssion
+- 클라이언트 당 1개
+- 서블릿, 필터, 리스너가 공유하는 저장소
+- 로그인 사용자 정보, 페이지 작업 정보 ...
+ServletRequest
+- 요청 당 1개
+- 서블릿, 필터, 리스너가 공유하는 저장소
+- 요청을 처리하는 동안 사용할 정보
+
+Servlet - 클라이언트 요청을 처리
+filter - 서블릿 실행 전후에 보조 작업을 수행
+listener - 특정 상태(이벤트)에서 작업을 수행
+  (이벤트)
+  → 웹 앱의 시작/종료
+  → 요청을 받거나 응답을 완료했을 때
+  → 세션이 시작/종료
+  → 등....
 -------------------------------------------------------------------------------------
-→
+Web Browser 와 Web Server, HttpSession
+사용자(chrome 여러 창, safari 여러 창) → (1클라이언트, 1HttpSession), (1클라이언트, 1HttpSession) → web server
+사용자(chrome 여러 창) → (1클라이언트, 1HttpSession) → web server
+→ 같은 브라우저 여러 개를 띄운 것은 같은 클라이언트
+→ 같은 브라우저에서 각각 다른 클라이언트로 접속 하고 싶으면 시크릿 창
+→ 다른 브라우저로 띄운 것은 다른 클라이언트
 -------------------------------------------------------------------------------------
-→
+Servlet Container 와 Web Application, ServletContext
+Servlet Container → 인사 관리 시스템, 결재 시스템 → 여러 Web Application
+Web Application → (입사, 퇴사, 경력증명서), (상신, 승인) → 여러 Servlet
+서블릿 컨테이너 -|------|<- 웹 애플리케이션 -|------|<- 서블릿
+웹 애플리케이션 당 1개의 ServletContext
 -------------------------------------------------------------------------------------
-→
+Servlet과 요청, ServletRequest
+서블릿 컨테이너 요청 <ServletRequest 생성/소멸> Servlet 응답
+1요청 → 1ServletRequest
 -------------------------------------------------------------------------------------
-→
+서블릿 컨테이너, 서블릿, 프로토콜
+web browser <Http> Servlet Container → service(ServletRequest, ServletResponse) → Servlet
+→ Http 프로토콜 정보를 포함한 HttpServletRequest, HttpServletResponse 객체를 넘겨준다
+
+web browser <xxx프로토콜> Servlet Container → service(ServletRequest, ServletResponse) → Servlet
+→ xxx 프로토콜 정보를 포함한 xxxServletRequest, xxxServletResponse 객체를 넘겨준다
+service(ServletRequest, ServletResponse) 
+→ 그래서 파라미터 타입은 다양한 프로토콜에 대응할 수 있도록 선언되어 있다
+-------------------------------------------------------------------------------------
+URL(Uniform Resource Locator)
+
+https://localhost:8888/auth/login?email=xxx&password=1111
+https → schema
+localhost → host
+8888 → port
+/auth/login → resource path → static / dynamic
+email=xxx → query string → parameter name=parameter value 
+-------------------------------------------------------------------------------------
+정적 자원과 동적 자원
+
+http://localhost:8888/aurh/form.html
+→ 정적자원 = 실행 결과가 고정됨
+→ .html, .css, .js, .pdf, .gif, .jpg
+
+http://localhost:8888/auth/login
+→ 동적자원 = 실행 결과가 가변적
+→ servlet, jsp 등 프로그램 실행
+
+서버(web app server)	클라이언트(web browser)
+BoardListServlet		요청/실행/결과
+HTML, CSS, js, jpeg		요청/파일 다운로드 후 실행
+-------------------------------------------------------------------------------------
+URL 인코딩(퍼센트% 인코딩)
+→ url을 작성할 때 특별한 의미를 지니는 단어의 경우(예: / : ? # & = @ 등) 
+→ 일반 문자로 사용해서는 안되기 때문에 특별한 형식으로 변환한다
+
+인코딩 대상 문자
+! → %21		= → %3D		공백 → +
+* → %2A		+ → %2B		가(EAB080) → %EA%B0%80
+' → %2C		$ → %24
+( → %28		, → %2C
+) → %29		/ → %2F		
+; → %3B  	? → %3F
+: → %3A		# → %23
+@ → %40	[ → %5B
+& → %26		] → %5D
+
+인코딩 제외 문자
+→ 영어 대소문자
+→ 숫자(0~9)
+→ - _ . ~
+
+url 인코딩/디코딩
+"가 @" url 인코딩 → web browser → %EA%B0%80+%40 → web server → url 디코딩 "가 @"
+→ 웹 브라우저가 웹서버에게 데이터를 보내기 전에 url 인코딩을 수행
+→ 웹 서버는 웹 브라우저가 보낸 데이터를 url 디코딩해서 리턴한다
+→ 개발자는 url 인코딩/디코딩을 직접 수행할 필요가 없다
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
