@@ -67,7 +67,7 @@ public class AssignmentViewServlet extends HttpServlet {
       out.printf("  </div>");
 
     } catch (Exception e) {
-      out.println("<p>조회 오류!</p>");
+      out.println("<p>조회 오류! </p>");
       out.println("<pre>");
       e.printStackTrace(out);
       out.println("</pre>");
