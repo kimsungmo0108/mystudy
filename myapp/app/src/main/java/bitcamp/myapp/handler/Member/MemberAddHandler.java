@@ -5,7 +5,6 @@ import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.vo.Member;
 import bitcamp.util.Prompt;
 import bitcamp.util.TransactionManager;
-import java.util.Date;
 
 public class MemberAddHandler extends AbstractMenuHandler {
 
@@ -25,7 +24,7 @@ public class MemberAddHandler extends AbstractMenuHandler {
       member.setEmail(prompt.input("이메일? "));
       member.setName(prompt.input("이름? "));
       member.setPassword(prompt.input("암호? "));
-      member.setCreatedDate(new Date());
+      //member.setCreatedDate(new Date());
 
       txManager.startTransaction();
       memberDao.add(member);

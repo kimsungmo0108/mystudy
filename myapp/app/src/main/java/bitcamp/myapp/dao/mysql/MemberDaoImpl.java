@@ -101,17 +101,28 @@ public class MemberDaoImpl implements MemberDao {
 
   @Override
   public int update(Member member) {
+    String sql;
+    if (member.getPassword().length() == 0) {
+      sql = "update members set email=?, name=? where member_no=?";
+    } else {
+      sql = "update members set email=?, name=?, password=sha2(?,256) where member_no=?";
+    }
+    {
+      try (Connection con = connectionPool.getConnection();
+          PreparedStatement pstmt = con.prepareStatement(sql)) {
+        pstmt.setString(1, member.getEmail());
+        pstmt.setString(2, member.getName());
+        if (member.getPassword().length() == 0) {
+          pstmt.setInt(3, member.getNo());
+        } else {
+          pstmt.setString(3, member.getPassword());
+          pstmt.setInt(4, member.getNo());
+        }
 
-    try (Connection con = connectionPool.getConnection();
-        PreparedStatement pstmt = con.prepareStatement(
-            "update members set email=?, name=?, password=sha2(?,256) where member_no=?")) {
-      pstmt.setString(1, member.getEmail());
-      pstmt.setString(2, member.getName());
-      pstmt.setString(3, member.getPassword());
-      pstmt.setInt(4, member.getNo());
-      return pstmt.executeUpdate();
-    } catch (Exception e) {
-      throw new DaoException("데이터 변경 오류", e);
+        return pstmt.executeUpdate();
+      } catch (Exception e) {
+        throw new DaoException("데이터 변경 오류", e);
+      }
     }
   }
 

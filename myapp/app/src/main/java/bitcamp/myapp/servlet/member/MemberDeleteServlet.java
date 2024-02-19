@@ -1,7 +1,8 @@
-package bitcamp.myapp.servlet.assignmnet;
+package bitcamp.myapp.servlet.member;
 
-import bitcamp.myapp.dao.AssignmentDao;
-import bitcamp.myapp.dao.mysql.AssignmentDaoImpl;
+import bitcamp.myapp.dao.MemberDao;
+import bitcamp.myapp.dao.mysql.MemberDaoImpl;
+import bitcamp.myapp.vo.Member;
 import bitcamp.util.DBConnectionPool;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,15 +12,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/assignment/delete")
-public class AssignmentDeleteServlet extends HttpServlet {
+@WebServlet("/member/delete")
+public class MemberDeleteServlet extends HttpServlet {
 
-  private AssignmentDao assignmentDao;
+  private MemberDao memberDao;
 
-  public AssignmentDeleteServlet() {
+  public MemberDeleteServlet() {
     DBConnectionPool connectionPool = new DBConnectionPool(
         "jdbc:mysql://localhost/studydb", "study", "Bitcamp!@#123");
-    this.assignmentDao = new AssignmentDaoImpl(connectionPool);
+    this.memberDao = new MemberDaoImpl(connectionPool);
   }
 
   @Override
@@ -34,12 +35,26 @@ public class AssignmentDeleteServlet extends HttpServlet {
     out.println("   <title> 비트캠프 데브옵스 5 기 </title>");
     out.println("</head>");
     out.println("<body>");
-    out.println("<h1>과제</h1>");
+    out.println("<h1>회원</h1>");
+    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+    if (loginUser == null) {
+      out.println("<p>로그인하시기 바랍니다!</p>");
+      out.println("</body>");
+      out.println("</html>");
+      return;
+    }
 
     try {
       int no = Integer.parseInt(request.getParameter("no"));
-      assignmentDao.delete(no);
-      out.println("<p>과제를 삭제했습니다.</p>");
+      Member member = memberDao.findBy(no);
+      if (member.getNo() != loginUser.getNo()) {
+        out.println("<p>권한이 없습니다.</p>");
+        out.println("</body>");
+        out.println("</html>");
+        return;
+      }
+      memberDao.delete(no);
+      out.println("<p>회원을 삭제했습니다.</p>");
 
     } catch (Exception e) {
       out.println("<p>삭제 오류!</p>");

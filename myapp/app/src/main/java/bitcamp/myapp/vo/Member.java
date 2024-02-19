@@ -1,7 +1,7 @@
 package bitcamp.myapp.vo;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
 public class Member implements Serializable {
 
@@ -11,7 +11,7 @@ public class Member implements Serializable {
   private String email;
   private String name;
   private String password;
-  private Date createdDate;
+  private java.sql.Date createdDate;
 
   @Override
   public String toString() {
@@ -60,7 +60,7 @@ public class Member implements Serializable {
     return createdDate;
   }
 
-  public void setCreatedDate(Date createdDate) {
+  public void setCreatedDate(java.sql.Date createdDate) {
     this.createdDate = createdDate;
   }
 }

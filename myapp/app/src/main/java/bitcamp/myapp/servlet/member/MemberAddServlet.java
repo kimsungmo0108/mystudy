@@ -1,7 +1,8 @@
-package bitcamp.myapp.servlet.assignmnet;
+package bitcamp.myapp.servlet.member;
 
-import bitcamp.myapp.dao.AssignmentDao;
-import bitcamp.myapp.dao.mysql.AssignmentDaoImpl;
+import bitcamp.myapp.dao.MemberDao;
+import bitcamp.myapp.dao.mysql.MemberDaoImpl;
+import bitcamp.myapp.vo.Member;
 import bitcamp.util.DBConnectionPool;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,20 +12,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/assignment/delete")
-public class AssignmentDeleteServlet extends HttpServlet {
+@WebServlet("/member/add")
+public class MemberAddServlet extends HttpServlet {
 
-  private AssignmentDao assignmentDao;
+  //private TransactionManager txManager;
+  private MemberDao memberDao;
 
-  public AssignmentDeleteServlet() {
+  public MemberAddServlet() {
     DBConnectionPool connectionPool = new DBConnectionPool(
         "jdbc:mysql://localhost/studydb", "study", "Bitcamp!@#123");
-    this.assignmentDao = new AssignmentDaoImpl(connectionPool);
+    this.memberDao = new MemberDaoImpl(connectionPool);
+    //this.txManager = new TransactionManager(connectionPool);
   }
 
   @Override
   protected void service(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
     out.println("<!DOCTYPE html>");
@@ -34,15 +38,18 @@ public class AssignmentDeleteServlet extends HttpServlet {
     out.println("   <title> 비트캠프 데브옵스 5 기 </title>");
     out.println("</head>");
     out.println("<body>");
-    out.println("<h1>과제</h1>");
+    out.println("<h1>회원</h1>");
 
     try {
-      int no = Integer.parseInt(request.getParameter("no"));
-      assignmentDao.delete(no);
-      out.println("<p>과제를 삭제했습니다.</p>");
+      Member member = new Member();
+      member.setName(request.getParameter("name"));
+      member.setEmail(request.getParameter("email"));
+      member.setPassword(request.getParameter("password"));
+      memberDao.add(member);
 
+      out.println("<p>회원을 등록했습니다.</p>");
     } catch (Exception e) {
-      out.println("<p>삭제 오류!</p>");
+      out.println("<p>회원 입력 중 오류 발생!</p>");
       out.println("<pre>");
       e.printStackTrace(out);
       out.println("</pre>");
