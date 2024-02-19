@@ -9,16 +9,19 @@ public class MemberDeleteHandler extends AbstractMenuHandler {
 
   private MemberDao memberDao;
 
-  public MemberDeleteHandler(MemberDao memberDao, Prompt prompt) {
-    super(prompt);
+  public MemberDeleteHandler(MemberDao memberDao) {
     this.memberDao = memberDao;
 
   }
 
   @Override
-  protected void action() {
-    int index = this.prompt.inputInt("번호? ");
-    this.memberDao.delete(index);
+  protected void action(Prompt prompt) {
+    int index = prompt.inputInt("번호? ");
+    if (memberDao.delete(index) == 0) {
+      prompt.println("게시글 번호가 유효하지 않습니다.");
+    } else {
+      prompt.println("삭제했습니다!");
+    }
 
   }
 }

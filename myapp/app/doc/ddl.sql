@@ -40,13 +40,22 @@ alter table assignments
   add constraint primary key(assignment_no),
   modify column assignment_no int not null auto_increment;
 
-create table members(
-  member_no int not null,
+create table membership(
+  no int not null,
   email varchar(255) not null,
   name varchar(255) not null,
   password varchar(100) not null,
   created_date datetime null default now()
 );
+
+no          INT          NOT NULL
+	name        VARCHAR(50)  NOT NULL
+	email       VARCHAR(50)  NOT NULL
+	tel         VARCHAR(50)  NOT NULL
+	password    VARCHAR(100) NOT NULL
+	create_date datetime         NULL     DEFAULT now()
+	addr        VARCHAR(100) NOT NULL
+	id          VARCHAR(50)  NOT NULL
 
 alter table members
   add constraint primary key(member_no),
