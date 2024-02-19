@@ -7,7 +7,6 @@ import bitcamp.myapp.dao.mysql.BoardDaoImpl;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Member;
-import bitcamp.util.DBConnectionPool;
 import bitcamp.util.TransactionManager;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,17 +24,19 @@ public class BoardUpdateServlet extends HttpServlet {
   private BoardDao boardDao;
   private AttachedFileDao attachedFileDao;
 
-  public BoardUpdateServlet() {
-    DBConnectionPool connectionPool = new DBConnectionPool(
-        "jdbc:mysql://localhost/studydb", "study", "Bitcamp!@#123");
-    this.boardDao = new BoardDaoImpl(connectionPool, 1);
-    this.txManager = new TransactionManager(connectionPool);
-    this.attachedFileDao = new AttachedFileDaoImpl(connectionPool);
+  @Override
+  public void init() {
+    this.boardDao = (BoardDaoImpl) this.getServletContext().getAttribute("boardDao");
+    this.attachedFileDao = (AttachedFileDaoImpl) this.getServletContext()
+        .getAttribute("attachedFileDao");
+    this.txManager = (TransactionManager) this.getServletContext().getAttribute("txManager");
   }
 
   @Override
   protected void service(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+    int category = Integer.parseInt(request.getParameter("category"));
+    String title = category == 1 ? "게시글" : "가입인사";
 
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
@@ -46,7 +47,7 @@ public class BoardUpdateServlet extends HttpServlet {
     out.println("   <title> 비트캠프 데브옵스 5 기 </title>");
     out.println("</head>");
     out.println("<body>");
-    out.println("<h1>게시글</h1>");
+    out.printf("<h1>%s</h1>\n", title);
 
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
     if (loginUser == null) {
@@ -59,7 +60,12 @@ public class BoardUpdateServlet extends HttpServlet {
     int no = Integer.parseInt(request.getParameter("no"));
     Board board = boardDao.findBy(no);
     if (board == null) {
-      out.println("<p>게시글 번호가 유효하지 않습니다.</p>");
+      out.println("<p>번호가 유효하지 않습니다.</p>");
+      out.println("</body>");
+      out.println("</html>");
+      return;
+    } else if (board.getWriter().getNo() != loginUser.getNo()) {
+      out.println("<p>권한이 없습니다.</p>");
       out.println("</body>");
       out.println("</html>");
       return;
@@ -95,9 +101,9 @@ public class BoardUpdateServlet extends HttpServlet {
       }
 
       txManager.commit();
-      out.println("<p>게시글을 변경했습니다.</p>");
+      out.println("<p>변경했습니다.</p>");
     } catch (Exception e) {
-      out.println("<p>게시글 변경 중 오류 발생!</p>");
+      out.println("<p>변경 중 오류 발생!</p>");
       out.println("<pre>");
       e.printStackTrace(out);
       out.println("</pre>");

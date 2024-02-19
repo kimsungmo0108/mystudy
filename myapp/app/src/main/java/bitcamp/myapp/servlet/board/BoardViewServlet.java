@@ -6,7 +6,6 @@ import bitcamp.myapp.dao.mysql.AttachedFileDaoImpl;
 import bitcamp.myapp.dao.mysql.BoardDaoImpl;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
-import bitcamp.util.DBConnectionPool;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -22,16 +21,20 @@ public class BoardViewServlet extends HttpServlet {
   private BoardDao boardDao;
   private AttachedFileDao attachedFileDao;
 
-  public BoardViewServlet() {
-    DBConnectionPool connectionPool = new DBConnectionPool(
-        "jdbc:mysql://localhost/studydb", "study", "Bitcamp!@#123");
-    this.boardDao = new BoardDaoImpl(connectionPool, 1);
-    this.attachedFileDao = new AttachedFileDaoImpl(connectionPool);
+  @Override
+  public void init() {
+    this.boardDao = (BoardDaoImpl) this.getServletContext().getAttribute("boardDao");
+    this.attachedFileDao = (AttachedFileDaoImpl) this.getServletContext()
+        .getAttribute("attachedFileDao");
   }
 
   @Override
   protected void service(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+
+    int category = Integer.parseInt(request.getParameter("category"));
+    String title = category == 1 ? "게시글" : "가입인사";
+
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
     out.println("<!DOCTYPE html>");
@@ -41,14 +44,14 @@ public class BoardViewServlet extends HttpServlet {
     out.println("   <title> 비트캠프 데브옵스 5 기 </title>");
     out.println("</head>");
     out.println("<body>");
-    out.println("<h1>게시글</h1>");
+    out.printf("<h1>%s</h1>\n", title);
 
     try {
       int no = Integer.parseInt(request.getParameter("no"));
 
       Board board = boardDao.findBy(no);
       if (board == null) {
-        out.println("<p>게시글 번호가 유효하지 않습니다.</p>");
+        out.println("<p>번호가 유효하지 않습니다.</p>");
         out.println("</body>");
         out.println("</html>");
         return;
@@ -56,6 +59,9 @@ public class BoardViewServlet extends HttpServlet {
 
       List<AttachedFile> files = attachedFileDao.findAllByBoardNo(no);
       out.printf("<form action='/board/update'>\n");
+      out.printf(" <div>\n");
+      out.printf("<input readonly name='category' type='hidden' value=%d>\n", category);
+      out.printf("  </div>\n");
       out.printf(" <div>\n");
       out.printf("  번호: <input readonly name = 'no' type = 'text' value='%s'>\n", board.getNo());
       out.printf("  </div>\n");
@@ -68,19 +74,22 @@ public class BoardViewServlet extends HttpServlet {
       out.printf(" <div>\n");
       out.printf("  작성자: <input readonly type = 'text' value='%s'>\n", board.getWriter().getName());
       out.printf("  </div>\n");
-      out.printf("  <div>\n");
-      out.printf("  첨부파일: <input multiple name = 'files' type = 'file'>\n");
-      out.printf("  <ul>\n");
-      for (AttachedFile file : files) {
-        out.printf("    <li>%s <a href='/board/file/delete?no=%d'>삭제</a></li>\n",
-            file.getFilePath(),
-            file.getNo());
+
+      if (category == 1) {
+        out.printf("  <div>\n");
+        out.printf("  첨부파일: <input multiple name = 'files' type = 'file'>\n");
+        out.printf("  <ul>\n");
+        for (AttachedFile file : files) {
+          out.printf("    <li>%s <a href='/board/file/delete?no=%d'>삭제</a></li>\n",
+              file.getFilePath(),
+              file.getNo());
+        }
+        out.printf("  </ul>\n");
+        out.printf("  </div>\n");
       }
-      out.printf("  </ul>\n");
-      out.printf("  </div>\n");
       out.printf("  <div>\n");
       out.printf("  <button> 변경 </button>");
-      out.printf("  <a href='/board/delete?no=%d'>삭제</a>\n", no);
+      out.printf("  <a href='/board/delete?no=%d&category=%d'>[삭제]</a>\n", no, category);
       out.printf("  </div>\n");
       out.printf("</form>\n");
 

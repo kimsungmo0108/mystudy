@@ -3,7 +3,6 @@ package bitcamp.myapp.servlet.assignmnet;
 import bitcamp.myapp.dao.AssignmentDao;
 import bitcamp.myapp.dao.mysql.AssignmentDaoImpl;
 import bitcamp.myapp.vo.Assignment;
-import bitcamp.util.DBConnectionPool;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -17,10 +16,9 @@ public class AssignmentViewServlet extends HttpServlet {
 
   private AssignmentDao assignmentDao;
 
-  public AssignmentViewServlet() {
-    DBConnectionPool connectionPool = new DBConnectionPool(
-        "jdbc:mysql://localhost/studydb", "study", "Bitcamp!@#123");
-    this.assignmentDao = new AssignmentDaoImpl(connectionPool);
+  @Override
+  public void init() throws ServletException {
+    this.assignmentDao = (AssignmentDaoImpl) this.getServletContext().getAttribute("assignmentDao");
   }
 
   @Override
@@ -63,7 +61,7 @@ public class AssignmentViewServlet extends HttpServlet {
       out.printf("  </div>\n");
       out.printf("  <div>\n");
       out.printf("  <button>변경</button>");
-      out.printf("  <a href='/assignment/delete?no=%d'>삭제</a>\n", no);
+      out.printf("  <a href='/assignment/delete?no=%d'>[삭제]</a>\n", no);
       out.printf("  </div>");
 
     } catch (Exception e) {

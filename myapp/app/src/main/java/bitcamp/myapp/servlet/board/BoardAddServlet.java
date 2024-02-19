@@ -7,7 +7,6 @@ import bitcamp.myapp.dao.mysql.BoardDaoImpl;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Member;
-import bitcamp.util.DBConnectionPool;
 import bitcamp.util.TransactionManager;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,17 +24,20 @@ public class BoardAddServlet extends HttpServlet {
   private BoardDao boardDao;
   private AttachedFileDao attachedFileDao;
 
-  public BoardAddServlet() {
-    DBConnectionPool connectionPool = new DBConnectionPool(
-        "jdbc:mysql://localhost/studydb", "study", "Bitcamp!@#123");
-    this.boardDao = new BoardDaoImpl(connectionPool, 1);
-    this.txManager = new TransactionManager(connectionPool);
-    this.attachedFileDao = new AttachedFileDaoImpl(connectionPool);
+  @Override
+  public void init() {
+    this.boardDao = (BoardDaoImpl) this.getServletContext().getAttribute("boardDao");
+    this.txManager = (TransactionManager) this.getServletContext().getAttribute("txManager");
+    this.attachedFileDao = (AttachedFileDaoImpl) this.getServletContext()
+        .getAttribute("atttachedFileDao");
   }
 
   @Override
   protected void service(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+
+    int category = Integer.parseInt(request.getParameter("category"));
+    String title = category == 1 ? "게시글" : "가입인사";
 
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
@@ -46,7 +48,7 @@ public class BoardAddServlet extends HttpServlet {
     out.println("   <title> 비트캠프 데브옵스 5 기 </title>");
     out.println("</head>");
     out.println("<body>");
-    out.println("<h1>게시글</h1>");
+    out.printf("<h1>%s</h1>", title);
 
     Board board = new Board();
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
@@ -60,16 +62,18 @@ public class BoardAddServlet extends HttpServlet {
     }
     board.setTitle(request.getParameter("title"));
     board.setContent(request.getParameter("content"));
+    board.setCategory(category);
 
     ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
-
-    String[] files = request.getParameterValues("files");
-    if (files != null) {
-      for (String file : files) {
-        if (file.length() == 0) {
-          continue;
+    if (category == 1) {
+      String[] files = request.getParameterValues("files");
+      if (files != null) {
+        for (String file : files) {
+          if (file.length() == 0) {
+            continue;
+          }
+          attachedFiles.add(new AttachedFile().filePath(file));
         }
-        attachedFiles.add(new AttachedFile().filePath(file));
       }
     }
 
@@ -87,9 +91,9 @@ public class BoardAddServlet extends HttpServlet {
       }
 
       txManager.commit();
-      out.println("<p>게시글을 등록했습니다.</p>");
+      out.println("<p>등록했습니다.</p>");
     } catch (Exception e) {
-      out.println("<p>게시글 입력 중 오류 발생!</p>");
+      out.println("<p>입력 중 오류 발생!</p>");
       out.println("<pre>");
       e.printStackTrace(out);
       out.println("</pre>");
