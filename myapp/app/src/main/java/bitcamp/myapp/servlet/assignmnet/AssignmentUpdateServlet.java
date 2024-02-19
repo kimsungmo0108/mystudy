@@ -6,6 +6,7 @@ import bitcamp.myapp.vo.Assignment;
 import bitcamp.util.DBConnectionPool;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -54,7 +55,7 @@ public class AssignmentUpdateServlet extends HttpServlet {
       assignment.setNo(old.getNo());
       assignment.setTitle(request.getParameter("title"));
       assignment.setContent(request.getParameter("content"));
-      assignment.setDeadline(old.getDeadline());
+      assignment.setDeadline(Date.valueOf(request.getParameter("deadline")));
 
       assignmentDao.update(assignment);
       out.println("<p>과제를 변경했습니다.</p>");
