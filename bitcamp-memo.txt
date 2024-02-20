@@ -7288,27 +7288,251 @@ Servlet Container → call → <<interface>> ServletContextListener <---- 리스
 → 웹 애플리케이션이 종료 직전 → contextDestroyed(){}
   → 웹 애플리케이션을 종료하기 전에 사용한 자원을 해제
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.02.20(화)
 -------------------------------------------------------------------------------------
-→
+★ web
+CERN → 유럽 입자 물리 연구소 → 팀 버너스 리 → 논문의 원활한 공유(텍스트+그림 등 기타 미디어 매체)
+논문에 언급된 다른 논문을 보기 위해서는 그 논문이 업로드 되어 있는 서버에 접속해서(서버 주소와 파일 경로를 알아야 함) 다운로드 받아야 한다
+→ FTP(File Transfer Protocol) C/S 사용
+→ 논문의 공유가 어렵다
+→ 논문이 텍스트 위주이다
+→ 개선할려고 Hyper-Text 고안
+  → 문서 안에 다른 문서의 연결정보를 삽입
+  → 그림 등 다른 매체를 삽입
+→ Markup Language를 정의 
+  → Hyper-Text Markup Language(HTML)
+  → Markup → 데이터를 제어하는 명령 = meta data = tag
+
+HTTP
+클라이언트 <FTP(텍스트 논문)> 서버
+개선→ 클라이언트 <HTTP(HTML을 전문적으로 주고 받는 프로토콜)> 서버
+HTTP Client <> HTTP Server
+Web browser <> Web Server
+→ 기존의 프로토콜(FTP)로는 다른 문서와 연결된 HTML을 주고 받기에는 불편했다
+→ 문서간의 연결이 거미망과 유사하여 "Web"이라 부른다!
+
+발전사
+→ ① 논문 공유 
+→ ② 홍보(회사홍보, 제품홍보, 온라인 카탈로그) 
+→ ③방명록, 게시판, 방문자수(프로그램을 결합=웹프로그램 시초)
+  web browser <방명록 작성> web server <실행/리턴 (=CGI)> 방명록 등록 App
+  → 방명록 등록 App(CGI 프로그램=CGI 규칙에 따라 웹서버와 데이터를 주고 받는 프로그램=웹애플리케이션 시초 c/c++)
+  → CGI(Common Gateway Interface) → 웹 서버와 App 사이에 데이터를 주고 받는 규칙
+→ ④ 주문 서비스(스크립트를 결합)
+  → 컴파일 방식에서 인터프리터 방식으로 변환, 텍스트 처리가 쉬움
+  web browser <> web server <> 스크립트 엔진 <스크립트 실행/결과리턴> → 스크립트
+→ ⑤ 웹 애플리케이션 
+  → 프로그램 변경 및 배포 용이
+  → 보안이 쉽다
+  → C/S 아키텍처에서 web App 아키텍처로 변경
+    C/S 아키텍처
+    → 클라이언트가 DBMS에 직접 접속하면 ID/PW 노출시 치명적이다
+    → 기능 변경 때마다 재배포
+    Web App
+    → DBMS 접속은 서버에서 이루어지므로 ID/PW 노출될 일이 없다
+    → 기능 변경시 서버쪽에만 배포하면 되므로 배포가 쉽다
 -------------------------------------------------------------------------------------
-→
+Web Application
+
+★ Monolithic 아키텍처 
+→ 한 개의 서비스나 웹 애플리케이션에 모든 기능을 담는 방식
+과제관리 시스템(회원관리, 과제관리, 게시글관리, 강사관리, 사용자인증) <> DBMS(회원, 강사, 과제, 게시글)
+장점
+→ 기능 간의 연동이 쉽다
+→ 직접 메소드 호출 가능
+단점 
+→ 기능 변경시 전체 서비스를 재시작 
+→ 일부 기능만 동작시키거나 멈출 수 없다
+→ 특정 기능에 더 많은 자원을 할당할 수 없다
+→ 강결합 → 상호 기능이 매우 의존적이다
+
+★ Microservice 아키텍처 
+→ 기능별로 서비스를 분리하는 방식
+회원관리 - DBMS
+과제관리 - DBMS
+강사관리 - DBMS
+게시글관리 - DBMS
+사용자인증 - DBMS
+장점
+→ 기능별 제어가 쉽다(일부 기능만 끄거나 실행할 수 있다)
+→ 기능 변경시 배포가 쉽다
+→ 특정 기능에 자원을 더 할당할 수 있다
+단점
+→ 기능간의 연동시 오버헤드 발생(반복적인 부가작업이 늘어남) - 자원 과다 사용
+→ 세션유지 및 관리가 번거롭다
+→ DB 무결성 관리가 어렵다
 -------------------------------------------------------------------------------------
-→
+Java Web Application
+
+Java EE(Enterprise Edition=기업용)
+→ 기업에서 사용할 App을 만드는데 필요한 기술과 도구를 제공한다
+개인용과 기업용 차이점
+  → 동시 접속 제어(통신, 멀티스레딩)
+  → 사용자 인증/권한 제어
+  → 자원 관리
+  → App 분산 처리
+→ 다중 동시 사용자용 App 개발에 필요한 기술 모음 및 도구 모음 => Java EE
+
+Java EE의 주요 기술
+기술명/Java EE버전 기술버전 JavaEE 8 | JavaEE 7 | JavaEE 6 | JavaEE 5
+웹 기술 
+Servlet 			4.0	3.1	 3.0	 2.5
+JSP 			2.3	2.3	 2.2	 2.1
+JSF 			2.3	2.2	 2.0	 1.2
+EL 			3.0	3.0	 2.2	  x
+JSTL			1.2	1.2	 1.2	 1.0
+
+분산 컴포넌트 
+EJB			3.2 	3.2	 3.1	 3.0
+JPA 			2.2	2.1	 2.0	 1.0
+JTA			1.2	1.2	 1.1	 1.0
+
+분산 서비스 
+WebService		1.3 	1.3	 1.3	 1.0
+JAX-RPC			1.1	1.1	 1.1	 1.1
+
+→ JSF 태그 => HTML, javascript, css 자동 생성 
+  → 개발자가 정적코드를 직접 작성하는 부담을 덜어줌 
+  → 망함!
+  → JS 기술 발전으로 인해 JS 라이브러리가 많이 등장
 -------------------------------------------------------------------------------------
-→
+Servlet 과 EJB
+web browser <HTTP 요청/(HTML,XML,JSON 등)응답> java ee 서버 <call/return> 서블릿 실행
+App <call/return> Stub <메소드 호출 요청/메소드의 리턴값 응답> java ee 서버(Skeleton) <call/return> EJB 실행(Remote Object)
+     				RMI-IIOP					메소드의 리턴타입 리턴
+Stub → 원격객체의 클라이언트측 대행자
+Skeleton → 원격객체의 서버측 대행자
+대행자 → ORB(Object Request Broker)	
+
+★ RESTful
+App <HTTP 요청/(XML,JSON 등)응답> java ee 서버 <call/return> 서블릿 실행
+→ App에서 HTTP 요청을 이용해 원격의 서블릿을 실행시키는 방법
+→ EJB 방식은 stub 객체가 자바 객체이기 때문에 java app에서만 사용할 수 있다
+→ HTTP 요청은 프로그래밍 언어와 상관없다
+  → 플랫폼, 기술 독립적이다
+→ App은 java, c#, python, javascript 등... 가능
+→ 그래서 EJB 폭망! RESTful 떡상!
+→ 서버 쪽을 꼭 자바로 만들 필요가 없다 php, c#, python, javascript 등... 가능
 -------------------------------------------------------------------------------------
-→
+★원격 메소드 호출
+
+호출방식		로컬(local)	원격(remote)
+로컬 메소드 	App → f() call 
+
+RPC(절차적)	App ------------------> f() call  => HTTP 기반 stub<>skel
+
+CORBA(언어독릭)	c.App ----------------> C# f()
+		pascall.App ---------> COBOL f()  => HTTP 기반 stub<>skel
+		C#.App --------------> python f()
+
+RMI(객체지향)	java.App ------------> java객체(원격객체) call  => HTTP 기반 stub<>skel
+
+EJB		java.App ------------> EJB 객체 call  => HTTP 기반 stub<>skel
+(Java EE 기술)
+
+Web Service  	c.App ---------------> C# f()  
+		java.App ------------> python f()    => HTTP 기반 stub<>skel
+		C#.App -------------> c f()
+
+RESTful		c.App ---------------> C# f()  
+		java.App ------------> python f()    => HTTP 요청
+
+CORBA → 이기종 언어간에 메소드 호출
+RESTful → stub과 skel이 없다
 -------------------------------------------------------------------------------------
-→
+★ Java EE와 서버
+
+Java EE
+Implementation     ------------>    웹기술 / 분산 컴포넌트 / 분산 서비스 / 자원관리 등... 전체 기술 구현
+Server
+→ Java EE 기술 명세에 따라 동작하도록 구현한 서버
+→ 예) JBoss, WebLogic, WebSphere, Jeus, Geronimo, GlassFish 등...
+→ 웹 기술만 구현한 서버가 Servlet Container이다 
+  → Jave EE 기술중 웹 기술만 구현(Servlet, JSP, JSTL, EL 등...)
+  → 예) Tomcat, Resin, Jetty, Undertow
+
+JBoss  ---->  Servlet, JSP, EJB, WebService         
+→ 모두 실행 가능
+Tomcat Server  ---->  Servlet, JSP, EJB, WebService     
+→ 웹 기술인 Servlet, JSP만 실행 가능
 -------------------------------------------------------------------------------------
-→
+Jave EE 기술버전과 서버 버전
+
+	Tomcat		Servlet		JSP
+	Java EE
+-----	Tomcat 6		2.5		2.1
+Jave	Tomcat 7		3.0		2.2
+EE	Tomcat 8		3.1		2.3
+-----	Tomcat 9		4.0		2.3
+Jakarta	Tomcat 10	5.0		3.0
+EE	Tomcat 10.1 	6.0		3.1
 -------------------------------------------------------------------------------------
-→
+Java EE 와 Jakarta EE
+
+Oracle이 유지보수
+~ Java EE 8((Servlet 4.0, JSP 2.3), EL 3.0, JSTL 1.2)
+Eclipse에서 유지보수
+Jakarta EE 8(Servelt 4.0, JSP 2.3 ...) 
+Jakarta EE 9(Servlet 5.0, JSP 3.0, EL 4.0, JSTL 2.0) 
+Jakarta EE 10(Servlet 6.0, JSP 3.1, EL 5.0, JSTL 3.0) ~
+
+Tomcat 9 = Java EE 8
+Tomcat 10 = Jakarta EE 9
+Tomcat 10.1 = Jakarta EE 10
+
+Java EE 8 = Jakarta EE 8
+→ 같은 버전 단 패키지명만 변경되었다
+→ javax.servlet => jakarta.servlet
+→ javax.servlet.jsp => jakarta.servlet.jsp
+→ javax.* => jakarta.*
 -------------------------------------------------------------------------------------
-→
+자바 소스 디렉토리 와 자바 패키지
+app/	→ 프로젝트 폴더
+      bin/
+      src/      → 자바 소스 폴더
+           com/    → 자바 루트 패키지 폴더
+                  eomcs/
+		  Hello.java
+		  package com.eomcs;
+
+app/	→ 프로젝트 폴더
+      bin/
+      src/      → 일반 폴더
+           main/        → 일반 폴더
+                   java/       → 자바 소스 폴더 → 루트 패키지 바로 위
+           		com/    → 자바 루트 패키지 폴더
+                  	       eomcs/
+		                 Hello.java
+		             package com.eomcs;
+app/
+       build/
+             classes/
+                        java/
+                               com/
+                                       eomcs/
+                                                  Hello.class
+
+$ java -calsspath 루트패키지를두는폴더의경로 FQName(패키지명+클래스명)
+			또는
+		       .jar 파일 경로
+FQName = Fully-Qualified class name
+app$ java -calsspath build/classes/java com.eomcs.Hello
 -------------------------------------------------------------------------------------
-→
+web 프로젝트 표준 디렉토리 구조
+app/	
+      src/      
+           main/        
+                   java/    → 자바소스폴더 : .java
+	      resources/    → 자바소스폴더 : .xml, .properties 등
+	      webapp/      
+		     WEB-INF/
+			     web.xml     → deployment descrpton file(DDFile) = component 배치 정보를 기술한 파일 → 선택 사항
+			     기타 웹 애플리케이션 관련 설정 파일
+  	                   HTML, css, JavaScripte, 이미지, 등 = static resource
+
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
