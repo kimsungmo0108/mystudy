@@ -7566,7 +7566,7 @@ init() → 서블릿이 사용할 자원을 준비한다
 -------------------------------------------------------------------------------------
 서블릿 배치 방법
 
-① 애노테이션
+★ ① 애노테이션
 @WebServlet(value={"path", "", ""})
 class Servlet01 () {}
 
@@ -7583,8 +7583,8 @@ class Servlet01 () {}
 -------------------------------------------------------------------------------------
 GenericServlet
 <<interface>> Servlet 	<<interface>> ServletConfig 		<<interface>> Serializable
-            ↑		[getServletName(), getServletContext()		 ↑
-	|		 getInitParameter(), getInitParameterName()]	  |
+            ↑		[getServletName(), getServletContext()		  ↑
+	|		 getInitParameter(), getInitParameterName()]	   |
             └---------┐┌----------------↑------------------------------------------------┘	
 <<abstract>> GenericServlet <---- MySerblet[service()]
 
@@ -7592,7 +7592,7 @@ Server1(인사관리시스템(s1, s2, s3))	┐       → 1. 서버에 문제 발
 				↓       → 2. 다른 서버로 현재 실행 상태를 그대로 옮긴다 deserialize
 Server2(화계관리시스템(), 인사관리시스템(s1, s2, s3))
 → 서블릿 객체를 serialize 하는 상황
-→ 
+→ 이런 이유로 GenericServlet에서 Serializable 인터페이스를 구현하는 것이다
 -------------------------------------------------------------------------------------
 HttpServlet
 <<abstract>> GenericServlet ← <<abstract>> HttpServlet ← MyServlet
@@ -7611,19 +7611,27 @@ doGet()
 doPost()
 doHead()
 -------------------------------------------------------------------------------------
-Filter 만들기
+★ Filter 만들기
 <<interface>> Filter [init(), doFilter(), destroy()]
-init() →
-doFilter() → 
-destroy() →
+init() → 웹 애플리케이션 실행 → 필터 객체 생성 후 
+doFilter() → 서블릿 요청에 필터가 적용될 때
+destroy() → 웹 애플리케이션 종료
+→ 서블릿 실행 전/후에 기능을 추가할 때 사용
+  → 기능 : 암호 해제 / 암호화
+  → 압축 해제 / 암축
+  → 디코딩 / 인코딩
+  → 로깅
+→ GoF의 "chain of responsibility"
+→ 기존 코드를 손대지 않고 기능을 추가 하거나 제거할 수 있는 설계 기법
+→ FilterChain : 체인의 총괄 매니저
 -------------------------------------------------------------------------------------
-주요 웹 컴포넌트
+★ 필터 실행 ★
 
+주요 웹 컴포넌트
 Filter01(/ex02/*)  		Servlet01(/ex02/s1)  	Listener01(ServletContextListener)
 Filter02(/ex02/a/*)  		Servlet02(/ex02/a/s2)  	Listener02(ServletRequestListener)
 
-필터 실행
-
+1)
 1. /ex02/s1 → Servlet Container → 2. doFilter() → /ex02/*(Filter01) → 3. service() → /ex02/s1(Servlet01)
 → 4. /ex02/*(Filter01) → 5. Servlet Container → 6. 응답
 
@@ -7637,6 +7645,7 @@ Servlet Container		F1	S1
 -----------|
 응답
 
+2)
 1. /ex02/s1 → Servlet Container → 2. doFilter() → /ex02/*(Filter01) → 3. doFilter() → /ex02/a/*(Filter02) → 4. service() → /ex02/a/s2(Servlet02)
 → 5. /ex02/a/*(Filter02) → 6. /ex02/*(Filter01) → 7. Servlet Container → 8. 응답
 
@@ -7653,13 +7662,62 @@ Servlet Container		F1	F2	S2
 응답
 
 UMLl의 Interaction Diagram 중에서 "Sequence Diagram"
-→ 시간의 흐름체 따라 실행 흐름을 도식화
+→ 서블릿 실행 전/후에 기능을 추가할 때 사용
+  → 기능 : 암호 해제 / 암호화
+  → 압축 해제 / 암축
+  → 디코딩 / 인코딩
+  → 로깅
+→ GoF의 "chain of responsibility"
+→ 기존 코드를 손대지 않고 기능을 추가 하거나 제거할 수 있는 설계 기법
+→ FilterChain : 체인의 총괄 매니저
 -------------------------------------------------------------------------------------
-→
+필터 구동 실체
+요청 → Servlet Container → call → FilterChain → F1 → doFilter() → F2 → doFilter() → Servlet → service()
+→ return → F2 → return →  F1 → FilterChain → return → Servlet Container → 응답
+→ 클래스 간의 coupling을 맺지 않는다
+→ 의존 관계가 아니다
+→ 유지 보수가 쉽다
 -------------------------------------------------------------------------------------
-→
+★ 리스너 실행 ★
+
+Filter01(/ex02/*)  		Servlet01(/ex02/s1)  	Listener01(ServletContextListener)
+Filter02(/ex02/a/*)  		Servlet02(/ex02/a/s2)  	Listener02(ServletRequestListener)
+
+		┌ <2.  requestInitialize() call / 3. return> Listener02
+1. /ex02/s1 → Servlet Container → 4. doFilter() → Filter01 → 5. doFilter() → Filter02 → 6. service() → Servlet02
+→ 7. Filter02 → 8. Filter01 → 9. Servlet Container <10. requestDestroyed() call / 11. return> Servlet Container → 12. 응답
+→ 시스템이 특정 상태에 놓일 때 알림(메소드가 호출됨)을 받아 작업 수행
+→ "Listener" = Observer => GoF의 Observer 패턴
+// => 서블릿 컨테이너 또는 서블릿, 세션 등의 객체 상태가 변경되었을 때 보고 받는 옵저버
+// => "Observer" 디자인 패턴이 적용된 것이다.
+// => ServletContextListener
+//    - 웹 애플리케이션을 시작하거나 종료할 때 보고 받고 싶다면 이 인터페이스를 구현하라.
+// => ServletRequestListener
+//    - 요청이 들어오거나 응답할 때 보고 받고 싶다면 이 인터페이스를 구현하라.
+// => HttpSessionListener
+//    - 세션이 생성되거나 종료될 때 보고 받고 싶다면 이 인터페이스를 구현하라.
+// => XxxListener
+//    - 기타 다양한 인터페이스가 있다. 문서를 참고하라.
 -------------------------------------------------------------------------------------
-→
+리스너, 필터, 서블릿 우선순위
+
+→ 서버 실행 → ContextListener 생성 → RequestListener 생성 → Filter 생성
+→ 요청 → RequestListener 호출 → 필터 호출 → 서블릿 생성 호출 or 서블릿 호출 
+→ 서블릿 종료 → 필터 종료 → RequestListener 종료 → ContextListener 종료 → 서버 종료
+
+웹 애플리케이션 실행 →
+ContextListener → 생성과 실행
+RequestListener → 생성
+Filter → 생성
+웹 요청 →
+RequestListener → 요청 들어왔을 때 실행 
+Filter → 요청리스너를 거쳐 실행
+Servlet → 필터를 거쳐 생성 실행 or 실행 
+종료 →
+Servlet → 종료
+Filter → 종료 
+RequestListener → 종료
+ContextListener → 다른 요청이 없고 서버 종료 직전에 종료
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------

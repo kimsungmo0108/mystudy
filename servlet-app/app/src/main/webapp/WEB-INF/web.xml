@@ -11,10 +11,16 @@
   version="4.0"
   metadata-complete="false">
 
-  <display-name>My Web Application</display-name>
+  <display-name>서블릿 예제 애플리케이션</display-name>
+  <description>
+    애플리케이션 소개
+  </description>
 
   <servlet>
     <servlet-name>hello</servlet-name>
+    <description>
+      서블릿 소개
+    </description>
     <servlet-class>com.eomcs.web.HelloServlet</servlet-class>
   </servlet>
 
@@ -22,6 +28,10 @@
   <servlet-mapping>
     <servlet-name>hello</servlet-name>
     <url-pattern>/hello</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>hello</servlet-name>
+    <url-pattern>/first</url-pattern>
   </servlet-mapping>
 
 </web-app>
