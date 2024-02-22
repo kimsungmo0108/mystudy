@@ -6,20 +6,29 @@ public class Main {
     int n = sc.nextInt();
     int[] abc;
     String str;
-    int strcount = 0;
-    int c = 0;
+    int strCount = n;
+    int now = 0;
+    int prev;
     for (int i = 0; i < n; i++) {
       str = sc.next();
       abc = new int[26];
+      prev = 0;
+
       for (int j = 0; j < str.length(); j++) {
-        c = str.charAt(j) - 97;
-        abc[c] += 1;
-        if (abc[c] > 0) {
+        now = str.charAt(j);
+        if (prev != now) {
+          if (abc[now - 97] == 0) {
+            abc[now - 97] = 1;
+            prev = now;
+          } else {
+            strCount--;
+            break;
+          }
         }
       }
     }
-
-    // System.out.println(strcount);
+    sc.close();
+    System.out.println(strCount);
   }
 }
 

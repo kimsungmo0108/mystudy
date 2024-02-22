@@ -7764,7 +7764,7 @@ general-header *
 response-header * → 응답할 때 사용; Server, Location 등		Server : 응답하는 서버의 정보 (enter)
 entity-header * 
 CRLF
-message-body → 
+message-body 						클라이언트에게 보내는 데이터
 -------------------------------------------------------------------------------------
 Proxy Server
 |	        Local		           |	        Remote	    |
@@ -7781,6 +7781,8 @@ GET 요청에서 데이터 보내기
 Request-URI에 Query String으로 보낸다
 예) http://서버:포트/ex04/s1?name=aaa&age=20
 name=aaa&age=20 → Query String
+name → parameter name
+aaa → parameter value
 
 POST 요청에서 데이터 보내기
 message-body에 데이터를 실어 보낸다
@@ -7816,7 +7818,23 @@ binary data 전송		전송불가			multipart/form-data 포맷으로 인코딩한
 용도		url에 데이터를 포함해야 하는 경우	게시글 등록과 같은 대량의 데이터 전송
 		→ 게시글 조회 url			binary data 전송
 -------------------------------------------------------------------------------------
-→
+apache commons-fileupload 사용법
+
+DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
+ServletFileUpload multipartDataHandler = new ServletFileUpload(fileItemFactory);
+
+실제 경계 문자열 예) ------WebKitFormBoundaryogFq6gl3Nbl5A4sI
+---------------------------------
+name=aaa
+---------------------------------
+age=20
+---------------------------------
+file1
+---------------------------------
+file2
+---------------------------------
+→ 분석 → ServletfileUpload → 파트를 넘긴다 → DiskfileItemFactory → 각 파트마다 FileItem 생성
+	→ 멀티파트 데이터 부분		→ 파트의 데이터를 FileItem 객체에 담는다
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
