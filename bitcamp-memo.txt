@@ -7570,7 +7570,7 @@ init() → 서블릿이 사용할 자원을 준비한다
 @WebServlet(value={"path", "", ""})
 class Servlet01 () {}
 
-② XML
+② XML(DD파일=Deployment Descriptor 파일)
 /WEB-INF/web.xml
 <servlet>
   <servlet-name>서블릿 별명</servlet-name>
@@ -7661,7 +7661,7 @@ Servlet Container		F1	F2	S2
 -----------|
 응답
 
-UMLl의 Interaction Diagram 중에서 "Sequence Diagram"
+UML의 Interaction Diagram 중에서 "Sequence Diagram"
 → 서블릿 실행 전/후에 기능을 추가할 때 사용
   → 기능 : 암호 해제 / 암호화
   → 압축 해제 / 암축
@@ -7715,25 +7715,106 @@ Filter → 요청리스너를 거쳐 실행
 Servlet → 필터를 거쳐 생성 실행 or 실행 
 종료 →
 Servlet → 종료
-Filter → 종료 
+Filter → 리턴
 RequestListener → 종료
-ContextListener → 다른 요청이 없고 서버 종료 직전에 종료
+Filter, ContextListener → 다른 요청이 없고 웹 애플리케이션 종료 직전에 종료
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.02.22(목)
 -------------------------------------------------------------------------------------
-→
+★ 서블릿에서 출력하기
+getWriter() → ServletResponse → PrintWrite 리턴
+print(콘텐트) → PrintWriter → 버퍼에 콘텐트 저장
+→ 버퍼에 있는 콘텐트를 응답할 때 UTF-16BE를 ISO-8859-1로 변환해서 응답한다
+→ 한글은 ISO-859-1 코드표에 존재하지 않는 문자이기 때문에 변환불가!
+→ 그런 의미에서 '?' 문자로 변환된다
+
+response.setContentType("text/plain;charset=UTF-8"); // UCS2(UTF-16) ==> UTF-8
+PrintWriter out = response.getWriter();
+
+MIME Type : Multi-purpose Internet Mail Extension
+ => 콘텐트의 형식을 표현
+ => 콘텐트타입/상세타입
+ => 예) text/plain, text/css, text/html 등
+ => 웹 브라우저는 콘텐트를 출력할 때 서버가 알려준 MIME 타입을 보고 어떤 방식으로 출력할 지 결정한다.
 -------------------------------------------------------------------------------------
-→
+★ binary data 응답
+/photo.jpeg
+web browser <photh.jpeg요청 / photh.jpeg응답> webserver	servlet container		servlet04
+					    └ /photh.jpeg 읽기
+web browser </ex03/s4요청 / 응답> webserver <위임> servlet container <service() / return> servlet04 → FileInputStream로 읽고 OutputStream으로 출력
 -------------------------------------------------------------------------------------
-→
+HTTP - web browser와 web server 사이에 데이터를 주고 받는 규칙
+① 요청 규칙
+Method SP Request-URI SP HTTP-Version CRLF → Request-Line	GET /photo.jpeg HTTP/1.1 (enter)
+Mehod → GET, POST, HEAD, PUT, DELETE, TRACE, OPTIONS
+general-header * → 요청, 응답에 모두 사용; Date, Connection 등	Connection : close (enter)
+request-header * → 요청에서 사용; Accept, Host, User-Agent 등	User-Agent : 브라우저 정보 (enter)
+entity-header * → 서버에 보내는 데이터 정보; Content-Type, Content-Length 등 	Content-Type : application/json, Content-Length : 14 (enter)
+CRLF									
+message-body → 서버에 보내는 데이터(POST 요청)		{"name":"aaa"}
+=entity
+
+② 응답 규칙
+HTTP-Version SP Status-Code SP Reason-Phrase CRLF		HTTP/1.1 200 ok (enter)
+Status-Code → 1xx, 2xx(성공), 3xx, 4xx(요청오류), 5xx(서버오류)
+general-header *  
+response-header * → 응답할 때 사용; Server, Location 등		Server : 응답하는 서버의 정보 (enter)
+entity-header * 
+CRLF
+message-body → 
 -------------------------------------------------------------------------------------
-→
+Proxy Server
+|	        Local		           |	        Remote	    |
+web browser < 요청 / 응답> Proxy Server < 요청 / 응답> Web Server
+Proxy Server 역할
+→ 주고 받는 데이터를 관찰, 감시
+→ cache 기능 : 서버에서 받은 콘텐트를 보관
+예) JDK 다운로드
+GET → GET → 응답 → Proxy Server cache에 JDK 보관 → 응답
+GET → HEAD → 응답 : JDK 정보 → 서버에서 받은 JDK 정보와 캐시에 보관된 JDK를 비교하여 같다면, 보관된 JDK를 web browser에게 준다 다르다면, 서버에서 다시 다운로드한다
+HEAD → JDK 정보를 달라는 메소드
 -------------------------------------------------------------------------------------
-→
+GET 요청에서 데이터 보내기
+Request-URI에 Query String으로 보낸다
+예) http://서버:포트/ex04/s1?name=aaa&age=20
+name=aaa&age=20 → Query String
+
+POST 요청에서 데이터 보내기
+message-body에 데이터를 실어 보낸다
+예) POST /ex04/s2 Http/1.1 (enter)
+...
+content-Type : application/x-www-form-urlencoded (enter)
+content-Length : 33 (enter)
+...
+name=AB%EA%B0%80%EA%B0%81&age=123
 -------------------------------------------------------------------------------------
-→
+GET 요청 데이터 전송
+name=AB%EA%B0%80%EA%B0%81&age=123
+web browser → utf-8변환+url인코딩 → web server (url 디코딩) → getParameter() 하면 utf-8=>UTF-16BE로 변환 → "AB가각" 
+UTF-16 0041 0042 AC00 AC01 AB가각
+
+★ POST 요청 데이터 전송
+name=AB%EA%B0%80%EA%B0%81&age=123
+web browser → utf-8변환+url인코딩 → web server (url 디코딩) → getParameter() 하면 ISO-8859-1=>UTF-16BE로 변환 → "AB가각" 
+→ getParameter() 호출하면 ISO-8859-1로 생각한다
+ISO-8859-1 0041 0042 00ea 00b0 0080 00ea 00b0 0081 AB????
+→ 클라이언트가 보낸 문자의 charset을 ISO-8859-1로 착각한다
+→ getParameter()를 호출하기 전 request.setCharacterEncoding("UTF-8")을 먼저 호출한다
 -------------------------------------------------------------------------------------
-→
+GET vs POST
+
+			GET			POST
+데이터전송		url에 포함		message-body에 포함
+binary data 전송		전송불가			multipart/form-data 포맷으로 인코딩한다면 가능
+			(단 binary 데이터를 base64로 인코딩해서 텍스트로 변환한다면 가능)
+전송크기 		웹서버에 설정된 크기 = 보통64KB 또는 8K	제한없음(단 서블릿에서 제한할 수 있다)
+보안 		웹 브라우저는 url을 보관한다		데이터 노출 안됨
+		→ 데이터가 노출된다
+용도		url에 데이터를 포함해야 하는 경우	게시글 등록과 같은 대량의 데이터 전송
+		→ 게시글 조회 url			binary data 전송
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
