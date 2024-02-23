@@ -49,7 +49,7 @@ public class BoardAddServlet extends HttpServlet {
     out.println("<body>");
     out.printf("<h1>%s</h1>\n", title);
 
-    out.printf("<form action='/board/add?category=%d method='post'>\n", category);
+    out.printf("<form action='/board/add?category=%d' method='post'>\n", category);
     out.printf("<input name='category' type='hidden' value='%d'>\n", category);
     out.println("<div>");
     out.println("제목: <input name='title' type='text'>");
@@ -130,7 +130,10 @@ public class BoardAddServlet extends HttpServlet {
       }
 
       txManager.commit();
-      out.println("<p>등록했습니다.</p>");
+
+      response.sendRedirect("/board/list?category=" + category);
+      return;
+
     } catch (Exception e) {
       out.println("<p>입력 중 오류 발생!</p>");
       out.println("<pre>");

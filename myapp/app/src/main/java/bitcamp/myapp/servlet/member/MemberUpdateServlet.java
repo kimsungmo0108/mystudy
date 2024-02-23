@@ -64,8 +64,10 @@ public class MemberUpdateServlet extends HttpServlet {
         return;
       }
       memberDao.update(member);
+      
+      response.sendRedirect("/member/list");
+      return;
 
-      out.println("<p>회원을 변경했습니다.</p>");
     } catch (Exception e) {
       out.println("<p>회원 변경 오류!</p>");
       out.println("<pre>");

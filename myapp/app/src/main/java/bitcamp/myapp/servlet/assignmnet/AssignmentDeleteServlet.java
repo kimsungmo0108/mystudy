@@ -37,7 +37,9 @@ public class AssignmentDeleteServlet extends HttpServlet {
     try {
       int no = Integer.parseInt(request.getParameter("no"));
       assignmentDao.delete(no);
-      out.println("<p>과제를 삭제했습니다.</p>");
+      
+      response.sendRedirect("/assignment/list");
+      return;
 
     } catch (Exception e) {
       out.println("<p>삭제 오류!</p>");

@@ -101,7 +101,10 @@ public class BoardUpdateServlet extends HttpServlet {
       }
 
       txManager.commit();
-      out.println("<p>변경했습니다.</p>");
+
+      response.sendRedirect("/board/list?category=" + category);
+      return;
+      
     } catch (Exception e) {
       out.println("<p>변경 중 오류 발생!</p>");
       out.println("<pre>");

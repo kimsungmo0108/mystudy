@@ -44,7 +44,9 @@ public class MemberAddServlet extends HttpServlet {
       member.setPassword(request.getParameter("password"));
       memberDao.add(member);
 
-      out.println("<p>회원을 등록했습니다.</p>");
+      response.sendRedirect("/member/list");
+      return;
+      
     } catch (Exception e) {
       out.println("<p>회원 입력 중 오류 발생!</p>");
       out.println("<pre>");

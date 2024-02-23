@@ -52,7 +52,9 @@ public class MemberDeleteServlet extends HttpServlet {
         return;
       }
       memberDao.delete(no);
-      out.println("<p>회원을 삭제했습니다.</p>");
+      
+      response.sendRedirect("/member/list");
+      return;
 
     } catch (Exception e) {
       out.println("<p>삭제 오류!</p>");
