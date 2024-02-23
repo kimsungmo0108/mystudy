@@ -11,6 +11,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/board/list")
 public class BoardListServlet extends GenericServlet {
@@ -26,6 +28,9 @@ public class BoardListServlet extends GenericServlet {
   public void service(ServletRequest servletRequest, ServletResponse servletResponse)
       throws ServletException, IOException {
 
+    HttpServletResponse response = (HttpServletResponse) servletResponse;
+    HttpServletRequest request = (HttpServletRequest) servletRequest;
+
     int category = Integer.parseInt(servletRequest.getParameter("category"));
     String title = category == 1 ? "게시글" : "가입인사";
 
@@ -39,6 +44,8 @@ public class BoardListServlet extends GenericServlet {
     out.println("</head>");
     out.println("<body>");
     out.printf("<h1>%s\n</h1>", title);
+
+    request.getRequestDispatcher("/header").include(request, response);
 
     out.printf("<a href='/board/add?category=%d'>새 글</a>\n", category);
 
@@ -71,6 +78,8 @@ public class BoardListServlet extends GenericServlet {
       }
       out.println("   </tbody>");
       out.println("</table>");
+
+      request.getRequestDispatcher("/footer").include(request, response);
 
     } catch (Exception e) {
       out.println("<p>목록 오류!</p>");
