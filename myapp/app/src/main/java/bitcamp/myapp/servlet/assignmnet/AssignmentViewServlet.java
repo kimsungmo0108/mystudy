@@ -22,7 +22,7 @@ public class AssignmentViewServlet extends HttpServlet {
   }
 
   @Override
-  protected void service(HttpServletRequest request, HttpServletResponse response)
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
@@ -44,7 +44,7 @@ public class AssignmentViewServlet extends HttpServlet {
         out.println("</html>");
         return;
       }
-      out.printf("<form action='/assignment/update'>\n");
+      out.printf("<form action='/assignment/update' method='post'>\n");
       out.printf(" <div>\n");
       out.printf("  번호: <input readonly name = 'no' type = 'text' value='%s'>\n",
           assignment.getNo());

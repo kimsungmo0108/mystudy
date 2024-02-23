@@ -23,7 +23,7 @@ public class MemberViewServlet extends HttpServlet {
   }
 
   @Override
-  protected void service(HttpServletRequest request, HttpServletResponse response)
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
@@ -47,7 +47,7 @@ public class MemberViewServlet extends HttpServlet {
         return;
       }
 
-      out.printf("<form action='/member/update'>\n");
+      out.printf("<form action='/member/update' method='post'>\n");
       out.printf(" <div>\n");
       out.printf("  번호: <input readonly name = 'no' type = 'text' value='%s'>\n", member.getNo());
       out.printf("  </div>\n");
