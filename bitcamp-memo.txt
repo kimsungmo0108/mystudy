@@ -7924,16 +7924,27 @@ Location : s100 (enter)
 ...
 message-body는 없다
 -------------------------------------------------------------------------------------
-★ forward, include, refresh, redirect
-1) forward
+★ forward, include, refresh, redirect ★
+
+① forward
+ RequestDispatcher 요청배달자 = request.getRequestDispatcher("/ex07/s2");
+요청배달자.forward(request, response);
+
 클라이언트 < 요청 / 응답 > 서블릿1 출력1 < RequestDispatcher.forward() / 리턴 > 서블릿2 출력2
 → 출력1은 무시하고 출력2만 출력
 
-2)include
+② include
+RequestDispatcher 요청배달자 = request.getRequestDispatcher("/ex07/s11_plus");
+요청배달자.include(request, response);
+
 클라이언트 < 요청 / 응답 > 서블릿1 출력1 < RequestDisPatcher.include() / 리턴 > 서블릿2 출력2
 → 출력1 + 출력2 출력
 
-3) refresh
+③ refresh
+response.setHeader("Refresh", "1;url=/index.html"); 
+or
+out.println("<meta http-equiv='Refresh' content='3;url=s100'>");
+
 클라이언트 < 요청 / 응답 > 서블릿1 콘텐트+url
      └> 콘텐트 출력 후 다른 url 요청 / 응답
 200 ok
@@ -7941,7 +7952,10 @@ Refresh : url
 → 서블릿1 요청 응답 후 콘텐트 출력 
 → 다른 url 요청
 
-4) redirect 
+④ redirect 
+response.sendRedirect("/board/list?category=" + category);
+return;
+
 클라이언트 < 요청 / 응답 > 서블릿1 +url
      └> 다른 url 요청 / 응답
 302 Found
