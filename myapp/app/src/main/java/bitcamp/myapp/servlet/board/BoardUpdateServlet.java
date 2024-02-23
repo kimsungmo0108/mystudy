@@ -33,7 +33,7 @@ public class BoardUpdateServlet extends HttpServlet {
   }
 
   @Override
-  protected void service(HttpServletRequest request, HttpServletResponse response)
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     int category = Integer.parseInt(request.getParameter("category"));
     String title = category == 1 ? "게시글" : "가입인사";

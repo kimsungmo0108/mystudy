@@ -29,7 +29,7 @@ public class BoardViewServlet extends HttpServlet {
   }
 
   @Override
-  protected void service(HttpServletRequest request, HttpServletResponse response)
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
     int category = Integer.parseInt(request.getParameter("category"));
@@ -58,7 +58,7 @@ public class BoardViewServlet extends HttpServlet {
       }
 
       List<AttachedFile> files = attachedFileDao.findAllByBoardNo(no);
-      out.printf("<form action='/board/update'>\n");
+      out.printf("<form action='/board/update' method='post'>\n");
       out.printf(" <div>\n");
       out.printf("<input readonly name='category' type='hidden' value=%d>\n", category);
       out.printf("  </div>\n");

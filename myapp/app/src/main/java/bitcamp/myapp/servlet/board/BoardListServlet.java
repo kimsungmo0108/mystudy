@@ -40,7 +40,7 @@ public class BoardListServlet extends GenericServlet {
     out.println("<body>");
     out.printf("<h1>%s\n</h1>", title);
 
-    out.printf("<a href='/board/form?category=%d'>새 글</a>\n", category);
+    out.printf("<a href='/board/add?category=%d'>새 글</a>\n", category);
 
     try {
       out.println("<table border='1'>");
