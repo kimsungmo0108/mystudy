@@ -45,7 +45,12 @@ public class MemberViewServlet extends HttpServlet {
         throw new Exception("회원 번호가 유효하지 않습니다.");
       }
 
-      out.printf("<form action='/member/update' method='post'>\n");
+      out.printf("<form action='/member/update' method='post' enctype='multipart/form-data'>\n");
+      out.printf(" <div>\n");
+      out.printf(
+          "  사진: <a href='%s'> <img src='%1$s' height='80px'></a><br> <input name = 'photo' type = 'file'>\n",
+          member.getPhoto() != null ? "/upload/" + member.getPhoto() : "/img/default-photo.jpg");
+      out.printf("  </div>\n");
       out.printf(" <div>\n");
       out.printf("  번호: <input readonly name = 'no' type = 'text' value='%s'>\n", member.getNo());
       out.printf("  </div>\n");

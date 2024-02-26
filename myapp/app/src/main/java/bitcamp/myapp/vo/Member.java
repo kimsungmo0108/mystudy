@@ -11,6 +11,7 @@ public class Member implements Serializable {
   private String email;
   private String name;
   private String password;
+  private String photo;
   private java.sql.Date createdDate;
 
   @Override
@@ -20,8 +21,17 @@ public class Member implements Serializable {
         ", email='" + email + '\'' +
         ", name='" + name + '\'' +
         ", password='" + password + '\'' +
+        ", photo='" + photo + '\'' +
         ", createdDate=" + createdDate +
         '}';
+  }
+
+  public String getPhoto() {
+    return photo;
+  }
+
+  public void setPhoto(String photo) {
+    this.photo = photo;
   }
 
   public int getNo() {
