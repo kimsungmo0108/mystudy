@@ -49,7 +49,6 @@ public class BoardFileDeleteServlet extends HttpServlet {
       } else {
         attachedFileDao.delete(fileNo);
       }
-
     } catch (Exception e) {
       request.setAttribute("message", "첨부파일 삭제 오류!");
       request.setAttribute("exception", e);
