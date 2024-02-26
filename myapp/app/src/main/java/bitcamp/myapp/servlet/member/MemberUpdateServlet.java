@@ -35,6 +35,7 @@ public class MemberUpdateServlet extends HttpServlet {
     out.println("   <title> 비트캠프 데브옵스 5 기 </title>");
     out.println("</head>");
     out.println("<body>");
+    request.getRequestDispatcher("/header").include(request, response);
     out.println("<h1>회원</h1>");
 
     try {
@@ -54,17 +55,19 @@ public class MemberUpdateServlet extends HttpServlet {
       member.setCreatedDate(Date.valueOf(request.getParameter("createDate")));
       if (member == null) {
         out.println("<p>번호가 유효하지 않습니다.</p>");
+        request.getRequestDispatcher("/footer").include(request, response);
         out.println("</body>");
         out.println("</html>");
         return;
       } else if (member.getNo() != loginUser.getNo()) {
         out.println("<p>권한이 없습니다.</p>");
+        request.getRequestDispatcher("/footer").include(request, response);
         out.println("</body>");
         out.println("</html>");
         return;
       }
       memberDao.update(member);
-      
+
       response.sendRedirect("/member/list");
       return;
 
@@ -74,6 +77,7 @@ public class MemberUpdateServlet extends HttpServlet {
       e.printStackTrace(out);
       out.println("</pre>");
     }
+    request.getRequestDispatcher("/footer").include(request, response);
     out.println("</body>");
     out.println("</html>");
   }

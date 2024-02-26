@@ -32,7 +32,12 @@ public class AssignmentViewServlet extends HttpServlet {
     out.println("   <meta charset = 'UTF-8'>");
     out.println("   <title> 비트캠프 데브옵스 5 기 </title>");
     out.println("</head>");
-    out.println("<body>");
+    try {
+      out.println("<body>");
+      request.getRequestDispatcher("/header").include(request, response);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
     out.println("<h1>과제</h1>");
 
     try {
@@ -40,6 +45,7 @@ public class AssignmentViewServlet extends HttpServlet {
       Assignment assignment = assignmentDao.findBy(no);
       if (assignment == null) {
         out.println("<p>과제 번호가 유효하지 않습니다!</p>");
+        request.getRequestDispatcher("/footer").include(request, response);
         out.println("</body>");
         out.println("</html>");
         return;
@@ -70,6 +76,7 @@ public class AssignmentViewServlet extends HttpServlet {
       e.printStackTrace(out);
       out.println("</pre>");
     }
+    request.getRequestDispatcher("/footer").include(request, response);
     out.println("</body>");
     out.println("</html>");
   }

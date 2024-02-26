@@ -35,6 +35,7 @@ public class AssignmentUpdateServlet extends HttpServlet {
     out.println("   <title> 비트캠프 데브옵스 5 기 </title>");
     out.println("</head>");
     out.println("<body>");
+    request.getRequestDispatcher("/header").include(request, response);
     out.println("<h1>과제</h1>");
     try {
 
@@ -43,6 +44,7 @@ public class AssignmentUpdateServlet extends HttpServlet {
       Assignment old = assignmentDao.findBy(no);
       if (old == null) {
         out.println("<p>과제 번호가 유효하지 않습니다!</p>");
+        request.getRequestDispatcher("/footer").include(request, response);
         out.println("</body>");
         out.println("</html>");
         return;
@@ -55,7 +57,7 @@ public class AssignmentUpdateServlet extends HttpServlet {
       assignment.setDeadline(Date.valueOf(request.getParameter("deadline")));
 
       assignmentDao.update(assignment);
-      
+
       response.sendRedirect("/assignment/list");
       return;
 
@@ -66,6 +68,7 @@ public class AssignmentUpdateServlet extends HttpServlet {
       e.printStackTrace(out);
       out.println("</pre>");
     }
+    request.getRequestDispatcher("/footer").include(request, response);
     out.println("</body>");
     out.println("</html>");
   }

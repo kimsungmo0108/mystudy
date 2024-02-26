@@ -87,6 +87,7 @@ public class BoardAddServlet extends HttpServlet {
     out.println("   <title> 비트캠프 데브옵스 5 기 </title>");
     out.println("</head>");
     out.println("<body>");
+    request.getRequestDispatcher("/header").include(request, response);
     out.printf("<h1>%s</h1>", title);
 
     Board board = new Board();
@@ -95,6 +96,7 @@ public class BoardAddServlet extends HttpServlet {
       board.setWriter(loginUser);
     } else {
       out.println("<p>로그인하시기 바랍니다.</p>");
+      request.getRequestDispatcher("/footer").include(request, response);
       out.println("</body>");
       out.println("</html>");
       return;
@@ -144,6 +146,7 @@ public class BoardAddServlet extends HttpServlet {
       } catch (Exception e2) {
       }
     }
+    request.getRequestDispatcher("/footer").include(request, response);
     out.println("</body>");
     out.println("</html>");
   }

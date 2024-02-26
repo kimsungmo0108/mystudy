@@ -33,6 +33,7 @@ public class MemberDeleteServlet extends HttpServlet {
     out.println("   <title> 비트캠프 데브옵스 5 기 </title>");
     out.println("</head>");
     out.println("<body>");
+    request.getRequestDispatcher("/header").include(request, response);
     out.println("<h1>회원</h1>");
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
     if (loginUser == null) {
@@ -47,12 +48,13 @@ public class MemberDeleteServlet extends HttpServlet {
       Member member = memberDao.findBy(no);
       if (member.getNo() != loginUser.getNo()) {
         out.println("<p>권한이 없습니다.</p>");
+        request.getRequestDispatcher("/footer").include(request, response);
         out.println("</body>");
         out.println("</html>");
         return;
       }
       memberDao.delete(no);
-      
+
       response.sendRedirect("/member/list");
       return;
 
@@ -62,6 +64,7 @@ public class MemberDeleteServlet extends HttpServlet {
       e.printStackTrace(out);
       out.println("</pre>");
     }
+    request.getRequestDispatcher("/footer").include(request, response);
     out.println("</body>");
     out.println("</html>");
   }
