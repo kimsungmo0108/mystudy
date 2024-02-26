@@ -60,36 +60,17 @@ public class AssignmentAddServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
-    out.println("<!DOCTYPE html>");
-    out.println("<html lang = 'en'>");
-    out.println("<head>");
-    out.println("   <meta charset = 'UTF-8'>");
-    out.println("   <title> 비트캠프 데브옵스 5 기 </title>");
-    out.println("</head>");
-    out.println("<body>");
-    request.getRequestDispatcher("/header").include(request, response);
-    out.println("<h1>과제</h1>");
-
     try {
       Assignment assignment = new Assignment();
       assignment.setTitle(request.getParameter("title"));
       assignment.setContent(request.getParameter("content"));
       assignment.setDeadline(Date.valueOf(request.getParameter("deadline")));
       assignmentDao.add(assignment);
-
       response.sendRedirect("/assignment/list");
-      return;
-
     } catch (Exception e) {
-      out.println("<p>등록 오류!</p>");
-      out.println("<pre>");
-      e.printStackTrace(out);
-      out.println("</pre>");
+      request.setAttribute("message", "과제 등록 오류!");
+      request.setAttribute("exception", e);
+      request.getRequestDispatcher("/error").forward(request, response);
     }
-    request.getRequestDispatcher("/footer").include(request, response);
-    out.println("</body>");
-    out.println("</html>");
   }
 }

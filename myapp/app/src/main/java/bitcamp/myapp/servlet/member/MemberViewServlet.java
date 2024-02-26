@@ -42,11 +42,7 @@ public class MemberViewServlet extends HttpServlet {
 
       Member member = memberDao.findBy(no);
       if (member == null) {
-        out.println("<p>회원 번호가 유효하지 않습니다.</p>");
-        request.getRequestDispatcher("/footer").include(request, response);
-        out.println("</body>");
-        out.println("</html>");
-        return;
+        throw new Exception("회원 번호가 유효하지 않습니다.");
       }
 
       out.printf("<form action='/member/update' method='post'>\n");
@@ -77,10 +73,9 @@ public class MemberViewServlet extends HttpServlet {
       out.printf("</form>\n");
 
     } catch (Exception e) {
-      out.println("<p>조회 오류!</p>");
-      out.println("<pre>");
-      e.printStackTrace(out);
-      out.println("</pre>");
+      request.setAttribute("message", "조회 오류!");
+      request.setAttribute("exception", e);
+      request.getRequestDispatcher("/error").forward(request, response);
     }
     request.getRequestDispatcher("/footer").include(request, response);
     out.println("</body>");

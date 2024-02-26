@@ -52,11 +52,7 @@ public class BoardViewServlet extends HttpServlet {
 
       Board board = boardDao.findBy(no);
       if (board == null) {
-        out.println("<p>번호가 유효하지 않습니다.</p>");
-        request.getRequestDispatcher("/footer").include(request, response);
-        out.println("</body>");
-        out.println("</html>");
-        return;
+        throw new Exception("번호가 유효하지 않습니다.");
       }
 
       List<AttachedFile> files = attachedFileDao.findAllByBoardNo(no);
@@ -96,10 +92,9 @@ public class BoardViewServlet extends HttpServlet {
       out.printf("</form>\n");
 
     } catch (Exception e) {
-      out.println("<p>조회 오류!</p>");
-      out.println("<pre>");
-      e.printStackTrace(out);
-      out.println("</pre>");
+      request.setAttribute("message", "조회 오류!");
+      request.setAttribute("exception", e);
+      request.getRequestDispatcher("/error").forward(request, response);
     }
     request.getRequestDispatcher("/footer").include(request, response);
     out.println("</body>");

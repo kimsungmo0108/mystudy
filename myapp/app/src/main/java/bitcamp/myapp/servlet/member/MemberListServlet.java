@@ -59,10 +59,9 @@ public class MemberListServlet extends HttpServlet {
       out.println("</table>");
 
     } catch (Exception e) {
-      out.println("<p>목록 오류!</p>");
-      out.println("<pre>");
-      e.printStackTrace(out);
-      out.println("</pre>");
+      request.setAttribute("message", "목록 오류!");
+      request.setAttribute("exception", e);
+      request.getRequestDispatcher("/error").forward(request, response);
     }
     request.getRequestDispatcher("/footer").include(request, response);
     out.println("</body>");

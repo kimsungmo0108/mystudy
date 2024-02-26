@@ -7983,11 +7983,24 @@ Location : url
 
 2024.02.26(월)
 -------------------------------------------------------------------------------------
-→
+forward 응용
+클1 <요청/응답> 서블릿1 → 오류발생 → forwarding → ErrorServlet → 오류 메세지 출력
+클2 <요청/응답> 서블릿2 → 오류발생 → forwarding → ErrorServlet → 오류 메세지 출력
+→ 오류 정보를 ServletRequest에 저장 후 넘긴다 
+→ ServletRequest에서 오류 정보를 꺼내서 오류 메세지를 출력한다
 -------------------------------------------------------------------------------------
-→
+forward/include 서블릿끼리 객체 공유
+클라이언트 → 서블릿1 → forward/include → 서블릿2
+	      request, response  → 전달 → request, response
+RequestDipatcher rd = request.getRequestDispatcher("/s2");
+rd.forward(request, response);
+rd.include(request, response);
+forward/include 하는 서블릿에게 request와 response를 넘긴다 = 공유한다
 -------------------------------------------------------------------------------------
-→
+★ ServletRequest/ServletResponse Lifecycle
+요청 → HttpServletRequest, HttpServletResponse 생성 → 응답
+   └ s1 → forward/include → s2 → forward/include → s3 ┘
+→ refresh/redirect는 다른 url을 요청하는 것이기 때문에 새로운 ServletRequest/ServletResponse를 생성한다
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------

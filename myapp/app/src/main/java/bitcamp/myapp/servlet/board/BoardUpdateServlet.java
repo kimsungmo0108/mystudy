@@ -9,7 +9,6 @@ import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Member;
 import bitcamp.util.TransactionManager;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,62 +34,39 @@ public class BoardUpdateServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    int category = Integer.parseInt(request.getParameter("category"));
-    String title = category == 1 ? "게시글" : "가입인사";
-
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
-    out.println("<!DOCTYPE html>");
-    out.println("<html lang = 'en'>");
-    out.println("<head>");
-    out.println("   <meta charset = 'UTF-8'>");
-    out.println("   <title> 비트캠프 데브옵스 5 기 </title>");
-    out.println("</head>");
-    out.println("<body>");
-    request.getRequestDispatcher("/header").include(request, response);
-    out.printf("<h1>%s</h1>\n", title);
-    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
-    if (loginUser == null) {
-      out.println("<p>로그인하시기 바랍니다.</p>");
-      request.getRequestDispatcher("/footer").include(request, response);
-      out.println("</body>");
-      out.println("</html>");
-      return;
-    }
-
-    int no = Integer.parseInt(request.getParameter("no"));
-    Board board = boardDao.findBy(no);
-    if (board == null) {
-      out.println("<p>번호가 유효하지 않습니다.</p>");
-      request.getRequestDispatcher("/footer").include(request, response);
-      out.println("</body>");
-      out.println("</html>");
-      return;
-    } else if (board.getWriter().getNo() != loginUser.getNo()) {
-      out.println("<p>권한이 없습니다.</p>");
-      request.getRequestDispatcher("/footer").include(request, response);
-      out.println("</body>");
-      out.println("</html>");
-      return;
-    }
-
-    board.setTitle(request.getParameter("title"));
-    board.setContent(request.getParameter("content"));
-    board.setWriter(loginUser);
-
-    ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
-
-    String[] files = request.getParameterValues("files");
-    if (files != null) {
-      for (String file : files) {
-        if (file.length() == 0) {
-          continue;
-        }
-        attachedFiles.add(new AttachedFile().filePath(file));
-      }
-    }
-
     try {
+      int category = Integer.parseInt(request.getParameter("category"));
+      String title = category == 1 ? "게시글" : "가입인사";
+
+      Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+      if (loginUser == null) {
+        throw new Exception("로그인하시기 바랍니다.");
+      }
+
+      int no = Integer.parseInt(request.getParameter("no"));
+      Board board = boardDao.findBy(no);
+      if (board == null) {
+        throw new Exception("번호가 유효하지 않습니다.");
+      } else if (board.getWriter().getNo() != loginUser.getNo()) {
+        throw new Exception("권한이 없습니다.");
+      }
+
+      board.setTitle(request.getParameter("title"));
+      board.setContent(request.getParameter("content"));
+      board.setWriter(loginUser);
+
+      ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
+
+      String[] files = request.getParameterValues("files");
+      if (files != null) {
+        for (String file : files) {
+          if (file.length() == 0) {
+            continue;
+          }
+          attachedFiles.add(new AttachedFile().filePath(file));
+        }
+      }
+
       txManager.startTransaction();
 
       boardDao.update(board);
@@ -106,20 +82,15 @@ public class BoardUpdateServlet extends HttpServlet {
       txManager.commit();
 
       response.sendRedirect("/board/list?category=" + category);
-      return;
 
     } catch (Exception e) {
-      out.println("<p>변경 중 오류 발생!</p>");
-      out.println("<pre>");
-      e.printStackTrace(out);
-      out.println("</pre>");
+      request.setAttribute("message", "변경 오류!");
+      request.setAttribute("exception", e);
+      request.getRequestDispatcher("/error").forward(request, response);
       try {
         txManager.rollback();
       } catch (Exception e2) {
       }
     }
-    request.getRequestDispatcher("/footer").include(request, response);
-    out.println("</body>");
-    out.println("</html>");
   }
 }

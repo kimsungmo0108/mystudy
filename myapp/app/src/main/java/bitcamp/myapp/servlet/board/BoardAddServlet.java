@@ -74,51 +74,32 @@ public class BoardAddServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+    try {
+      int category = Integer.parseInt(request.getParameter("category"));
 
-    int category = Integer.parseInt(request.getParameter("category"));
-    String title = category == 1 ? "게시글" : "가입인사";
+      Board board = new Board();
+      Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+      if (loginUser != null) {
+        board.setWriter(loginUser);
+      } else {
+        throw new Exception("로그인하시기 바랍니다.");
+      }
+      board.setTitle(request.getParameter("title"));
+      board.setContent(request.getParameter("content"));
+      board.setCategory(category);
 
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
-    out.println("<!DOCTYPE html>");
-    out.println("<html lang = 'en'>");
-    out.println("<head>");
-    out.println("   <meta charset = 'UTF-8'>");
-    out.println("   <title> 비트캠프 데브옵스 5 기 </title>");
-    out.println("</head>");
-    out.println("<body>");
-    request.getRequestDispatcher("/header").include(request, response);
-    out.printf("<h1>%s</h1>", title);
-
-    Board board = new Board();
-    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
-    if (loginUser != null) {
-      board.setWriter(loginUser);
-    } else {
-      out.println("<p>로그인하시기 바랍니다.</p>");
-      request.getRequestDispatcher("/footer").include(request, response);
-      out.println("</body>");
-      out.println("</html>");
-      return;
-    }
-    board.setTitle(request.getParameter("title"));
-    board.setContent(request.getParameter("content"));
-    board.setCategory(category);
-
-    ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
-    if (category == 1) {
-      String[] files = request.getParameterValues("files");
-      if (files != null) {
-        for (String file : files) {
-          if (file.length() == 0) {
-            continue;
+      ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
+      if (category == 1) {
+        String[] files = request.getParameterValues("files");
+        if (files != null) {
+          for (String file : files) {
+            if (file.length() == 0) {
+              continue;
+            }
+            attachedFiles.add(new AttachedFile().filePath(file));
           }
-          attachedFiles.add(new AttachedFile().filePath(file));
         }
       }
-    }
-
-    try {
       txManager.startTransaction();
 
       boardDao.add(board);
@@ -137,17 +118,13 @@ public class BoardAddServlet extends HttpServlet {
       return;
 
     } catch (Exception e) {
-      out.println("<p>입력 중 오류 발생!</p>");
-      out.println("<pre>");
-      e.printStackTrace(out);
-      out.println("</pre>");
+      request.setAttribute("message", "등록 오류!");
+      request.setAttribute("exception", e);
+      request.getRequestDispatcher("/error").forward(request, response);
       try {
         txManager.rollback();
       } catch (Exception e2) {
       }
     }
-    request.getRequestDispatcher("/footer").include(request, response);
-    out.println("</body>");
-    out.println("</html>");
   }
 }

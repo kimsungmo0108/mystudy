@@ -7,7 +7,6 @@ import bitcamp.myapp.dao.mysql.BoardDaoImpl;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Member;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,30 +30,14 @@ public class BoardDeleteServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    int category = Integer.parseInt(request.getParameter("category"));
-    String title = category == 1 ? "게시글" : "가입인사";
-
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
-    out.println("<!DOCTYPE html>");
-    out.println("<html lang = 'en'>");
-    out.println("<head>");
-    out.println("   <meta charset = 'UTF-8'>");
-    out.println("   <title> 비트캠프 데브옵스 5 기 </title>");
-    out.println("</head>");
-    out.println("<body>");
-    request.getRequestDispatcher("/header").include(request, response);
-    out.printf("<h1>%s</h1>", title);
-    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
-    if (loginUser == null) {
-      out.println("<p>로그인하시기 바랍니다!</p>");
-      request.getRequestDispatcher("/footer").include(request, response);
-      out.println("</body>");
-      out.println("</html>");
-      return;
-    }
-
     try {
+
+      int category = Integer.parseInt(request.getParameter("category"));
+
+      Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+      if (loginUser == null) {
+        throw new Exception("로그인하시기 바랍니다.");
+      }
       int boardNo = Integer.parseInt(request.getParameter("no"));
 
 //      AttachedFile file = attachedFileDao.findByNo(fileNo);
@@ -66,36 +49,20 @@ public class BoardDeleteServlet extends HttpServlet {
       Board board = boardDao.findBy(boardNo);
 
       if (board == null) {
-        out.println("<p>번호가 유효하지 않습니다.</p>");
-        request.getRequestDispatcher("/footer").include(request, response);
-        out.println("</body>");
-        out.println("</html>");
-        return;
+        throw new Exception("번호가 유효하지 않습니다.");
       } else if (board.getWriter().getNo() != loginUser.getNo()) {
-        out.println("<p>권한이 없습니다.</p>");
-        request.getRequestDispatcher("/footer").include(request, response);
-        out.println("</body>");
-        out.println("</html>");
-        return;
+        throw new Exception("권한이 없습니다.");
       }
 
       attachedFileDao.deleteAll(boardNo);
       boardDao.delete(boardNo);
-      out.println("<p>삭제했습니다!</p>");
 
-      out.println("<script>");
-      out.printf("  location.href = '/board/list?category=%d';\n", category);
-      out.println("</script>");
-
+      response.sendRedirect("/board/list");
 
     } catch (Exception e) {
-      out.println("<p>삭제 오류!</p>");
-      out.println("<pre>");
-      e.printStackTrace(out);
-      out.println("</pre>");
+      request.setAttribute("message", "삭제 오류!");
+      request.setAttribute("exception", e);
+      request.getRequestDispatcher("/error").forward(request, response);
     }
-    request.getRequestDispatcher("/footer").include(request, response);
-    out.println("</body>");
-    out.println("</html>");
   }
 }
