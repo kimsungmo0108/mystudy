@@ -49,7 +49,7 @@ public class MemberViewServlet extends HttpServlet {
       out.println("<div>");
       out.printf(
           "  사진: <a href='%s'><img src='%1$s' height='80px'></a><br> <input name='photo' type='file'>\n",
-          member.getPhoto() != null ? "/upload/" + member.getPhoto() : "/img/default-photo.jpeg");
+          member.getPhoto() != null ? "/upload/" + member.getPhoto() : "/img/default-photo.jpg");
       out.println("</div>");
       out.println("<div>");
       out.printf("  번호: <input readonly name='no' type='text' value='%d'>\n", member.getNo());
