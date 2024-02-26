@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class AssignmentDaoImpl implements AssignmentDao {
 
   DBConnectionPool connectionPool;
@@ -21,7 +20,6 @@ public class AssignmentDaoImpl implements AssignmentDao {
 
   @Override
   public void add(Assignment assignment) {
-
     try (Connection con = connectionPool.getConnection();
         PreparedStatement pstmt = con.prepareStatement(
             "insert into assignments(title,content,deadline) values(?,?,?)")) {
@@ -31,6 +29,7 @@ public class AssignmentDaoImpl implements AssignmentDao {
       pstmt.setDate(3, assignment.getDeadline());
 
       pstmt.executeUpdate();
+
     } catch (Exception e) {
       throw new DaoException("데이터 입력 오류", e);
     }
@@ -38,11 +37,9 @@ public class AssignmentDaoImpl implements AssignmentDao {
 
   @Override
   public int delete(int no) {
-
     try (Connection con = connectionPool.getConnection();
         PreparedStatement pstmt = con.prepareStatement(
             "delete from assignments where assignment_no=?")) {
-
       pstmt.setInt(1, no);
 
       return pstmt.executeUpdate();
@@ -54,7 +51,6 @@ public class AssignmentDaoImpl implements AssignmentDao {
 
   @Override
   public List<Assignment> findAll() {
-
     try (Connection con = connectionPool.getConnection();
         PreparedStatement pstmt = con.prepareStatement(
             "select assignment_no, title, deadline from assignments order by assignment_no desc");
@@ -78,27 +74,7 @@ public class AssignmentDaoImpl implements AssignmentDao {
   }
 
   @Override
-  public int update(Assignment assignment) {
-
-    try (Connection con = connectionPool.getConnection();
-        PreparedStatement pstmt = con.prepareStatement(
-            "update assignments set title=?, content=?, deadline=? where assignment_no=?")) {
-
-      pstmt.setString(1, assignment.getTitle());
-      pstmt.setString(2, assignment.getContent());
-      pstmt.setDate(3, assignment.getDeadline());
-      pstmt.setInt(4, assignment.getNo());
-
-      return pstmt.executeUpdate();
-
-    } catch (Exception e) {
-      throw new DaoException("데이터 변경 오류", e);
-    }
-  }
-
-  @Override
   public Assignment findBy(int no) {
-
     try (Connection con = connectionPool.getConnection();
         PreparedStatement pstmt = con.prepareStatement(
             "select * from assignments where assignment_no=?")) {
@@ -123,8 +99,21 @@ public class AssignmentDaoImpl implements AssignmentDao {
     }
   }
 
+  @Override
+  public int update(Assignment assignment) {
+    try (Connection con = connectionPool.getConnection();
+        PreparedStatement pstmt = con.prepareStatement(
+            "update assignments set title=?, content=?, deadline=? where assignment_no=?")) {
+
+      pstmt.setString(1, assignment.getTitle());
+      pstmt.setString(2, assignment.getContent());
+      pstmt.setDate(3, assignment.getDeadline());
+      pstmt.setInt(4, assignment.getNo());
+
+      return pstmt.executeUpdate();
+
+    } catch (Exception e) {
+      throw new DaoException("데이터 변경 오류", e);
+    }
+  }
 }
-
-
-
-

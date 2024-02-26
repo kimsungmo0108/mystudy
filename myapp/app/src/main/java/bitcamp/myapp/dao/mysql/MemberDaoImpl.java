@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class MemberDaoImpl implements MemberDao {
 
   DBConnectionPool connectionPool;
@@ -21,7 +20,6 @@ public class MemberDaoImpl implements MemberDao {
 
   @Override
   public void add(Member member) {
-
     try (Connection con = connectionPool.getConnection();
         PreparedStatement pstmt = con.prepareStatement(
             "insert into members(email,name,password,photo) values(?,?,sha2(?,256),?)")) {
@@ -38,7 +36,6 @@ public class MemberDaoImpl implements MemberDao {
 
   @Override
   public int delete(int no) {
-
     try (Connection con = connectionPool.getConnection();
         PreparedStatement pstmt = con.prepareStatement(
             "delete from members where member_no=?")) {
@@ -52,7 +49,6 @@ public class MemberDaoImpl implements MemberDao {
 
   @Override
   public List<Member> findAll() {
-
     try (Connection con = connectionPool.getConnection();
         PreparedStatement pstmt = con.prepareStatement(
             "select member_no, email, name, photo, created_date from members");
@@ -79,10 +75,9 @@ public class MemberDaoImpl implements MemberDao {
 
   @Override
   public Member findBy(int no) {
-
     try (Connection con = connectionPool.getConnection();
         PreparedStatement pstmt = con.prepareStatement(
-            "select member_no, email, name,photo, created_date from members where member_no=?")) {
+            "select member_no, email, name, photo, created_date from members where member_no=?")) {
       pstmt.setInt(1, no);
 
       try (ResultSet rs = pstmt.executeQuery()) {
@@ -91,12 +86,13 @@ public class MemberDaoImpl implements MemberDao {
           member.setNo(rs.getInt("member_no"));
           member.setEmail(rs.getString("email"));
           member.setName(rs.getString("name"));
-          member.setCreatedDate(rs.getDate("created_date"));
           member.setPhoto(rs.getString("photo"));
+          member.setCreatedDate(rs.getDate("created_date"));
           return member;
         }
         return null;
       }
+
     } catch (Exception e) {
       throw new DaoException("데이터 가져오기 오류", e);
     }
@@ -104,29 +100,30 @@ public class MemberDaoImpl implements MemberDao {
 
   @Override
   public int update(Member member) {
-    String sql;
+    String sql = null;
     if (member.getPassword().length() == 0) {
       sql = "update members set email=?, name=?, photo=? where member_no=?";
     } else {
       sql = "update members set email=?, name=?, photo=?, password=sha2(?,256) where member_no=?";
     }
-    {
-      try (Connection con = connectionPool.getConnection();
-          PreparedStatement pstmt = con.prepareStatement(sql)) {
-        pstmt.setString(1, member.getEmail());
-        pstmt.setString(2, member.getName());
-        pstmt.setString(3, member.getPhoto());
-        if (member.getPassword().length() == 0) {
-          pstmt.setInt(4, member.getNo());
-        } else {
-          pstmt.setString(4, member.getPassword());
-          pstmt.setInt(5, member.getNo());
-        }
 
-        return pstmt.executeUpdate();
-      } catch (Exception e) {
-        throw new DaoException("데이터 변경 오류", e);
+    try (Connection con = connectionPool.getConnection();
+        PreparedStatement pstmt = con.prepareStatement(sql)) {
+      pstmt.setString(1, member.getEmail());
+      pstmt.setString(2, member.getName());
+      pstmt.setString(3, member.getPhoto());
+
+      if (member.getPassword().length() == 0) {
+        pstmt.setInt(4, member.getNo());
+      } else {
+        pstmt.setString(4, member.getPassword());
+        pstmt.setInt(5, member.getNo());
       }
+      
+      return pstmt.executeUpdate();
+
+    } catch (Exception e) {
+      throw new DaoException("데이터 변경 오류", e);
     }
   }
 
@@ -149,9 +146,9 @@ public class MemberDaoImpl implements MemberDao {
         }
         return null;
       }
+
     } catch (Exception e) {
       throw new DaoException("데이터 가져오기 오류", e);
     }
   }
 }
-

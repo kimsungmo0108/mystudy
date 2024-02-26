@@ -28,6 +28,7 @@ public class AttachedFileDaoImpl implements AttachedFileDao {
       pstmt.setInt(2, file.getBoardNo());
 
       pstmt.executeUpdate();
+
     } catch (Exception e) {
       throw new DaoException("데이터 입력 오류", e);
     }
@@ -35,11 +36,6 @@ public class AttachedFileDaoImpl implements AttachedFileDao {
 
   @Override
   public int addAll(List<AttachedFile> files) {
-//    for (AttachedFile file : files) {
-//      this.add(file);
-//    }
-//    return files.size();
-
     try (Connection con = connectionPool.getConnection();
         PreparedStatement pstmt = con.prepareStatement(
             "insert into board_files(file_path,board_no) values(?,?)")) {
@@ -49,7 +45,9 @@ public class AttachedFileDaoImpl implements AttachedFileDao {
         pstmt.setInt(2, file.getBoardNo());
         pstmt.executeUpdate();
       }
+
       return files.size();
+
     } catch (Exception e) {
       throw new DaoException("데이터 입력 오류", e);
     }
@@ -60,9 +58,7 @@ public class AttachedFileDaoImpl implements AttachedFileDao {
     try (Connection con = connectionPool.getConnection();
         PreparedStatement pstmt = con.prepareStatement(
             "delete from board_files where file_no=?")) {
-
       pstmt.setInt(1, no);
-
       return pstmt.executeUpdate();
 
     } catch (Exception e) {
@@ -75,9 +71,7 @@ public class AttachedFileDaoImpl implements AttachedFileDao {
     try (Connection con = connectionPool.getConnection();
         PreparedStatement pstmt = con.prepareStatement(
             "delete from board_files where board_no=?")) {
-
       pstmt.setInt(1, boardNo);
-
       return pstmt.executeUpdate();
 
     } catch (Exception e) {
@@ -89,7 +83,8 @@ public class AttachedFileDaoImpl implements AttachedFileDao {
   public List<AttachedFile> findAllByBoardNo(int boardNo) {
     try (Connection con = connectionPool.getConnection();
         PreparedStatement pstmt = con.prepareStatement(
-            "select file_no, file_path, board_no from board_files where board_no=? order by file_no asc")) {
+            "select file_no, file_path, board_no"
+                + " from board_files where board_no=? order by file_no asc")) {
 
       pstmt.setInt(1, boardNo);
 
@@ -117,26 +112,21 @@ public class AttachedFileDaoImpl implements AttachedFileDao {
   public AttachedFile findByNo(int no) {
     try (Connection con = connectionPool.getConnection();
         PreparedStatement pstmt = con.prepareStatement(
-            "select file_no, file_path, board_no from board_files where file_no=?")) {
-
+            "select file_no, file_path, board_no"
+                + " from board_files where file_no=?")) {
       pstmt.setInt(1, no);
-
       try (ResultSet rs = pstmt.executeQuery()) {
-
         if (rs.next()) {
           AttachedFile file = new AttachedFile();
           file.setNo(rs.getInt("file_no"));
           file.setFilePath(rs.getString("file_path"));
           file.setBoardNo(rs.getInt("board_no"));
-
           return file;
         }
         return null;
       }
-
     } catch (Exception e) {
       throw new DaoException("데이터 가져오기 오류", e);
     }
   }
-
 }
