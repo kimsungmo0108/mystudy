@@ -26,6 +26,15 @@ public class LoginServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+    String email = "";
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+      for (Cookie cookie : cookies) {
+        if (cookie.getName().equals("email")) {
+          email = cookie.getValue();
+        }
+      }
+    }
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
     out.println("");
@@ -42,7 +51,7 @@ public class LoginServlet extends HttpServlet {
     out.println("<h1>로그인</h1>");
     out.println("<form action='/auth/login' method='post'>");
     out.println("  <div>");
-    out.println("    이메일: <input name='email' type='text'>");
+    out.printf("    이메일: <input name='email' type='text' value='%s'>\n", email);
     out.println("  </div>");
     out.println("  <div>");
     out.println("    암호: <input name='password' type='password'>");
@@ -58,17 +67,6 @@ public class LoginServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-
-    String email = "";
-    Cookie[] cookies = request.getCookies();
-    if (cookies != null) {
-      for (Cookie cookie : cookies) {
-        if (cookie.getName().equals("email")) {
-          email = cookie.getValue();
-          return;
-        }
-      }
-    }
 
     String email = request.getParameter("email");
     String password = request.getParameter("password");

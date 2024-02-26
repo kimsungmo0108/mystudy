@@ -44,7 +44,7 @@ public class BoardUpdateServlet extends HttpServlet {
     String title = "";
 
     try {
-      int category = Integer.valueOf(request.getParameter("category"));
+      int category = Integer.parseInt(request.getParameter("category"));
       title = category == 1 ? "게시글" : "가입인사";
 
       Member loginUser = (Member) request.getSession().getAttribute("loginUser");
