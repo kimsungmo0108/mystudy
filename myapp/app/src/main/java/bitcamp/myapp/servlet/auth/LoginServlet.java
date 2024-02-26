@@ -59,6 +59,17 @@ public class LoginServlet extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
+    String email = "";
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+      for (Cookie cookie : cookies) {
+        if (cookie.getName().equals("email")) {
+          email = cookie.getValue();
+          return;
+        }
+      }
+    }
+
     String email = request.getParameter("email");
     String password = request.getParameter("password");
     String saveEmail = request.getParameter("saveEmail");

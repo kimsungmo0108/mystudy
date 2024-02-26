@@ -1,10 +1,8 @@
 package bitcamp.myapp.servlet.member;
 
 import bitcamp.myapp.dao.MemberDao;
-import bitcamp.myapp.dao.mysql.MemberDaoImpl;
 import bitcamp.myapp.vo.Member;
 import java.io.IOException;
-import java.sql.Date;
 import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -22,8 +20,8 @@ public class MemberUpdateServlet extends HttpServlet {
   private String uploadDir;
 
   @Override
-  public void init() throws ServletException {
-    this.memberDao = (MemberDaoImpl) this.getServletContext().getAttribute("memberDao");
+  public void init() {
+    this.memberDao = (MemberDao) this.getServletContext().getAttribute("memberDao");
     uploadDir = this.getServletContext().getRealPath("/upload");
   }
 
@@ -33,37 +31,30 @@ public class MemberUpdateServlet extends HttpServlet {
     try {
       request.setCharacterEncoding("UTF-8");
 
-      Member loginUser = (Member) request.getSession().getAttribute("loginUser");
-      if (loginUser == null) {
-        throw new Exception("로그인하시기 바랍니다.");
-      }
       int no = Integer.parseInt(request.getParameter("no"));
       Member old = memberDao.findBy(no);
+      if (old == null) {
+        throw new Exception("회원 번호가 유효하지 않습니다.");
+      }
 
       Member member = new Member();
       member.setNo(old.getNo());
-      member.setName(request.getParameter("name"));
       member.setEmail(request.getParameter("email"));
+      member.setName(request.getParameter("name"));
       member.setPassword(request.getParameter("password"));
-      member.setCreatedDate(Date.valueOf(request.getParameter("createDate")));
-      if (member == null) {
-        throw new Exception("번호가 유효하지 않습니다.");
-      } else if (member.getNo() != loginUser.getNo()) {
-        throw new Exception("권한이 없습니다.");
-      }
+      member.setCreatedDate(old.getCreatedDate());
 
       Part photoPart = request.getPart("photo");
       if (photoPart.getSize() > 0) {
         String filename = UUID.randomUUID().toString();
         member.setPhoto(filename);
-        photoPart.write(this.uploadDir + '/' + filename);
+        photoPart.write(this.uploadDir + "/" + filename);
       } else {
         member.setPhoto(old.getPhoto());
       }
 
       memberDao.update(member);
-
-      response.sendRedirect("/member/list");
+      response.sendRedirect("list");
 
     } catch (Exception e) {
       request.setAttribute("message", "변경 오류!");
