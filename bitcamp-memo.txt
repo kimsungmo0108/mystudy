@@ -8002,9 +8002,25 @@ forward/include 하는 서블릿에게 request와 response를 넘긴다 = 공유
    └ s1 → forward/include → s2 → forward/include → s3 ┘
 → refresh/redirect는 다른 url을 요청하는 것이기 때문에 새로운 ServletRequest/ServletResponse를 생성한다
 -------------------------------------------------------------------------------------
-과제 62. 
+과제 62. 파일 업로드 다루기 - multipart/form-data POST 요청 파라미터 인코딩
+- Servlet API를 이용하여 multipart/form-data 파라미터를 다루는 방법
+- 회원 사진 추가
+- DDL 변경
 -------------------------------------------------------------------------------------
-→
+Cookie
+1) 쿠키 저장
+web browser < 요청 / 응답+쿠키 > Servlet
+       ↓
+쿠키 저장(key, value)
+
+HTTP/1.1 ok (enter)
+Set-Cookie:email=user1@test.com;Max-Age=12;
+Set-Cookie:쿠키이릅=값;Max-Age=12;
+message-body
+
+2) 쿠키 읽기
+web browser → 쿠키 로딩 → 요청+쿠키 → 서블릿
+
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------

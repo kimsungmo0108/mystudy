@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,6 +48,7 @@ public class LoginServlet extends HttpServlet {
     out.println("    암호: <input name='password' type='password'>");
     out.println("  </div>");
     out.println("  <button>로그인</button>");
+    out.println("<input type='checkbox' name='saveEmail'> 이메일 저장");
     out.println("</form>");
     request.getRequestDispatcher("/footer").include(request, response);
     out.println("</body>");
@@ -59,6 +61,16 @@ public class LoginServlet extends HttpServlet {
 
     String email = request.getParameter("email");
     String password = request.getParameter("password");
+    String saveEmail = request.getParameter("saveEmail");
+    if (saveEmail != null) {
+      Cookie cookie = new Cookie("email", email);
+      cookie.setMaxAge(60 * 60 * 24 * 7);
+      response.addCookie(cookie);
+    } else {
+      Cookie cookie = new Cookie("email", "");
+      cookie.setMaxAge(0);
+      response.addCookie(cookie);
+    }
 
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
@@ -80,7 +92,6 @@ public class LoginServlet extends HttpServlet {
         out.printf("<p>%s님 환영합니다.</p>\n", member.getName());
         request.getRequestDispatcher("/footer").include(request, response);
         response.setHeader("Refresh", "1;url=/index.html");
-//        response.sendRedirect("/index.html");
       } else {
         out.println("<p>이메일 또는 암호가 맞지 않습니다.</p>");
         request.getRequestDispatcher("/footer").include(request, response);

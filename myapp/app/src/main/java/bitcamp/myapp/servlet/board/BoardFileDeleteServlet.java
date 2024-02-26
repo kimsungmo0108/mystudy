@@ -2,8 +2,6 @@ package bitcamp.myapp.servlet.board;
 
 import bitcamp.myapp.dao.AttachedFileDao;
 import bitcamp.myapp.dao.BoardDao;
-import bitcamp.myapp.dao.mysql.AttachedFileDaoImpl;
-import bitcamp.myapp.dao.mysql.BoardDaoImpl;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Member;
 import java.io.File;
@@ -23,8 +21,8 @@ public class BoardFileDeleteServlet extends HttpServlet {
 
   @Override
   public void init() {
-    this.boardDao = (BoardDaoImpl) this.getServletContext().getAttribute("boardDao");
-    this.attachedFileDao = (AttachedFileDaoImpl) this.getServletContext()
+    this.boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
+    this.attachedFileDao = (AttachedFileDao) this.getServletContext()
         .getAttribute("attachedFileDao");
     uploadDir = this.getServletContext().getRealPath("/upload/board");
   }
@@ -32,31 +30,36 @@ public class BoardFileDeleteServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+
+    String title = "";
+
     try {
+      int category = Integer.valueOf(request.getParameter("category"));
+      title = category == 1 ? "게시글" : "가입인사";
+
       Member loginUser = (Member) request.getSession().getAttribute("loginUser");
       if (loginUser == null) {
         throw new Exception("로그인하시기 바랍니다!");
       }
 
       int fileNo = Integer.parseInt(request.getParameter("no"));
-
       AttachedFile file = attachedFileDao.findByNo(fileNo);
       if (file == null) {
         throw new Exception("첨부파일 번호가 유효하지 않습니다.");
       }
 
       Member writer = boardDao.findBy(file.getBoardNo()).getWriter();
-
       if (writer.getNo() != loginUser.getNo()) {
         throw new Exception("권한이 없습니다.");
       }
 
       attachedFileDao.delete(fileNo);
       new File(this.uploadDir + "/" + file.getFilePath()).delete();
+      
       response.sendRedirect(request.getHeader("Referer"));
 
     } catch (Exception e) {
-      request.setAttribute("message", "첨부파일 삭제 오류!");
+      request.setAttribute("message", String.format("%s 첨부파일 삭제 오류!", title));
       request.setAttribute("exception", e);
       request.getRequestDispatcher("/error").forward(request, response);
     }
