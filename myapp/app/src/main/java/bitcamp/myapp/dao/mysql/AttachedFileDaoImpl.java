@@ -35,24 +35,24 @@ public class AttachedFileDaoImpl implements AttachedFileDao {
 
   @Override
   public int addAll(List<AttachedFile> files) {
-    for (AttachedFile file : files) {
-      this.add(file);
-    }
-    return files.size();
-
-//    try (Connection con = connectionPool.getConnection();
-//        PreparedStatement pstmt = con.prepareStatement(
-//            "insert into board_files(file_path,board_no) values(?,?)")) {
-//
-//      for (AttachedFile file : files) {
-//        pstmt.setString(1, file.getFilePath());
-//        pstmt.setInt(2, file.getBoardNo());
-//        pstmt.executeUpdate();
-//      }
-//      return files.size();
-//    } catch (Exception e) {
-//      throw new DaoException("데이터 입력 오류", e);
+//    for (AttachedFile file : files) {
+//      this.add(file);
 //    }
+//    return files.size();
+
+    try (Connection con = connectionPool.getConnection();
+        PreparedStatement pstmt = con.prepareStatement(
+            "insert into board_files(file_path,board_no) values(?,?)")) {
+
+      for (AttachedFile file : files) {
+        pstmt.setString(1, file.getFilePath());
+        pstmt.setInt(2, file.getBoardNo());
+        pstmt.executeUpdate();
+      }
+      return files.size();
+    } catch (Exception e) {
+      throw new DaoException("데이터 입력 오류", e);
+    }
   }
 
   @Override

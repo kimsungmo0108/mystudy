@@ -2,8 +2,6 @@ package bitcamp.myapp.servlet.board;
 
 import bitcamp.myapp.dao.AttachedFileDao;
 import bitcamp.myapp.dao.BoardDao;
-import bitcamp.myapp.dao.mysql.AttachedFileDaoImpl;
-import bitcamp.myapp.dao.mysql.BoardDaoImpl;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import java.io.IOException;
@@ -23,8 +21,8 @@ public class BoardViewServlet extends HttpServlet {
 
   @Override
   public void init() {
-    this.boardDao = (BoardDaoImpl) this.getServletContext().getAttribute("boardDao");
-    this.attachedFileDao = (AttachedFileDaoImpl) this.getServletContext()
+    this.boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
+    this.attachedFileDao = (AttachedFileDao) this.getServletContext()
         .getAttribute("attachedFileDao");
   }
 
@@ -32,72 +30,78 @@ public class BoardViewServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    int category = Integer.parseInt(request.getParameter("category"));
-    String title = category == 1 ? "게시글" : "가입인사";
-
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
-    out.println("<!DOCTYPE html>");
-    out.println("<html lang = 'en'>");
-    out.println("<head>");
-    out.println("   <meta charset = 'UTF-8'>");
-    out.println("   <title> 비트캠프 데브옵스 5 기 </title>");
-    out.println("</head>");
-    out.println("<body>");
-    request.getRequestDispatcher("/header").include(request, response);
-    out.printf("<h1>%s</h1>\n", title);
+    String title = "";
 
     try {
-      int no = Integer.parseInt(request.getParameter("no"));
+      int category = Integer.valueOf(request.getParameter("category"));
+      title = category == 1 ? "게시글" : "가입인사";
 
+      int no = Integer.parseInt(request.getParameter("no"));
       Board board = boardDao.findBy(no);
       if (board == null) {
         throw new Exception("번호가 유효하지 않습니다.");
       }
-
       List<AttachedFile> files = attachedFileDao.findAllByBoardNo(no);
-      out.printf("<form action='/board/update' method='post'>\n");
-      out.printf(" <div>\n");
-      out.printf("<input readonly name='category' type='hidden' value=%d>\n", category);
-      out.printf("  </div>\n");
-      out.printf(" <div>\n");
-      out.printf("  번호: <input readonly name = 'no' type = 'text' value='%s'>\n", board.getNo());
-      out.printf("  </div>\n");
-      out.printf(" <div>\n");
-      out.printf("  제목: <input name = 'title' type = 'text' value='%s'>\n", board.getTitle());
-      out.printf("  </div>\n");
-      out.printf("  <div>\n");
-      out.printf("  내용: <textarea name = 'content'>%s</textarea>\n", board.getContent());
-      out.printf("  </div>\n");
-      out.printf(" <div>\n");
-      out.printf("  작성자: <input readonly type = 'text' value='%s'>\n", board.getWriter().getName());
-      out.printf("  </div>\n");
+
+      response.setContentType("text/html;charset=UTF-8");
+      PrintWriter out = response.getWriter();
+
+      out.println("<!DOCTYPE html>");
+      out.println("<html lang='en'>");
+      out.println("<head>");
+      out.println("  <meta charset='UTF-8'>");
+      out.println("  <title>비트캠프 데브옵스 5기</title>");
+      out.println("</head>");
+      out.println("<body>");
+
+      request.getRequestDispatcher("/header").include(request, response);
+
+      out.printf("<h1>%s</h1>\n", title);
+      out.println("<form action='/board/update' method='post' enctype='multipart/form-data'>");
+      out.printf("<input name='category' type='hidden' value='%d'>\n", category);
+      out.println("<div>");
+      out.printf("  번호: <input readonly name='no' type='text' value='%d'>\n", board.getNo());
+      out.println("</div>");
+      out.println("<div>");
+      out.printf("  제목: <input name='title' type='text' value='%s'>\n", board.getTitle());
+      out.println("</div>");
+      out.println("<div>");
+      out.printf("  내용: <textarea name='content'>%s</textarea>\n", board.getContent());
+      out.println("</div>");
+      out.println("<div>");
+      out.printf("  작성자: <input readonly type='text' value='%s'>\n", board.getWriter().getName());
+      out.println("</div>");
 
       if (category == 1) {
-        out.printf("  <div>\n");
-        out.printf("  첨부파일: <input multiple name = 'files' type = 'file'>\n");
-        out.printf("  <ul>\n");
+        out.println("<div>");
+        out.println("  첨부파일: <input multiple name='files' type='file'>");
+        out.println("  <ul>");
         for (AttachedFile file : files) {
-          out.printf("    <li>%s <a href='/board/file/delete?no=%d'>삭제</a></li>\n",
+          out.printf(
+              "    <li><a href='/upload/board/%s'>%1$s</a> [<a href='/board/file/delete?category=%d&no=%d'>삭제</a>]</li>\n",
               file.getFilePath(),
+              category,
               file.getNo());
         }
-        out.printf("  </ul>\n");
-        out.printf("  </div>\n");
+        out.println("  </ul>");
+        out.println("</div>");
       }
-      out.printf("  <div>\n");
-      out.printf("  <button> 변경 </button>");
-      out.printf("  <a href='/board/delete?no=%d&category=%d'>[삭제]</a>\n", no, category);
-      out.printf("  </div>\n");
-      out.printf("</form>\n");
+
+      out.println("<div>");
+      out.println("  <button>변경</button>");
+      out.printf("  <a href='/board/delete?category=%d&no=%d'>[삭제]</a>\n", category, no);
+      out.println("</div>");
+      out.println("</form>");
+
+      request.getRequestDispatcher("/footer").include(request, response);
+
+      out.println("</body>");
+      out.println("</html>");
 
     } catch (Exception e) {
-      request.setAttribute("message", "조회 오류!");
+      request.setAttribute("message", String.format("%s 조회 오류!", title));
       request.setAttribute("exception", e);
       request.getRequestDispatcher("/error").forward(request, response);
     }
-    request.getRequestDispatcher("/footer").include(request, response);
-    out.println("</body>");
-    out.println("</html>");
   }
 }

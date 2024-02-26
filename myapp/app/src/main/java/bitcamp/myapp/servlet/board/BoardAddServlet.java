@@ -11,25 +11,32 @@ import bitcamp.util.TransactionManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.UUID;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
+@MultipartConfig(maxFileSize = 1024 * 1024 * 10)
 @WebServlet("/board/add")
 public class BoardAddServlet extends HttpServlet {
 
   private TransactionManager txManager;
   private BoardDao boardDao;
   private AttachedFileDao attachedFileDao;
+  private String uploadDir;
 
   @Override
   public void init() {
     this.boardDao = (BoardDaoImpl) this.getServletContext().getAttribute("boardDao");
     this.txManager = (TransactionManager) this.getServletContext().getAttribute("txManager");
     this.attachedFileDao = (AttachedFileDaoImpl) this.getServletContext()
-        .getAttribute("atttachedFileDao");
+        .getAttribute("attachedFileDao");
+    uploadDir = this.getServletContext().getRealPath("/upload/board");
   }
 
   @Override
@@ -50,16 +57,18 @@ public class BoardAddServlet extends HttpServlet {
     request.getRequestDispatcher("/header").include(request, response);
     out.printf("<h1>%s</h1>\n", title);
 
-    out.printf("<form action='/board/add?category=%d' method='post'>\n", category);
-    out.printf("<input name='category' type='hidden' value='%d'>\n", category);
+    out.printf(
+        "<form action='/board/add?category=%d' method='post' enctype='multipart/form-data'>\n",
+        category);
+    out.printf("<input name='category' type='hidden' value=%d>\n", category);
     out.println("<div>");
     out.println("제목: <input name='title' type='text'>");
     out.println("</div>");
     out.println("<div>");
     out.println("내용: <textarea name='content'></textarea>");
     out.println("</div>");
-    out.println("<div>");
     if (category == 1) {
+      out.println("<div>");
       out.println("첨부파일: <input multiple name='files' type='file'>");
       out.println("</div>");
     }
@@ -75,8 +84,11 @@ public class BoardAddServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+    request.setCharacterEncoding("UTF-8");
+    String title = "";
     try {
       int category = Integer.parseInt(request.getParameter("category"));
+      title = category == 1 ? "게시글" : "가입인사";
 
       Board board = new Board();
       Member loginUser = (Member) request.getSession().getAttribute("loginUser");
@@ -91,14 +103,14 @@ public class BoardAddServlet extends HttpServlet {
 
       ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
       if (category == 1) {
-        String[] files = request.getParameterValues("files");
-        if (files != null) {
-          for (String file : files) {
-            if (file.length() == 0) {
-              continue;
-            }
-            attachedFiles.add(new AttachedFile().filePath(file));
+        Collection<Part> parts = request.getParts();
+        for (Part part : parts) {
+          if (!part.getName().equals("files") || part.getSize() == 0) {
+            continue;
           }
+          String filename = UUID.randomUUID().toString();
+          part.write(this.uploadDir + "/" + filename);
+          attachedFiles.add(new AttachedFile().filePath(filename));
         }
       }
       txManager.startTransaction();
@@ -116,16 +128,15 @@ public class BoardAddServlet extends HttpServlet {
       txManager.commit();
 
       response.sendRedirect("/board/list?category=" + category);
-      return;
 
     } catch (Exception e) {
-      request.setAttribute("message", "등록 오류!");
-      request.setAttribute("exception", e);
-      request.getRequestDispatcher("/error").forward(request, response);
       try {
         txManager.rollback();
       } catch (Exception e2) {
       }
+      request.setAttribute("message", String.format("%s 등록 오류!", title));
+      request.setAttribute("exception", e);
+      request.getRequestDispatcher("/error").forward(request, response);
     }
   }
 }

@@ -6,6 +6,7 @@ import bitcamp.myapp.dao.mysql.AttachedFileDaoImpl;
 import bitcamp.myapp.dao.mysql.BoardDaoImpl;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Member;
+import java.io.File;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,12 +19,14 @@ public class BoardFileDeleteServlet extends HttpServlet {
 
   private BoardDao boardDao;
   private AttachedFileDao attachedFileDao;
+  private String uploadDir;
 
   @Override
   public void init() {
     this.boardDao = (BoardDaoImpl) this.getServletContext().getAttribute("boardDao");
     this.attachedFileDao = (AttachedFileDaoImpl) this.getServletContext()
         .getAttribute("attachedFileDao");
+    uploadDir = this.getServletContext().getRealPath("/upload/board");
   }
 
   @Override
@@ -46,9 +49,12 @@ public class BoardFileDeleteServlet extends HttpServlet {
 
       if (writer.getNo() != loginUser.getNo()) {
         throw new Exception("권한이 없습니다.");
-      } else {
-        attachedFileDao.delete(fileNo);
       }
+
+      attachedFileDao.delete(fileNo);
+      new File(this.uploadDir + "/" + file.getFilePath()).delete();
+      response.sendRedirect(request.getHeader("Referer"));
+
     } catch (Exception e) {
       request.setAttribute("message", "첨부파일 삭제 오류!");
       request.setAttribute("exception", e);
