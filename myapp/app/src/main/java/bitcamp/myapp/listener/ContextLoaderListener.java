@@ -19,7 +19,6 @@ import javax.servlet.annotation.WebListener;
 public class ContextLoaderListener implements ServletContextListener {
   // 웹 애플리케이션이 사용할 자원을 준비시키고 해제시키는 역할
 
-
   @Override
   public void contextInitialized(ServletContextEvent sce) {
     System.out.println("웹 애플리케이션 자원 준비!");

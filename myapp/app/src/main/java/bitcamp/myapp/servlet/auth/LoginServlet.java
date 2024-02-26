@@ -36,9 +36,9 @@ public class LoginServlet extends HttpServlet {
     out.println("<title>비트캠프 데브옵스 5기</title>");
     out.println("</head>");
     out.println("<body>");
+    request.getRequestDispatcher("/header").include(request, response);
 
     out.println("<h1>로그인</h1>");
-    request.getRequestDispatcher("/header").include(request, response);
     out.println("<form action='/auth/login' method='post'>");
     out.println("  <div>");
     out.println("    이메일: <input name='email' type='text'>");
@@ -78,6 +78,7 @@ public class LoginServlet extends HttpServlet {
         request.getSession().setAttribute("loginUser", member);
         out.printf("<p>%s님 환영합니다.</p>\n", member.getName());
         response.setHeader("Refresh", "1;url=/index.html");
+//        response.sendRedirect("/index.html");
       } else {
         out.println("<p>이메일 또는 암호가 맞지 않습니다.</p>");
         response.setHeader("Refresh", "1;url=/auth/login");

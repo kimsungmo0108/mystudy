@@ -43,9 +43,8 @@ public class BoardListServlet extends GenericServlet {
     out.println("   <title> 비트캠프 데브옵스 5 기 </title>");
     out.println("</head>");
     out.println("<body>");
-    out.printf("<h1>%s\n</h1>", title);
-
     request.getRequestDispatcher("/header").include(request, response);
+    out.printf("<h1>%s\n</h1>", title);
 
     out.printf("<a href='/board/add?category=%d'>새 글</a>\n", category);
 
