@@ -1,4 +1,4 @@
-package algorithm.test.baekjoon.level06.exam09;
+package algorithm.test.baekjoon.level07.exam02;
 
 public class Main {
   public static void main(String[] args) {
@@ -8,5 +8,3 @@ public class Main {
     sc.close();
   }
 }
-
-
