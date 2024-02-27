@@ -16,13 +16,16 @@ import membership.vo.Member;
 public class MembersihpListServlet extends HttpServlet {
 
   private MemberDao memberDao;
-@Override
-  public void init() throws ServletException{
+  private String uploaddir;
+
+  @Override
+  public void init() throws ServletException {
     this.memberDao = (MemberDaoImpl) this.getServletContext().getAttribute("memberDao");
+    uploaddir = this.getServletContext().getRealPath("/upload");
   }
 
   @Override
-  protected void service(HttpServletRequest request, HttpServletResponse response)
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
@@ -36,7 +39,7 @@ public class MembersihpListServlet extends HttpServlet {
     out.println("<body>");
     out.println("<h1>회원 리스트</h1>");
 
-    out.println("<a href='/membership/form.html'>새 회원</a>");
+    out.println("<a href='/membership/add'>새 회원</a>");
 
     out.println("<table border='1'>");
     out.println("   <thead>");
@@ -47,7 +50,8 @@ public class MembersihpListServlet extends HttpServlet {
     try {
       for (Member member : memberDao.findAll()) {
         out.printf(
-            "<tr> <td>%d</td><td><a href='/membership/view?no=%1$d'>%s</a></td> <td>%s</td> <td>%s</td>\n",
+            "<tr><td><img src='%s' height='20px'></td> <td>%d</td><td><a href='/membership/view?no=%2$d'>%s</a></td> <td>%s</td> <td>%s</td>\n",
+            member.getPhoto() != null ? "/upload/" + member.getPhoto() : "/img/default-photo.jpg",
             member.getNo(),
             member.getName(),
             member.getEmail(),

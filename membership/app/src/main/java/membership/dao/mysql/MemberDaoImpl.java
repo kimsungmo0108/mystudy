@@ -27,13 +27,14 @@ public class MemberDaoImpl implements MemberDao {
   public void add(Member member) {
     try (Connection con = connectionPool.getConnection();
         PreparedStatement pstmt = con.prepareStatement(
-        "insert into membership(id, email, name, password, addr, tel) values(?,?,?,sha2(?,256),?,?)")) {
+        "insert into membership(id, email, name, password, addr, tel, photo) values(?,?,?,sha2(?,256),?,?,?)")) {
       pstmt.setString(1, member.getId());
       pstmt.setString(2, member.getEmail());
       pstmt.setString(3, member.getName());
       pstmt.setString(4, member.getPassword());
       pstmt.setString(5, member.getAddr());
       pstmt.setString(6, member.getTel());
+      pstmt.setString(7, member.getPhoto());
       pstmt.executeUpdate();
     } catch (Exception e) {
       throw new DaoException("데이터 입력 오류", e);
@@ -56,7 +57,7 @@ public class MemberDaoImpl implements MemberDao {
   public List<Member> findAll() {
     try (Connection con = connectionPool.getConnection();
         PreparedStatement pstmt = con.prepareStatement(
-        "select no, id, email, name, create_date, addr, tel from membership")) {
+        "select no, id, email, name, photo, create_date, addr, tel from membership")) {
       try (ResultSet rs = pstmt.executeQuery()) {
 
         ArrayList<Member> list = new ArrayList<>();
@@ -70,6 +71,7 @@ public class MemberDaoImpl implements MemberDao {
          // member.setCreatedTime(rs.getTime("created_date"));
           member.setAddr(rs.getString("addr"));
           member.setTel(rs.getString("tel"));
+          member.setPhoto(rs.getString("photo"));
 
           list.add(member);
         }
