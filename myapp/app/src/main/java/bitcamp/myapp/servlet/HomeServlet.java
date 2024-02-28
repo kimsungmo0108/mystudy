@@ -25,12 +25,12 @@ public class HomeServlet extends HttpServlet {
     out.println("</head>");
     out.println("<body>");
 
-    request.getRequestDispatcher("/header").include(request, response);
+    request.getRequestDispatcher("/header.jsp").include(request, response);
 
     out.println("<h1>과제 관리 시스템</h1>");
     out.println("<p>환영합니다! 교육 센터 과제 관리 시스템입니다.</p>");
 
-    request.getRequestDispatcher("/footer").include(request, response);
+    request.getRequestDispatcher("/footer.jsp").include(request, response);
 
     out.println("</body>");
     out.println("</html>");

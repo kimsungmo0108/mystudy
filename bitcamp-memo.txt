@@ -8249,13 +8249,36 @@ encoding = filterConfig.getInitParameter("encoding");
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 -------------------------------------------------------------------------------------
-→
+과제 64. 필터 활용하기
+- 필터를 활용하는 방법
 -------------------------------------------------------------------------------------
-→
+JSP 도입
+JSP 소스 → JSP Engine이 컴파일 → 자바 서블릿 소드 → Java Compiler가 컴파일 → 자바 클래스 완성
+
+form.jsp			<<interface>>JspPage[jspInit(), jspDestroy()] <------- <interface>>HttpJspPage[jspService()]       <┐
+				→ JSP로 만든 서블릿은 반드시 구현해야 한다					|
+|			       javax					    |		Tomcap		|	        		
+<<interface>>Servlet <-------- <<abstract>>GenericServlet <ㅡㅡㅡ <<abstract>>HttpServlet <ㅡㅡㅡ <<abstract>>HttpJspBase[] <ㅡㅡㅡ <<concrete>>form_jsp[-jspService()]
+												└> jspInit(), jspDestroy() 구현
+init() → call → jspInit()
+destroy() → call → jspDesttroy() 
+service() → call → -jspService()
+
+form.jsp → JSP Engine이 컴파일 → form_jsp.java → Java Compiler가 컴파일 → 자바 클래스 완성
 -------------------------------------------------------------------------------------
-→
+JSP와 MVC 모델 1
+		View, Controller			         Model(업무 관련 로직 실행)
+요청/응답 <> JSP(UI 생성, 입출력 데이터 가공, 업무 흐름 제어) <> DAO(데이터 처리) <> DBMS
+
+		View, Controller				Model()		    		  Model(업무 관련 로직 실행)
+요청/응답 <> JSP(UI 생성, 입출력 데이터 가공, 실행 흐름 제어) <> service(업무 흐름 제어 → 트랜잭션 제어) <> DAO(데이터 처리) <> DBMS
 -------------------------------------------------------------------------------------
-→
+JSP와 MVC 모델 2
+	       Controller		  Model
+요청/응답 <> 서블릿(실행 흐름 제어) <> DAO(데이터 처리) <> DBMS
+	       ↓↑ forward/include
+	       JSP(UI 생성) → View
+도메인(Board, Member, Assignment) → 모든 객체가 사용한다, Model이다
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
