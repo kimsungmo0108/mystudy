@@ -23,7 +23,7 @@ public class MembershipViewServlet extends HttpServlet {
   }
 
   @Override
-  protected void service(HttpServletRequest request, HttpServletResponse response)
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
@@ -35,6 +35,7 @@ public class MembershipViewServlet extends HttpServlet {
     out.println("   <title>회원 관리 시스템</title>");
     out.println("</head>");
     out.println("<body>");
+    request.getRequestDispatcher("/header").include(request, response);
     out.println("<h1>회원 조회</h1>");
 
     try {
@@ -43,11 +44,12 @@ public class MembershipViewServlet extends HttpServlet {
       Member member = memberDao.findBy(no);
       if (member == null) {
         out.println("<p>회원 번호가 유효하지 않습니다.</p>");
+        request.getRequestDispatcher("/footer").include(request, response);
         out.println("</body>");
         out.println("</html>");
         return;
       }
-      out.printf("<form action='/membership/update'>\n");
+      out.printf("<form action='/membership/update' method='post'>\n");
       out.printf(" <div>\n");
       out.printf("  번호: <input readonly name = 'no' type = 'text' value='%s'>\n", member.getNo());
       out.printf("  </div>\n");
@@ -83,11 +85,11 @@ public class MembershipViewServlet extends HttpServlet {
       out.printf("  </div>\n");
       out.printf("</form>\n");
     } catch (Exception e) {
-      out.println("<p>조회 오류!</p>");
-      out.println("<pre>");
-      e.printStackTrace(out);
-      out.println("</pre>");
+      request.setAttribute("message", "조회 오류!");
+      request.setAttribute("exception", e);
+      request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
+    request.getRequestDispatcher("/footer").include(request, response);
     out.println("</body>");
     out.println("</html>");
   }
