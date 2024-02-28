@@ -29,11 +29,11 @@ public class AssignmentDeleteServlet extends HttpServlet {
       }
 
       response.sendRedirect("/assignment/list");
-      
+
     } catch (Exception e) {
       request.setAttribute("message", "삭제 오류!");
       request.setAttribute("exception", e);
-      request.getRequestDispatcher("/error").forward(request, response);
+      request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
   }
 }

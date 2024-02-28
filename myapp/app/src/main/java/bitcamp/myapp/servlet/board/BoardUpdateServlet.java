@@ -39,7 +39,7 @@ public class BoardUpdateServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    
+
     String title = "";
 
     try {
@@ -94,7 +94,7 @@ public class BoardUpdateServlet extends HttpServlet {
       }
       request.setAttribute("message", String.format("%s 변경 오류!", title));
       request.setAttribute("exception", e);
-      request.getRequestDispatcher("/error").forward(request, response);
+      request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
   }
 }

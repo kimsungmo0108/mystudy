@@ -7,7 +7,6 @@ import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Member;
 import bitcamp.util.TransactionManager;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
@@ -44,47 +43,11 @@ public class BoardAddServlet extends HttpServlet {
     int category = Integer.valueOf(request.getParameter("category"));
     String title = category == 1 ? "게시글" : "가입인사";
 
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
+    request.setAttribute("category", category);
+    request.setAttribute("title", title);
 
-    out.println("<!DOCTYPE html>");
-    out.println("<html lang='en'>");
-    out.println("<head>");
-    out.println("  <meta charset='UTF-8'>");
-    out.println("  <title>비트캠프 데브옵스 5기</title>");
-    out.println("</head>");
-    out.println("<body>");
+    request.getRequestDispatcher("/board/form.jsp").forward(request, response);
 
-    request.getRequestDispatcher("/header").include(request, response);
-
-    out.printf("<h1>%s</h1>\n", title);
-
-    out.printf(
-        "<form action='/board/add?category=%d' method='post' enctype='multipart/form-data'>\n",
-        category);
-    out.printf("<input name='category' type='hidden' value='%d'>\n", category);
-    out.println("<div>");
-    out.println("      제목: <input name='title' type='text'>");
-    out.println("</div>");
-    out.println("<div>");
-    out.println("      내용: <textarea name='content'></textarea>");
-    out.println("</div>");
-
-    if (category == 1) {
-      out.println("<div>");
-      out.println("      첨부파일: <input multiple name='files' type='file'>");
-      out.println("</div>");
-    }
-
-    out.println("<div>");
-    out.println("  <button>등록</button>");
-    out.println("</div>");
-    out.println("</form>");
-
-    request.getRequestDispatcher("/footer").include(request, response);
-
-    out.println("</body>");
-    out.println("</html>");
   }
 
   @Override
@@ -143,7 +106,7 @@ public class BoardAddServlet extends HttpServlet {
       }
       request.setAttribute("message", String.format("%s 등록 오류!", title));
       request.setAttribute("exception", e);
-      request.getRequestDispatcher("/error").forward(request, response);
+      request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
   }
 }
