@@ -29,7 +29,6 @@ public class MemberUpdateServlet extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     try {
-      request.setCharacterEncoding("UTF-8");
 
       int no = Integer.parseInt(request.getParameter("no"));
       Member old = memberDao.findBy(no);
