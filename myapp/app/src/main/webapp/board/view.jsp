@@ -32,7 +32,7 @@
           첨부파일: <input multiple name='files' type='file'>
           <ul>
 
-        <c:forEach items="${list}" var="file">
+        <c:forEach items="${files}" var="file">
             <li>
                 <a href='/upload/board/${file.filePath}'>${file.filePath}</a>
                 [<a href='/board/file/delete?category=${category}&no=${file.no}'>삭제</a>]

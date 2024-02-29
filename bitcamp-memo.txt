@@ -8335,9 +8335,38 @@ ${객체.프로퍼티.프로퍼티. ....}
 JSTL(JSP Standard Tag Library)
 → JSP 확장 태그
 -------------------------------------------------------------------------------------
-→
+과제 67. Front Controller 디자인 패턴 도입하기
+- Front Controller 디자인 패턴의 효과 및 적용 방법
+- 프론트 컨트롤러와 페이지 컨트롤러의 역할 이해
 -------------------------------------------------------------------------------------
-→
+Front Controller 도입
+
+1) 도입 전
+/board/list <요청/응답> BoardListServlet → BoardDao
+       			↓↑		↓
+	     	 /board/list.jsp	→       Board List
+
+/member/list <요청/응답> MemberListServlet → MemberDao 
+       			↓↑		↓
+	      	/memeber/list.jsp  →	Member List
+
+→ 각각의 서블릿이 요청을 받아 처리한다
+
+2) 도입 후
+모든 요청 → DispatcherServlet(프론트 컨트롤러) → include → BoardListServlet, MemberListServlet(페이지 컨트롤러)
+		↓↑
+	              JSP
+
+BoardListServlet → BoardDao
+       	↓↑		↓
+		       Board List
+
+MemberListServlet → MemberDao 
+       	↓↑		↓
+		       Member List
+
+→ 모든 요청을 받는다
+→ 서블릿이 반복적으로 하던 일을 처리한다
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------

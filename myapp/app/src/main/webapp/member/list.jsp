@@ -11,10 +11,10 @@
 <jsp:include  page="/header.jsp"></jsp:include>
 
 <h1>회원</h1>
-      <a href='/member/add'>새 회원</a>
+      <a href='/app/member/add'>새 회원</a>
       <table border='1'>
           <thead>
-          <tr> <th>번호</th> <th>이름</th> <th>이메일</th> <th>가입일</th> </tr>
+          <tr> <th>번호</th> <th>사진</th> <th>이름</th> <th>이메일</th> <th>가입일</th> </tr>
           </thead>
           <tbody>
 
@@ -32,7 +32,7 @@
     </c:choose>
         </td>
         <td>
-        <a href='/member/view?no=${member.no}'>${member.name}</a>
+        <a href='/app/member/view?no=${member.no}'>${member.name}</a>
         </td>
         <td>${member.email}</td>
         <td>${member.createdDate}</td>

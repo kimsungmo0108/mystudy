@@ -41,13 +41,11 @@ public class AssignmentUpdateServlet extends HttpServlet {
       assignment.setDeadline(Date.valueOf(request.getParameter("deadline")));
 
       assignmentDao.update(assignment);
-
-      response.sendRedirect("/assignment/list");
+      
+      request.setAttribute("viewUrl", "redirect:list");
 
     } catch (Exception e) {
-      request.setAttribute("message", "변경 오류!");
       request.setAttribute("exception", e);
-      request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
   }
 }
