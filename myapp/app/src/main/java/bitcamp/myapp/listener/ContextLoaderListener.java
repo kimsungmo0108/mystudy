@@ -39,6 +39,8 @@ public class ContextLoaderListener implements ServletContextListener {
     웹애플리케이션저장소.setAttribute("boardDao", boardDao);
     웹애플리케이션저장소.setAttribute("txManager", txManager);
     웹애플리케이션저장소.setAttribute("attachedFileDao", attachedFileDao);
+
+
   }
 
   @Override
