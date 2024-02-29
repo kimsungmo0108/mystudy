@@ -36,7 +36,7 @@ public class LoginServlet extends HttpServlet {
         }
       }
     }
-    request.getRequestDispatcher("/auth/form.jsp").forward(request, response);
+    request.setAttribute("viewUrl", "/auth/form.jsp");
   }
 
   @Override
@@ -67,7 +67,7 @@ public class LoginServlet extends HttpServlet {
       if (member != null) {
         request.getSession().setAttribute("loginUser", member);
       }
-      
+
       request.setAttribute("viewUrl", "/auth/login.jsp");
 
     } catch (Exception e) {

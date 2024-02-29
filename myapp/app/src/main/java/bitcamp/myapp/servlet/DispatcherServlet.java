@@ -37,7 +37,7 @@ public class DispatcherServlet extends HttpServlet {
       return;
     }
 
-    //
+    // 페이지 컨트롤러에서 만든 쿠키가 있다면 응답에 포함시킨다.
     List<Cookie> cookies = (List<Cookie>) request.getAttribute("cookies");
     if (cookies != null) {
       for (Cookie cookie : cookies) {
