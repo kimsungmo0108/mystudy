@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
-<%@ page import="bitcamp.myapp.vo.Assignment"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html lang='en'>
@@ -9,26 +9,25 @@
 </head>
 <body>
 <jsp:include  page="/header.jsp"></jsp:include>
-<%
-    Assignment assignment = (Assignment) request.getAttribute("assignment");
-%>
+
+
 <h1>과제</h1>
       <form action='/assignment/update' method='post'>
        <div>
-        번호: <input readonly name = 'no' type = 'text' value='<%=assignment.getNo()%>'>
+        번호: <input readonly name = 'no' type = 'text' value='${assignment.no}'>
         </div>
        <div>
-        제목: <input name = 'title' type = 'text' value='<%=assignment.getTitle()%>'>
+        제목: <input name = 'title' type = 'text' value='${assignment.title}'>
         </div>
         <div>
-        내용: <textarea name = 'content'><%=assignment.getContent()%></textarea>
+        내용: <textarea name = 'content'>${assignment.content}</textarea>
         </div>
        <div>
-        제출날짜: <input name='deadline' type = 'date' value='<%=assignment.getDeadline()%>'>
+        제출날짜: <input name='deadline' type = 'date' value='${assignment.deadline}'>
         </div>
         <div>
         <button>변경</button>
-        <a href='/assignment/delete?no=<%=assignment.getNo()%>'>[삭제]</a>
+        <a href='/assignment/delete?no=${assignment.no}'>[삭제]</a>
         </div>
         </form>
 
