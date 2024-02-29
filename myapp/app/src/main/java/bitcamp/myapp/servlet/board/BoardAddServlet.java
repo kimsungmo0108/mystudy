@@ -46,7 +46,7 @@ public class BoardAddServlet extends HttpServlet {
     request.setAttribute("category", category);
     request.setAttribute("title", title);
 
-    request.getRequestDispatcher("/board/form.jsp").forward(request, response);
+    request.setAttribute("viewUrl", "/board/form.jsp");
 
   }
 
@@ -97,16 +97,14 @@ public class BoardAddServlet extends HttpServlet {
 
       txManager.commit();
 
-      response.sendRedirect("/board/list?category=" + category);
+      request.setAttribute("viewUrl", "redirect:/app/board/list?category=" + category);
 
     } catch (Exception e) {
       try {
         txManager.rollback();
       } catch (Exception e2) {
       }
-      request.setAttribute("message", String.format("%s 등록 오류!", title));
       request.setAttribute("exception", e);
-      request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
   }
 }

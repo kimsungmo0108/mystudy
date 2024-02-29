@@ -12,7 +12,7 @@
 
 
 <h1>${title}</h1>
-      <form action='/board/update' method='post' enctype='multipart/form-data'>
+      <form action='/app/board/update' method='post' enctype='multipart/form-data'>
       <input name='category' type='hidden' value='${category}'>
       <div>
         번호: <input readonly name='no' type='text' value='${board.no}'>
@@ -35,7 +35,7 @@
         <c:forEach items="${files}" var="file">
             <li>
                 <a href='/upload/board/${file.filePath}'>${file.filePath}</a>
-                [<a href='/board/file/delete?category=${category}&no=${file.no}'>삭제</a>]
+                [<a href='/app/board/file/delete?category=${category}&no=${file.no}'>삭제</a>]
             </li>
         </c:forEach>
           </ul>
@@ -44,7 +44,7 @@
 
       <div>
         <button>변경</button>
-        <a href='/board/delete?category=${category}&no=${board.no}'>[삭제]</a>
+        <a href='/app/board/delete?category=${category}&no=${board.no}'>[삭제]</a>
       </div>
       </form>
 

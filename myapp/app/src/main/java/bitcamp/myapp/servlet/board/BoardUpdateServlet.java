@@ -85,16 +85,15 @@ public class BoardUpdateServlet extends HttpServlet {
         attachedFileDao.addAll(attachedFiles);
       }
       txManager.commit();
-      response.sendRedirect("/board/list?category=" + category);
+
+      request.setAttribute("viewUrl", "redirect:/app/board/list?category=" + category);
 
     } catch (Exception e) {
       try {
         txManager.rollback();
       } catch (Exception e2) {
       }
-      request.setAttribute("message", String.format("%s 변경 오류!", title));
       request.setAttribute("exception", e);
-      request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
   }
 }

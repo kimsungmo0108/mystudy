@@ -31,7 +31,7 @@ public class BoardListServlet extends HttpServlet {
       request.setAttribute("category", category);
       request.setAttribute("title", title);
 
-      request.getRequestDispatcher("/board/list.jsp").forward(request, response);
+      request.setAttribute("viewUrl", "/board/list.jsp");
 
 
     } catch (Exception e) {

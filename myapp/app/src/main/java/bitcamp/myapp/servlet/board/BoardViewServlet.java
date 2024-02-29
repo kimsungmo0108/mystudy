@@ -44,7 +44,7 @@ public class BoardViewServlet extends HttpServlet {
       request.setAttribute("title", title);
       request.setAttribute("board", board);
 
-      request.getRequestDispatcher("/board/view.jsp").forward(request, response);
+      request.setAttribute("viewUrl", "/board/view.jsp");
 
 
     } catch (Exception e) {

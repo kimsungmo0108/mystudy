@@ -8368,7 +8368,22 @@ MemberListServlet → MemberDao
 → 모든 요청을 받는다
 → 서블릿이 반복적으로 하던 일을 처리한다
 -------------------------------------------------------------------------------------
-→
+상대경로
+http://localhost:8888/app/assignmnet/list → list는 자원의 이름
+http://localhost:8888/app/assignmnet/list/app/assignment/add
+
+<a href="app/assignment/add"> 새 과제 </a>
+→ /가 없으면 상대경로를 가리킨다
+→ 현재 웹브라우저 경로를 기준으로 계산한다
+
+화성시 동탄대로 4길 333동 1111호 홍길동
+
+절대경로
+http://localhost:8888/app/assignmnet/list
+http://localhost:8888/app/assignment/add
+
+<a href="/app/assignment/add"> 새 과제 </a>
+→ 절대경로는 포트번호 뒤에 붙는다
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
