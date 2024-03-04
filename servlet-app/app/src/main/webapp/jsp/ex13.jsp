@@ -14,7 +14,7 @@
 <h1>JSP 액션 태그 - jsp:useBean (계속)</h1>
 <%-- 보관소에 저장된 객체 꺼내기 --%>
 <%
-ArrayList<String> names = new ArrayList<>();
+ArrayList names = new ArrayList<>();
 names.add("홍길동");
 names.add("임꺽정");
 names.add("안중근");
@@ -23,10 +23,10 @@ names.add("윤봉길");
 pageContext.setAttribute("list", names);
 %>
 
-<jsp:useBean id="list" type="java.util.ArrayList<String>" scope="page"/>
+<jsp:useBean id="list" type="java.util.ArrayList" scope="page"/>
 <%-- 자바코드로 표현해보면,
-  java.util.ArrayList<String> list = 
-    (java.util.ArrayList<String>) pageContext.getAttribute("list");
+  java.util.ArrayList list =
+    (java.util.ArrayList) pageContext.getAttribute("list");
   if (list == null) {
     throw new Exception("ArrayList 꺼내기 오류!");
   }

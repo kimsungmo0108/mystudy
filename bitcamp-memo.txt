@@ -8416,7 +8416,9 @@ JSP 태그
     language="java" 
     contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
-    trimDirectiveWhitespaces="true"%>
+    trimDirectiveWhitespaces="true"
+    errorPage="ex20_error.jsp"
+    isErrorPage="true"%> → 에러를 받는 jsp에서 설정을 해야 exception 객체를 빌트인 해준다
 <%@ taglib 
     uri="확장 태그를 정의할 때 부여한 확장 태그 URI" 
     prefix="확장태그를 사용할 때 붙이는 접두사"%>
@@ -8435,9 +8437,20 @@ JSP 태그
 <%= ~~ %>
 → 표현식
 → 출력문의 파라미터 자리에 복사
+${객체.객체.객체.프라퍼티}
 
 5) JSP action tag
 <jsp:~ ~~ %>
+<jsp:useBean id="객체명" class="클래스명" scope="보관소명"/>   
+<jsp:useBean id="레퍼런스명" type="레퍼런스타입" scope="보관소"/>
+<jsp:useBean id="b3" class="com.eomcs.web.vo.Board" scope="page"/>
+                               └> type은 객체가 없으면 에러, class는 객체가 없으면 인스턴스 생성(type, class 같이 사용 가능)
+<jsp:setProperty name="b3" property="no" value="100"/>
+<jsp:setProperty name="b3" property="contents" value="내용입니다."/>
+<jsp:setProperty name="b3" property="viewCount" value="88"/>
+<%=b3%> => out.print(b3);<br> 
+
+<jsp:include page="ex19_header.jsp"/>
 
 6) template date
 → 그냥 작성 → 출력문을 생성한다 예) out.write("out.write("템플릿 데이터")");
@@ -8481,6 +8494,7 @@ JspContext
 <board> <board>
 → 개발자가 추가로 정의한 태그
 → 이 태그를 이용해서 자바 소스 코드를 만들어야 한다 → Tag Handler
+→ JSP 실행할 때 유지
 
 JSP 태그 개발자
 → 태그 정의
@@ -8498,11 +8512,48 @@ Tag Handler  <사용>  JspContext
 → JspContext{"n"="aaa"}
 → getAttribue("n") 호출, 보관소에 저장된 값 꺼내기
 -------------------------------------------------------------------------------------
-→
+JSP 빌트인 객체
+- JSP를 가지고 서블릿 클래스를 만들 때 _jspService() 메서드에서 기본으로 준비하는 객체
+- JSP 엔진은 반드시 다음과 같은 이름으로 레퍼런스를 선언해야 한다.
+  즉 서블릿 컨테이너(ex: 톰캣, jetty, resin 등)에 상관없이 이름이 같다.
+
+1) request - HttpServletRequest => _jspService() 파라미터이다.
+2) response - HttpServletResponse => _jspService() 파라미터이다.
+3) pageContext - PageContext => _jspService()의 로컬 변수이다.
+4) session - HttpSession => _jspService()의 로컬 변수이다.
+5) application - ServletContext => _jspService()의 로컬 변수이다.
+6) config - ServletConfig => _jspService()의 로컬 변수이다.
+7) out - JspWriter => _jspService()의 로컬 변수이다.
+8) page - 서블릿 객체를 가리킨다. 즉 this 이다. => _jspService()의 로컬 변수이다.
+9) exception - Throwable => _jspService()의 로컬 변수이다.
+   - 이 변수는 JSP 페이지가 <%@ page isErrorPage="true"%>로 설정되었을 때만 존재한다.
+   - 주로 오류가 발생되었을 때 실행되는 JSP 페이지인 경우 위 설정을 붙인다. 
 -------------------------------------------------------------------------------------
-→
+JSP action tag
+<jsp:~ ~~ %>
+<jsp:useBean scope="보관소명" id="객체명" class="클래스명"/>   
+<jsp:useBean id="b3" class="com.eomcs.web.vo.Board" scope="page"/>
+                               └> type은 객체가 없으면 에러, class는 객체가 없으면 인스턴스 생성(type, class 같이 사용 가능)
+<jsp:setProperty name="b3" property="no" value="100"/>
+<jsp:setProperty name="b3" property="contents" value="내용입니다."/>
+<jsp:setProperty name="b3" property="viewCount" value="88"/>
+<%=b3%> => out.print(b3);<br> 
+
+java.util.List list = (java.util.List) pageContext.getAttribute("list");
+  if (list == null) {
+    list = new java.util.List(); 
+    pageContext.setAttribute("list", list);
+  }
+
+throw new Throwable("list라는 이름의 빈이 없습니다.");
+
+<jsp:include page="ex19_header.jsp"/>
+RequestDispatcher rd = request.getRequestDispatcher("/ex19_header.jsp");
+rd.include(request, response):
 -------------------------------------------------------------------------------------
-→
+코로나 시국이 끝나고 여행을 가고 싶지만 자기 혼자만 시간이 된다면 여행을 같이 가는 사람을 구하는 사이트를 이용해서 즐거운 여행을 가기 위해
+
+다른 사이트 서비스를 찾아보니 트래블어스는 동행자만 구할 수 있고 만약 계획을 구성하기 위해서는 채팅 기능으로만 계획할 수 있다 하지만 우리 프로젝트(모여)는 계획 툴, 채팅, 여행 후기 게시글을 찾아보고 더 자세한 여행 계획을 짤 수 있는 이점이 있다
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
