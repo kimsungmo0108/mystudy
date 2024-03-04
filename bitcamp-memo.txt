@@ -8257,7 +8257,7 @@ JSP 소스 → JSP Engine이 컴파일 → 자바 서블릿 소드 → Java Comp
 
 form.jsp			<<interface>>JspPage[jspInit(), jspDestroy()] <------- <interface>>HttpJspPage[jspService()]       <┐
 				→ JSP로 만든 서블릿은 반드시 구현해야 한다					|
-|			       javax					    |		Tomcap		|	        		
+|			       javax					    |		Tomcat		|	        		
 <<interface>>Servlet <-------- <<abstract>>GenericServlet <ㅡㅡㅡ <<abstract>>HttpServlet <ㅡㅡㅡ <<abstract>>HttpJspBase[] <ㅡㅡㅡ <<concrete>>form_jsp[-jspService()]
 												└> jspInit(), jspDestroy() 구현
 init() → call → jspInit()
@@ -8395,21 +8395,108 @@ http://localhost:8888/app/assignment/add
 모든 요청 → DispatcherServlet(프론트 컨트롤러) → call → <<interface>>PageController <------- BoardListController, MemberListController
 		↓↑
 	              JSP
+-------------------------------------------------------------------------------------
 
+
+
+2024.03.04(월)
 -------------------------------------------------------------------------------------
-→
+JSP의 구동원리
+/hello.jsp → servlet Container → 서블릿 클래스가 없거나 JSP가 변경되었다면
+→ JSP Engine이 서블릿 클래스 생성 
+→ hello.java → java 컴파일러가 컴파일 
+→ hello.class → 서블릿 컨테이너가 인스턴스 생성 init() 호출
+→ hello 인스턴스 → service() 호출
 -------------------------------------------------------------------------------------
-→
+JSP 태그
+1) directive element
+<%@ ~~ %>
+→ 특정 자바코드를 생성한다
+<%@ page 
+    language="java" 
+    contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"
+    trimDirectiveWhitespaces="true"%>
+<%@ taglib 
+    uri="확장 태그를 정의할 때 부여한 확장 태그 URI" 
+    prefix="확장태그를 사용할 때 붙이는 접두사"%>
+<%@ page import="java.sql.Statement"%>
+
+2) declaration element
+<%! ~~ %>
+→ 필드, 메소드
+→ 클래스 블록 안에 그대로 복사
+
+3) scriptlet
+<% ~~ %>
+→ 자바 코드를 그래도 복사
+
+4) expression element
+<%= ~~ %>
+→ 표현식
+→ 출력문의 파라미터 자리에 복사
+
+5) JSP action tag
+<jsp:~ ~~ %>
+
+6) template date
+→ 그냥 작성 → 출력문을 생성한다 예) out.write("out.write("템플릿 데이터")");
+
+7) JSP 주석
+<%-- ~~ --%>
+
+8) HTML 주석
+<!-- ~~ -->
 -------------------------------------------------------------------------------------
-→
+서버 루트와 웹애플리케이션 루트
+
+1) 다른 경우
+http://localhost:8888/myapp/board/list
+/myapp → 서버 루트+경로
+/board/list → 웹 애플리케이션 루트(=컨텍스트 루트)+경로
+
+2) 같은 경우
+http://localhost:8888/board/list
+/ → 서버 루트 이면서 웹 애플리케이션 루트
+board/list → 리소스 경로(자원)
 -------------------------------------------------------------------------------------
-→
+<%@ include %> vs <jsp:include ~~ />
+
+1) <%@ include %>
+a.jsp  |  x.txt  |  y.txt
+a.jsp{
+  x.txt 삽입
+  y.txt 삽입
+}
+→ 생성 → a.java
+→ 파일을 삽입해서 하나의 자바 파일을 생성
+
+2) <jsp:include ~~ />
+a.jsp  |  x.jsp  |  y.jsp
+a.java | x.java | y.java  →  생성
+→ a.java가 x.java/y.java를 include
+→ 자바 파일에서 다른 자바 파일을 include
 -------------------------------------------------------------------------------------
-→
--------------------------------------------------------------------------------------
-→
--------------------------------------------------------------------------------------
-→
+JspContext
+<board> <board>
+→ 개발자가 추가로 정의한 태그
+→ 이 태그를 이용해서 자바 소스 코드를 만들어야 한다 → Tag Handler
+
+JSP 태그 개발자
+→ 태그 정의
+→ 태그의 작업을 수행하는 클래스
+
+JSP와 태그 핸들러
+JSP  ◇------------>  JspContext
+Tag Handler  <사용>  JspContext
+→ JSP와 태그핸들러 사이에 값을 공유하기 위한 저장소
+→ JspContext <------- PageContext
+<c:forEach items="aaa, bbb, ccc" var="n">
+  <li><%=pageContext.getAttribue("n")%></li>
+</c:forEach>
+→ <c:forEach> 태그 핸들러가 "aaa, bbb, ccc" 문자열에서 한 개의 문자열 추출해서 보관소에 "n" 이름으로 저장
+→ JspContext{"n"="aaa"}
+→ getAttribue("n") 호출, 보관소에 저장된 값 꺼내기
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
