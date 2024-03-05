@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.sql.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 public class AssignmentController {
 
@@ -17,7 +16,7 @@ public class AssignmentController {
   }
 
   @RequestMapping("/assignment/add")
-  public String add(HttpServletRequest request, HttpServletResponse response)
+  public String add(HttpServletRequest request)
       throws ServletException, IOException {
     if (request.getMethod().equals("GET")) {
       return "/assignment/form.jsp";
@@ -33,7 +32,7 @@ public class AssignmentController {
   }
 
   @RequestMapping("/assignment/list")
-  public String list(HttpServletRequest request, HttpServletResponse response)
+  public String list(HttpServletRequest request)
       throws ServletException, IOException {
     request.setAttribute("list", assignmentDao.findAll());
 
@@ -42,9 +41,8 @@ public class AssignmentController {
 
 
   @RequestMapping("/assignment/view")
-  public String view(HttpServletRequest request, HttpServletResponse response)
+  public String view(@RequestParam("no") int no, HttpServletRequest request)
       throws Exception {
-    int no = Integer.parseInt(request.getParameter("no"));
     Assignment assignment = assignmentDao.findBy(no);
     if (assignment == null) {
       throw new Exception("과제 번호가 유효하지 않습니다!");
@@ -55,7 +53,7 @@ public class AssignmentController {
   }
 
   @RequestMapping("/assignment/update")
-  public String update(HttpServletRequest request, HttpServletResponse response)
+  public String update(HttpServletRequest request)
       throws Exception {
     int no = Integer.parseInt(request.getParameter("no"));
 
@@ -76,7 +74,7 @@ public class AssignmentController {
   }
 
   @RequestMapping("/assignment/delete")
-  public String delete(HttpServletRequest request, HttpServletResponse response)
+  public String delete(HttpServletRequest request)
       throws Exception {
     int no = Integer.parseInt(request.getParameter("no"));
     if (assignmentDao.delete(no) == 0) {
