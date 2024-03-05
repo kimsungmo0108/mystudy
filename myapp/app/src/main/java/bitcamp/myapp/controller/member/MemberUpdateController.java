@@ -1,6 +1,6 @@
 package bitcamp.myapp.controller.member;
 
-import bitcamp.myapp.controller.PageController;
+import bitcamp.myapp.controller.RequestMapping;
 import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.vo.Member;
 import java.io.File;
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-public class MemberUpdateController implements PageController {
+public class MemberUpdateController {
 
   private MemberDao memberDao;
   private String uploadDir;
@@ -20,7 +20,7 @@ public class MemberUpdateController implements PageController {
     this.uploadDir = uploadDir;
   }
 
-  @Override
+  @RequestMapping
   public String execute(HttpServletRequest request, HttpServletResponse response)
       throws Exception {
 

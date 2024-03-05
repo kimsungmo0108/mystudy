@@ -1,12 +1,12 @@
 package bitcamp.myapp.controller.member;
 
-import bitcamp.myapp.controller.PageController;
+import bitcamp.myapp.controller.RequestMapping;
 import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.vo.Member;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class MemberViewController implements PageController {
+public class MemberViewController {
 
   private MemberDao memberDao;
 
@@ -14,7 +14,7 @@ public class MemberViewController implements PageController {
     this.memberDao = memberDao;
   }
 
-  @Override
+  @RequestMapping
   public String execute(HttpServletRequest request, HttpServletResponse response)
       throws Exception {
 

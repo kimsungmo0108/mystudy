@@ -1,6 +1,6 @@
 package bitcamp.myapp.controller.member;
 
-import bitcamp.myapp.controller.PageController;
+import bitcamp.myapp.controller.RequestMapping;
 import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.vo.Member;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-public class MemberAddController implements PageController {
+public class MemberAddController {
 
   private MemberDao memberDao;
   private String uploadDir;
@@ -20,7 +20,7 @@ public class MemberAddController implements PageController {
     this.uploadDir = uploadDir;
   }
 
-
+  @RequestMapping
   public String execute(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
