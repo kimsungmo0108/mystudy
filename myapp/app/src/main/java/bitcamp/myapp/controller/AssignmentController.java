@@ -15,17 +15,22 @@ public class AssignmentController {
     this.assignmentDao = assignmentDao;
   }
 
-  @RequestMapping("/assignment/add")
-  public String add(HttpServletRequest request)
-      throws ServletException, IOException {
-    if (request.getMethod().equals("GET")) {
-      return "/assignment/form.jsp";
-    }
+  @RequestMapping("/assignment/form")
+  public String form() {
 
+    return "/assignment/form.jsp";
+
+  }
+
+  @RequestMapping("/assignment/add")
+  public String add(
+      @RequestParam("title") String title,
+      @RequestParam("content") String content,
+      @RequestParam("deadline") Date deadline) {
     Assignment assignment = new Assignment();
-    assignment.setTitle(request.getParameter("title"));
-    assignment.setContent(request.getParameter("content"));
-    assignment.setDeadline(Date.valueOf(request.getParameter("deadline")));
+    assignment.setTitle(title);
+    assignment.setContent(content);
+    assignment.setDeadline(deadline);
     assignmentDao.add(assignment);
 
     return "redirect:list";
@@ -53,9 +58,12 @@ public class AssignmentController {
   }
 
   @RequestMapping("/assignment/update")
-  public String update(HttpServletRequest request)
+  public String update(
+      @RequestParam("no") int no,
+      @RequestParam("title") String title,
+      @RequestParam("content") String content,
+      @RequestParam("deadline") Date deadline)
       throws Exception {
-    int no = Integer.parseInt(request.getParameter("no"));
 
     Assignment old = assignmentDao.findBy(no);
     if (old == null) {
@@ -64,9 +72,9 @@ public class AssignmentController {
 
     Assignment assignment = new Assignment();
     assignment.setNo(old.getNo());
-    assignment.setTitle(request.getParameter("title"));
-    assignment.setContent(request.getParameter("content"));
-    assignment.setDeadline(Date.valueOf(request.getParameter("deadline")));
+    assignment.setTitle(title);
+    assignment.setContent(content);
+    assignment.setDeadline(deadline);
 
     assignmentDao.update(assignment);
 
@@ -74,9 +82,8 @@ public class AssignmentController {
   }
 
   @RequestMapping("/assignment/delete")
-  public String delete(HttpServletRequest request)
+  public String delete(@RequestParam("no") int no)
       throws Exception {
-    int no = Integer.parseInt(request.getParameter("no"));
     if (assignmentDao.delete(no) == 0) {
       throw new Exception("과제 번호가 유효하지 않습니다.");
     }
