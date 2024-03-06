@@ -14,7 +14,7 @@
     <a href = "/app/auth/logout">로그아웃</a>
 </c:if>
 <c:if test="${empty loginUser}">
-    <a href = "/app/auth/login">로그인</a>
+    <a href = "/app/auth/form">로그인</a>
 </c:if>
 <a href="/about.html">소개</a>
 
