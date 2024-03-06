@@ -9,7 +9,6 @@ import bitcamp.util.TransactionManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -102,19 +101,19 @@ public class BoardController {
   }
 
   @RequestMapping("/board/delete")
-  public String delete(HttpServletRequest request, HttpServletResponse response)
+  public String delete(
+      @RequestParam("category") int category,
+      @RequestParam("no") int no,
+      HttpSession session)
       throws Exception {
-
-    int category = Integer.valueOf(request.getParameter("category"));
-    String title = category == 1 ? "게시글" : "가입인사";
+    
     try {
 
-      Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+      Member loginUser = (Member) session.getAttribute("loginUser");
       if (loginUser == null) {
         throw new Exception("로그인하시기 바랍니다!");
       }
 
-      int no = Integer.parseInt(request.getParameter("no"));
       Board board = boardDao.findBy(no);
       if (board == null) {
         throw new Exception("번호가 유효하지 않습니다.");
@@ -142,10 +141,10 @@ public class BoardController {
   }
 
   @RequestMapping("/board/list")
-  public String list(HttpServletRequest request, HttpServletResponse response)
+  public String list(@RequestParam("category") int category, HttpServletRequest request,
+      HttpServletResponse response)
       throws ServletException, IOException {
 
-    int category = Integer.valueOf(request.getParameter("category"));
     String title = category == 1 ? "게시글" : "가입인사";
 
     request.setAttribute("list", boardDao.findAll(category));
@@ -156,35 +155,33 @@ public class BoardController {
   }
 
   @RequestMapping("/board/update")
-  public String update(HttpServletRequest request, HttpServletResponse response)
+  public String update(
+      @RequestParam("no") int no,
+      Board board,
+      HttpSession session,
+      @RequestParam("files") Part[] files,
+      Map<String, Object> map)
       throws Exception {
-    int category = Integer.parseInt(request.getParameter("category"));
-    String title = category == 1 ? "게시글" : "가입인사";
 
     try {
 
-      Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+      Member loginUser = (Member) session.getAttribute("loginUser");
       if (loginUser == null) {
         throw new Exception("로그인하시기 바랍니다!");
       }
 
-      int no = Integer.parseInt(request.getParameter("no"));
-      Board board = boardDao.findBy(no);
-      if (board == null) {
+      Board old = boardDao.findBy(no);
+      if (old == null) {
         throw new Exception("번호가 유효하지 않습니다.");
 
-      } else if (board.getWriter().getNo() != loginUser.getNo()) {
+      } else if (old.getWriter().getNo() != loginUser.getNo()) {
         throw new Exception("권한이 없습니다.");
       }
 
-      board.setTitle(request.getParameter("title"));
-      board.setContent(request.getParameter("content"));
-
       ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
-      if (category == 1) {
-        Collection<Part> parts = request.getParts();
-        for (Part part : parts) {
-          if (!part.getName().equals("files") || part.getSize() == 0) {
+      if (board.getCategory() == 1) {
+        for (Part part : files) {
+          if (part.getSize() == 0) {
             continue;
           }
           String filename = UUID.randomUUID().toString();
@@ -207,44 +204,45 @@ public class BoardController {
     } catch (Exception e) {
       txManager.rollback();
     }
-    return "redirect:/app/board/list?category=" + category;
+    return "redirect:/app/board/list?category=" + board.getCategory();
   }
 
 
   @RequestMapping("/board/view")
-  public String view(HttpServletRequest request, HttpServletResponse response)
+  public String view(
+      @RequestParam("category") int category,
+      @RequestParam("no") int no,
+      Map<String, Object> map)
       throws Exception {
 
-    int category = Integer.valueOf(request.getParameter("category"));
     String title = category == 1 ? "게시글" : "가입인사";
 
-    int no = Integer.parseInt(request.getParameter("no"));
     Board board = boardDao.findBy(no);
     if (board == null) {
       throw new Exception("번호가 유효하지 않습니다.");
     }
 
-    request.setAttribute("files", attachedFileDao.findAllByBoardNo(no));
-    request.setAttribute("category", category);
-    request.setAttribute("title", title);
-    request.setAttribute("board", board);
+    map.put("files", attachedFileDao.findAllByBoardNo(no));
+    map.put("category", category);
+    map.put("title", title);
+    map.put("board", board);
 
     return "/board/view.jsp";
 
   }
 
   @RequestMapping("/board/file/delete")
-  public String fileDelete(HttpServletRequest request, HttpServletResponse response)
+  public String fileDelete(
+      @RequestParam("category") int category,
+      @RequestParam("no") int fileNo,
+      HttpSession session)
       throws Exception {
-    int category = Integer.valueOf(request.getParameter("category"));
-    String title = category == 1 ? "게시글" : "가입인사";
 
-    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+    Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
       throw new Exception("로그인하시기 바랍니다!");
     }
 
-    int fileNo = Integer.parseInt(request.getParameter("no"));
     AttachedFile file = attachedFileDao.findByNo(fileNo);
     if (file == null) {
       throw new Exception("첨부파일 번호가 유효하지 않습니다.");
@@ -259,9 +257,8 @@ public class BoardController {
     new File(this.uploadDir + "/" + file.getFilePath()).delete();
 
 //      response.sendRedirect(request.getHeader("Referer"));
-    return "redirect:" + request.getHeader("Referer");
-//      request.setAttribute("viewUrl", "redirect:../view?category=" + category + "&no=" + file.getBoardNo());
-
+//    return "redirect:" + request.getHeader("Referer");
+    return "redirect:../view?category=" + category + "&no=" + file.getBoardNo();
   }
 
 }

@@ -4,10 +4,9 @@ import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.vo.Member;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 public class MemberController {
@@ -20,20 +19,17 @@ public class MemberController {
     this.uploadDir = uploadDir;
   }
 
+  @RequestMapping("/member/form")
+  public String form() {
+    return "/member/form.jsp";
+  }
+
   @RequestMapping("/member/add")
-  public String add(HttpServletRequest request, HttpServletResponse response)
+  public String add(
+      Member member,
+      @RequestParam("photo") Part photoPart)
       throws ServletException, IOException {
 
-    if (request.getMethod().equals("GET")) {
-      return "/member/form.jsp";
-    }
-
-    Member member = new Member();
-    member.setEmail(request.getParameter("email"));
-    member.setName(request.getParameter("name"));
-    member.setPassword(request.getParameter("password"));
-
-    Part photoPart = request.getPart("photo");
     if (photoPart.getSize() > 0) {
       String filename = UUID.randomUUID().toString();
       member.setPhoto(filename);
@@ -46,9 +42,8 @@ public class MemberController {
   }
 
   @RequestMapping("/member/delete")
-  public String delete(HttpServletRequest request, HttpServletResponse response)
+  public String delete(@RequestParam("no") int no)
       throws Exception {
-    int no = Integer.parseInt(request.getParameter("no"));
     Member member = memberDao.findBy(no);
     if (member == null) {
       throw new Exception("회원 번호가 유효하지 않습니다.");
@@ -59,38 +54,32 @@ public class MemberController {
     if (filename != null) {
       new File(this.uploadDir + "/" + filename).delete();
     }
-
     return "redirect:list";
-
   }
 
   @RequestMapping("/member/list")
-  public String list(HttpServletRequest request, HttpServletResponse response)
+  public String list(Map<String, Object> map)
       throws Exception {
 
-    request.setAttribute("list", memberDao.findAll());
+    map.put("list", memberDao.findAll());
     return "/member/list.jsp";
-
   }
 
   @RequestMapping("/member/update")
-  public String update(HttpServletRequest request, HttpServletResponse response)
+  public String update(
+      @RequestParam("no") int no,
+      Member member,
+      @RequestParam("photo") Part photoPart)
       throws Exception {
 
-    int no = Integer.parseInt(request.getParameter("no"));
     Member old = memberDao.findBy(no);
     if (old == null) {
       throw new Exception("회원 번호가 유효하지 않습니다.");
     }
 
-    Member member = new Member();
     member.setNo(old.getNo());
-    member.setEmail(request.getParameter("email"));
-    member.setName(request.getParameter("name"));
-    member.setPassword(request.getParameter("password"));
     member.setCreatedDate(old.getCreatedDate());
 
-    Part photoPart = request.getPart("photo");
     if (photoPart.getSize() > 0) {
       String filename = UUID.randomUUID().toString();
       member.setPhoto(filename);
@@ -102,22 +91,19 @@ public class MemberController {
 
     memberDao.update(member);
     return "redirect:list";
-
-
   }
 
 
   @RequestMapping("/member/view")
-  public String view(HttpServletRequest request, HttpServletResponse response)
+  public String view(@RequestParam("no") int no, Map<String, Object> map)
       throws Exception {
 
-    int no = Integer.parseInt(request.getParameter("no"));
     Member member = memberDao.findBy(no);
     if (member == null) {
       throw new Exception("회원 번호가 유효하지 않습니다.");
     }
 
-    request.setAttribute("member", member);
+    map.put("member", member);
     return "/member/view.jsp";
 
   }
