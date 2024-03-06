@@ -12,7 +12,7 @@
 
 
 <h1>${title}</h1>
-      <a href='/app/board/add?category=${category}'>새 글</a>
+      <a href='/app/board/form?category=${category}'>새 글</a>
       <table border='1'>
           <thead>
           <tr> <th>번호</th> <th>제목</th> <th>작성자</th> <th>등록일</th> <th>첨부파일</th> </tr>

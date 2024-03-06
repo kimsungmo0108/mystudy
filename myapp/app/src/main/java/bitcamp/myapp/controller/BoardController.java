@@ -11,10 +11,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 
@@ -34,39 +36,44 @@ public class BoardController {
     this.uploadDir = uploadDir;
   }
 
-  @RequestMapping("/board/add")
-  public String add(HttpServletRequest request, HttpServletResponse response)
+  @RequestMapping("/board/form")
+  public String form(@RequestParam("category") int category, Map<String, Object> map)
       throws Exception {
-    int category = Integer.valueOf(request.getParameter("category"));
     String title = category == 1 ? "게시글" : "가입인사";
-    request.setAttribute("title", title);
-    request.setAttribute("category", category);
-    if (request.getMethod().equals("GET")) {
-      return "/board/form.jsp";
-    }
-    try {
+    map.put("title", title);
+    map.put("category", category);
+    return "/board/form.jsp";
+  }
 
-      Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+  @RequestMapping("/board/add")
+  public String add(
+      Board board,
+      HttpSession session,
+      @RequestParam("files") Part[] files,
+      Map<String, Object> map)
+      throws Exception {
+    int category = board.getCategory();
+    String title = category == 1 ? "게시글" : "가입인사";
+    map.put("title", title);
+    map.put("category", category);
+
+    try {
+      Member loginUser = (Member) session.getAttribute("loginUser");
       if (loginUser == null) {
         throw new Exception("로그인하시기 바랍니다!");
       }
 
-      Board board = new Board();
-      board.setCategory(category);
-      board.setTitle(request.getParameter("title"));
-      board.setContent(request.getParameter("content"));
       board.setWriter(loginUser);
 
       ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
 
       if (category == 1) {
-        Collection<Part> parts = request.getParts();
-        for (Part part : parts) {
-          if (!part.getName().equals("files") || part.getSize() == 0) {
+        for (Part file : files) {
+          if (file.getSize() == 0) {
             continue;
           }
           String filename = UUID.randomUUID().toString();
-          part.write(this.uploadDir + "/" + filename);
+          file.write(this.uploadDir + "/" + filename);
           attachedFiles.add(new AttachedFile().filePath(filename));
         }
       }
