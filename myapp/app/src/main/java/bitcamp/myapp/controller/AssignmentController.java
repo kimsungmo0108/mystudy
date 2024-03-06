@@ -24,13 +24,7 @@ public class AssignmentController {
 
   @RequestMapping("/assignment/add")
   public String add(
-      @RequestParam("title") String title,
-      @RequestParam("content") String content,
-      @RequestParam("deadline") Date deadline) {
-    Assignment assignment = new Assignment();
-    assignment.setTitle(title);
-    assignment.setContent(content);
-    assignment.setDeadline(deadline);
+      Assignment assignment) {
     assignmentDao.add(assignment);
 
     return "redirect:list";
