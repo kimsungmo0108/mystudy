@@ -9,5 +9,6 @@ public class AboutController {
   @RequestMapping("/about")
   public String about() throws Exception {
     return "/about.jsp";
+    
   }
 }
