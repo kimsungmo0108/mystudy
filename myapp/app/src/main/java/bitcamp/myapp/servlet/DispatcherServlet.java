@@ -3,12 +3,7 @@ package bitcamp.myapp.servlet;
 import bitcamp.myapp.controller.CookieValue;
 import bitcamp.myapp.controller.RequestMapping;
 import bitcamp.myapp.controller.RequestParam;
-import bitcamp.myapp.dao.AssignmentDao;
-import bitcamp.myapp.dao.AttachedFileDao;
-import bitcamp.myapp.dao.BoardDao;
-import bitcamp.myapp.dao.MemberDao;
 import bitcamp.util.Component;
-import bitcamp.util.TransactionManager;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -40,6 +34,7 @@ import javax.servlet.http.Part;
 @WebServlet(urlPatterns = "/app/*", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
 
+  private Map<String, Object> beanMap;
   private Map<String, RequestHandler> requestHandlerMap = new HashMap<>();
   private List<Object> controllers = new ArrayList<>();
 
@@ -50,12 +45,7 @@ public class DispatcherServlet extends HttpServlet {
       System.setProperty("board.upload.dir", this.getServletContext().getRealPath("/upload/board"));
       System.setProperty("member.upload.dir", this.getServletContext().getRealPath("/upload"));
 
-      ServletContext ctx = this.getServletContext();
-      BoardDao boardDao = (BoardDao) ctx.getAttribute("boardDao");
-      AssignmentDao assignmentDao = (AssignmentDao) ctx.getAttribute("assignmentDao");
-      MemberDao memberDao = (MemberDao) ctx.getAttribute("memberDao");
-      AttachedFileDao attachedFileDao = (AttachedFileDao) ctx.getAttribute("attachedFileDao");
-      TransactionManager txManager = (TransactionManager) ctx.getAttribute("txManager");
+      beanMap = (Map<String, Object>) this.getServletContext().getAttribute("beanMap");
 
 //      controllers.add(new HomeController());
 //      controllers.add(new AssignmentController(assignmentDao));
@@ -116,7 +106,7 @@ public class DispatcherServlet extends HttpServlet {
 
   private void prepareaPageControllers() throws Exception {
     File classpath = new File("./build/classes/java/main");
-    System.out.println(classpath.getCanonicalPath());
+//    System.out.println(classpath.getCanonicalPath());
     findComponents(classpath, "");
   }
 
@@ -135,8 +125,10 @@ public class DispatcherServlet extends HttpServlet {
         Class<?> clazz = Class.forName(packageName + file.getName().replace(".class", ""));
         Component compoAnno = clazz.getAnnotation(Component.class);
         if (compoAnno != null) {
-          Constructor<?> constructor = clazz.getConstructor();
-          controllers.add(constructor.newInstance());
+          Constructor<?> constructor = clazz.getConstructors()[0];
+          Parameter[] params = constructor.getParameters();
+          Object[] args = getArguments(params);
+          controllers.add(constructor.newInstance(args));
           System.out.println(clazz.getName() + "객체 생성!");
         }
 
@@ -147,6 +139,24 @@ public class DispatcherServlet extends HttpServlet {
 
   }
 
+  private Object[] getArguments(Parameter[] params) {
+    Object[] args = new Object[params.length];
+    for (int i = 0; i < params.length; i++) {
+      args[i] = findBean(params[i].getType());
+    }
+    return args;
+  }
+
+  private Object findBean(Class<?> type) {
+    Collection<Object> objs = beanMap.values();
+    for (Object obj : objs) {
+      if (type.isInstance(obj)) {
+        //System.out.printf("%s => %s\n", type.getName(), obj.getClass().getName());
+        return obj;
+      }
+    }
+    return null;
+  }
 
   private void prepareRequestHandlers(List<Object> controllers) {
     for (Object controller : controllers) {

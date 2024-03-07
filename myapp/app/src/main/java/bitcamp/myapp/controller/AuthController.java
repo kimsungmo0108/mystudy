@@ -2,6 +2,7 @@ package bitcamp.myapp.controller;
 
 import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.vo.Member;
+import bitcamp.util.Component;
 import java.io.IOException;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -9,6 +10,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+@Component
 public class AuthController {
 
   MemberDao memberDao;
