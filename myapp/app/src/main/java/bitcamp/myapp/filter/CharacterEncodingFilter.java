@@ -8,10 +8,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-
 public class CharacterEncodingFilter implements Filter {
 
-  String encoding;
+  private String encoding;
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
@@ -24,12 +23,9 @@ public class CharacterEncodingFilter implements Filter {
   @Override
   public void doFilter(ServletRequest request, ServletResponse response,
       FilterChain filterChain) throws IOException, ServletException {
-    request.setCharacterEncoding(encoding);
-    filterChain.doFilter(request, response);
-  }
 
-  @Override
-  public void destroy() {
-    Filter.super.destroy();
+    request.setCharacterEncoding(encoding);
+
+    filterChain.doFilter(request, response);
   }
 }

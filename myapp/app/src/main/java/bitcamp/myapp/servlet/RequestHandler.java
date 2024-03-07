@@ -14,6 +14,4 @@ public class RequestHandler {
     this.controller = controller;
     this.handler = handler;
   }
-
-
 }

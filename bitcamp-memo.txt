@@ -8789,16 +8789,46 @@ ContextLoaderListener ◇------> Map(공유하는 객체 보관소) → DAO, ser
 	┌-------------------------┘공유
 DispatcherServlet ◇-------> Map(웹 관련 객체 보관소) → 페이지 컨트롤러 등을 보관
 -------------------------------------------------------------------------------------
-→
+과제 73. IoC 컨테이너 만들기
+ContextLoaderListener ◇--------> <<IoC 컨테이너>> ApplicationContext(DAO, service, Tx 매니저, DB 커넥션 등) <┐
+<<Front Controller>>DispatcherServlet ◇---------> <<IoC 컨테이너>> ApplicationContext(페이지 컨트롤러 등)    ┘참조
 
 -------------------------------------------------------------------------------------
-→
+Ioc 컨테이너(Inversion Of Control)
+1) Dependency Injection(의존성 주입)
+→ DI 컨테이너 = IoC컨테이너 = Bean(자바 객체) 컨테이너
+
+2) Event Handl
 -------------------------------------------------------------------------------------
-→
+과제 74. Spring IoC 컨테이너를 도입하기
+
 -------------------------------------------------------------------------------------
-→
+Spring IoC Container
+ApplicationContext → .xml
+	           └> JAVA
+→ IoC 컨테이너 설정
+
 -------------------------------------------------------------------------------------
-→
+package 와 namespace
+package → 자바 클래스가 소속된 그룹
+namespace → 자바 외 다른 프로그래밍 언어에서는 namespace라고 부른다 (c#, c++, xml)
+
+[자바]
+System.out.println("hello");
+→ java.lang 패키지 소속 클래스는 패키지명을 작성하지 않아도 된다
+
+java.util.ArraList arr = null;
+→ java.lang 외의 패키지는 이름을 명시해야한다
+
+[xml]
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns="http://www.springframework.org/schema/context"
+  xmlns:context="http://~~~~~~~~~~~~~~~~~~~~~~~~"></beans>
+xmlns → 기본 namespace				        └> 기본 namespace에 소속된 태그는 바로 사용
+xmlns:context → 그 외에는 별명을 정의해야한다
+<context:component-scan ~~~~/>
+→ namespace 별명을 붙여야한다
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------

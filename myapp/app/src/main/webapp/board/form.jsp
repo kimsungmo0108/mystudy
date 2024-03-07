@@ -10,7 +10,7 @@
 
 <jsp:include page="/header.jsp"></jsp:include>
 
-<h1>${title}</h1>
+<h1>${boardName}</h1>
 
 <form action='/app/board/add?category=${category}' method='post' enctype='multipart/form-data'>
   <input name='category' type='hidden' value='${category}'>

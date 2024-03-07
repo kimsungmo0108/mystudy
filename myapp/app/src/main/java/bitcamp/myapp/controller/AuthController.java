@@ -2,22 +2,19 @@ package bitcamp.myapp.controller;
 
 import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.vo.Member;
-import bitcamp.util.Component;
-import java.io.IOException;
 import java.util.Map;
-import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.springframework.stereotype.Component;
 
 @Component
 public class AuthController {
 
   MemberDao memberDao;
 
-
   public AuthController(MemberDao memberDao) {
-
+    System.out.println("AuthController() 호출됨!");
     this.memberDao = memberDao;
   }
 
@@ -25,7 +22,6 @@ public class AuthController {
   public String form(@CookieValue("email") String email, Map<String, Object> map) {
     map.put("email", email);
     return "/auth/form.jsp";
-
   }
 
   @RequestMapping("/auth/login")
@@ -34,8 +30,7 @@ public class AuthController {
       @RequestParam("password") String password,
       @RequestParam("saveEmail") String saveEmail,
       HttpServletResponse response,
-      HttpSession session)
-      throws Exception {
+      HttpSession session) throws Exception {
 
     if (saveEmail != null) {
       Cookie cookie = new Cookie("email", email);
@@ -51,15 +46,12 @@ public class AuthController {
     if (member != null) {
       session.setAttribute("loginUser", member);
     }
-
     return "/auth/login.jsp";
   }
 
   @RequestMapping("/auth/logout")
-  public String logout(HttpSession session)
-      throws ServletException, IOException {
+  public String logout(HttpSession session) throws Exception {
     session.invalidate();
     return "redirect:/index.html";
   }
-
 }

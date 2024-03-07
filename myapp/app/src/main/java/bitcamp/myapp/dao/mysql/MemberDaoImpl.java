@@ -9,12 +9,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MemberDaoImpl implements MemberDao {
 
   DBConnectionPool connectionPool;
 
   public MemberDaoImpl(DBConnectionPool connectionPool) {
+    System.out.println("MemberDaoImpl() 호출됨!");
     this.connectionPool = connectionPool;
   }
 
@@ -119,7 +122,7 @@ public class MemberDaoImpl implements MemberDao {
         pstmt.setString(4, member.getPassword());
         pstmt.setInt(5, member.getNo());
       }
-      
+
       return pstmt.executeUpdate();
 
     } catch (Exception e) {

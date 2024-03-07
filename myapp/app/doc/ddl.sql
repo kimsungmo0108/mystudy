@@ -15,7 +15,7 @@ create table boards(
 );
 
 alter table boards
-  add constraint primary key(board_no),
+  add constraint primary key (board_no),
   modify column board_no int not null auto_increment;
 
 create table board_files(
@@ -25,9 +25,9 @@ create table board_files(
 );
 
 alter table board_files
-  add constraint primary key(file_no),
+  add constraint primary key (file_no),
   modify column file_no int not null auto_increment,
-  add constraint board_files_fk foreign key(board_no) references boards(board_no);
+  add constraint board_files_fk foreign key (board_no) references boards(board_no);
 
 create table assignments(
   assignment_no int not null,
@@ -37,7 +37,7 @@ create table assignments(
 );
 
 alter table assignments
-  add constraint primary key(assignment_no),
+  add constraint primary key (assignment_no),
   modify column assignment_no int not null auto_increment;
 
 create table members(
@@ -50,9 +50,9 @@ create table members(
 );
 
 alter table members
-  add constraint primary key(member_no),
+  add constraint primary key (member_no),
   modify column member_no int not null auto_increment,
   add constraint members_uk unique (email);
 
 alter table boards
-  add constraint boards_fk foreign key(writer) references members(member_no);
+  add constraint boards_fk foreign key (writer) references members(member_no);

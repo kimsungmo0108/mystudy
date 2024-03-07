@@ -2,13 +2,11 @@ package bitcamp.myapp.controller;
 
 import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.vo.Member;
-import bitcamp.util.Component;
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
-import javax.servlet.ServletException;
 import javax.servlet.http.Part;
+import org.springframework.stereotype.Component;
 
 @Component
 public class MemberController {
@@ -17,34 +15,69 @@ public class MemberController {
   private String uploadDir = System.getProperty("member.upload.dir");
 
   public MemberController(MemberDao memberDao) {
+    System.out.println("MemberController() 호출됨!");
     this.memberDao = memberDao;
   }
 
   @RequestMapping("/member/form")
-  public String form() {
+  public String form() throws Exception {
     return "/member/form.jsp";
   }
 
   @RequestMapping("/member/add")
-  public String add(
-      Member member,
-      @RequestParam("photo") Part photoPart)
-      throws ServletException, IOException {
-
-    if (photoPart.getSize() > 0) {
+  public String add(Member member, @RequestParam("file") Part file) throws Exception {
+    if (file.getSize() > 0) {
       String filename = UUID.randomUUID().toString();
       member.setPhoto(filename);
-      photoPart.write(this.uploadDir + "/" + filename);
+      file.write(this.uploadDir + "/" + filename);
     }
-
     memberDao.add(member);
     return "redirect:list";
+  }
 
+  @RequestMapping("/member/list")
+  public String list(Map<String, Object> map) throws Exception {
+    map.put("list", memberDao.findAll());
+    return "/member/list.jsp";
+  }
+
+  @RequestMapping("/member/view")
+  public String view(
+      @RequestParam("no") int no,
+      Map<String, Object> map) throws Exception {
+
+    Member member = memberDao.findBy(no);
+    if (member == null) {
+      throw new Exception("회원 번호가 유효하지 않습니다.");
+    }
+    map.put("member", member);
+    return "/member/view.jsp";
+  }
+
+  @RequestMapping("/member/update")
+  public String update(Member member, @RequestParam("file") Part file) throws Exception {
+
+    Member old = memberDao.findBy(member.getNo());
+    if (old == null) {
+      throw new Exception("회원 번호가 유효하지 않습니다.");
+    }
+    member.setCreatedDate(old.getCreatedDate());
+
+    if (file.getSize() > 0) {
+      String filename = UUID.randomUUID().toString();
+      member.setPhoto(filename);
+      file.write(this.uploadDir + "/" + filename);
+      new File(this.uploadDir + "/" + old.getPhoto()).delete();
+    } else {
+      member.setPhoto(old.getPhoto());
+    }
+
+    memberDao.update(member);
+    return "redirect:list";
   }
 
   @RequestMapping("/member/delete")
-  public String delete(@RequestParam("no") int no)
-      throws Exception {
+  public String delete(@RequestParam("no") int no) throws Exception {
     Member member = memberDao.findBy(no);
     if (member == null) {
       throw new Exception("회원 번호가 유효하지 않습니다.");
@@ -57,56 +90,4 @@ public class MemberController {
     }
     return "redirect:list";
   }
-
-  @RequestMapping("/member/list")
-  public String list(Map<String, Object> map)
-      throws Exception {
-
-    map.put("list", memberDao.findAll());
-    return "/member/list.jsp";
-  }
-
-  @RequestMapping("/member/update")
-  public String update(
-      @RequestParam("no") int no,
-      Member member,
-      @RequestParam("photo") Part photoPart)
-      throws Exception {
-
-    Member old = memberDao.findBy(no);
-    if (old == null) {
-      throw new Exception("회원 번호가 유효하지 않습니다.");
-    }
-
-    member.setNo(old.getNo());
-    member.setCreatedDate(old.getCreatedDate());
-
-    if (photoPart.getSize() > 0) {
-      String filename = UUID.randomUUID().toString();
-      member.setPhoto(filename);
-      photoPart.write(this.uploadDir + "/" + filename);
-      new File(this.uploadDir + "/" + old.getPhoto()).delete();
-    } else {
-      member.setPhoto(old.getPhoto());
-    }
-
-    memberDao.update(member);
-    return "redirect:list";
-  }
-
-
-  @RequestMapping("/member/view")
-  public String view(@RequestParam("no") int no, Map<String, Object> map)
-      throws Exception {
-
-    Member member = memberDao.findBy(no);
-    if (member == null) {
-      throw new Exception("회원 번호가 유효하지 않습니다.");
-    }
-
-    map.put("member", member);
-    return "/member/view.jsp";
-
-  }
-
 }

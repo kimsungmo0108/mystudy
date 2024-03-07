@@ -22,12 +22,19 @@ import java.util.concurrent.Executor;
 
 public class ConnectionProxy implements Connection {
 
-  private Connection original;
   private ConnectionPool connectionPool;
+  private Connection original;
 
   public ConnectionProxy(Connection original, ConnectionPool connectionPool) {
     this.original = original;
     this.connectionPool = connectionPool;
+  }
+
+  public void realClose() {
+    try {
+      original.close();
+    } catch (Exception e) {
+    }
   }
 
   @Override
@@ -35,13 +42,6 @@ public class ConnectionProxy implements Connection {
     if (original.getAutoCommit()) {
       // DB 커넥션풀에 되돌아간다.
       connectionPool.returnConnection(this);
-    }
-  }
-
-  public void realClose() {
-    try {
-      original.close();
-    } catch (Exception e) {
     }
   }
 

@@ -9,12 +9,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AttachedFileDaoImpl implements AttachedFileDao {
 
   DBConnectionPool connectionPool;
 
   public AttachedFileDaoImpl(DBConnectionPool connectionPool) {
+    System.out.println("AttachedFileDaoImpl() 호출됨!");
     this.connectionPool = connectionPool;
   }
 

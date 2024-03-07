@@ -9,12 +9,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AssignmentDaoImpl implements AssignmentDao {
 
   DBConnectionPool connectionPool;
 
   public AssignmentDaoImpl(DBConnectionPool connectionPool) {
+    System.out.println("AssignmentDaoImpl() 호출됨!");
     this.connectionPool = connectionPool;
   }
 

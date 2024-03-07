@@ -12,13 +12,13 @@
 
 <h1>오류!</h1>
 
-    <c:if test="${not empty message}">
-      <p>${message}</p>
-    </c:if>
+<c:if test="${not empty message}">
+  <p>${message}</p>
+</c:if>
 
-    <c:if test="${not empty detail}">
-      <pre>${detail}</pre>
-    </c:if>
+<c:if test="${not empty detail}">
+  <pre>${detail}</pre>
+</c:if>
 
 <jsp:include page="/footer.jsp"></jsp:include>
 
