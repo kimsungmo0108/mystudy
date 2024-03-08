@@ -22,7 +22,8 @@ public class AuthController {
   }
 
   @RequestMapping("/auth/form")
-  public String form(@CookieValue("email") String email, Map<String, Object> map) {
+  public String form(@CookieValue(value = "email", defaultValue = "") String email,
+      Map<String, Object> map) {
     map.put("email", email);
     return "/auth/form.jsp";
   }
