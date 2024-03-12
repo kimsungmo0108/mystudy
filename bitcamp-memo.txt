@@ -8989,6 +8989,9 @@ Properties 객체 설정
             </props>
         </property>
 </bean>
+
+        <!-- 의존 객체 주입(Dependency Injection; DI) -->
+        <property name="engine" ref="e1"/>
 -------------------------------------------------------------------------------------
 메소드 호출
 
@@ -9020,6 +9023,11 @@ Properties 객체 설정
         <property name="model" value="소나타"/>
     </bean>
 // FactoryBean의 구현체 여부에 따라 "c1" 이라는 이름으로 저장할 객체가 다르다.
+
+public class CarFactoryBean implements FactoryBean<Car> {
+  public Car getObject() throws Exception {}
+  public Class<?> getObjectType() {}
+}
 -------------------------------------------------------------------------------------
 프로퍼티 에디터
 → String 값을 다른 타입의 값으로 변환하는 객체
@@ -9052,13 +9060,39 @@ public class CustomDateEditor extends PropertyEditorSupport {
 	</property>
 </bean>
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.03.12(화)
 -------------------------------------------------------------------------------------
-→
+애노테이션을 처리할 도우미 객체를 등록한다
+<context:annotation-config/>
+→ 위의 태그는 애노테이션을 처리할 객체들을 자동 생성
+- ConfigurationClassPostProcessor
+- AutowiredAnnotationBeanPostProcessor
+- EventListenerMethodProcessor
+- DefaultEventListenerFactory
 -------------------------------------------------------------------------------------
-→
+BeanPostProcessor 인터페이스:
+=> 스프링 IoC 컨테이너는 객체 중에 이 인터페이스를 구현한 객체가 있다면,
+     설정 파일에 적혀있는 객체를 생성한 후에
+     이 구현체의 postProcess....() 메서드를 호출한다. 
+=> 즉 빈 생성 이후의 마무리 작업을 진행시킨다.
+=> 그래서 이 인터페이스의 이름이 
+     BeanPostProcessor(객체 생성 후 처리기) 인 것이다.
 -------------------------------------------------------------------------------------
-→
+  // @Autowired의 required 값은 기본이 true이다.
+  // => 즉 의존객체 주입이 필수사항이다.
+  // 해당하는 의존 객체가 없으면 예외가 발생한다.
+  // => 선택사항으로 바꾸고 싶으면 false로 설정하라!
+  // => required를 false로 설정하면 해당 객체가 없더라도 오류가 발생하지 않는다.
+  // @Autowired
+  @Autowired(required = false)
+
+  // @Qualifier("e2")
+  // 의존 객체가 여러 개 있을 경우, 주입할 의존 객체의 이름을 지정하라!
+  // 주의!
+  // @Qualifier 애노테이션을 처리할 BeanPostProcessor를 등록해야 한다.
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
