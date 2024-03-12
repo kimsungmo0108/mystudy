@@ -26,9 +26,9 @@
         <context:exclude-filter type="regex" 
             expression="com.eomcs.spring.ioc.ex09.p4.*"/>
             
-        <!-- 특정 패키지에서 지정된 패턴의 이름을 가진 클래스를 제외하기 -->
+        <!-- 특정 패키지에서 지정된 패턴의 이름을 가진 클래스를 제외하기-->
         <context:exclude-filter type="regex" 
-            expression="com.eomcs.spring.ioc.ex09.p5.*Truck"/>
+            expression="com.eomcs.spring.ioc.ex09.p5.*Truck"/> 
     </context:component-scan>
     
 </beans>
