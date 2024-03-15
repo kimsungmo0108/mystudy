@@ -9424,13 +9424,61 @@ createServletApplicationContext() → DispatcherServlet이 사용할 IoC 컨테�
 getRootConfigClasses() → ContextLoaderListener의 IoC 컨테이너 설정
 getServletConfigClasses() → DispatcherServlet의 IoC 컨테이너 설정
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.03.15(금)
 -------------------------------------------------------------------------------------
-→
+클라이언트에게 메시지 보내기
+@Controller
+@RequestMapping("/c01_1")
+public class Controller01_1 {
+
+  @RequestMapping // 이 애노테이션을 붙여서 요청이 들어왔을 때 호출될 메서드임을 표시한다.
+  @ResponseBody → 이 애노테이션이 없으면 리턴값을 JSP(페이지 url)로 인식
+  public String handler() {
+    return "c01_1 -> handler()";
+  }
+}
+// URL 한 개 당 한 개의 핸들러만 연결할 수 있다.
+// 같은 URL에 대해 다른 메서드를 또 정의하면 실행 오류가 발생한다.
 -------------------------------------------------------------------------------------
-→
+요청 핸들러 매핑
+// 핸들러에서 URL을 지정한다.
+// 한 개의 request handler에 여러 개의 URL을 매핑할 수 있다.
+@RequestMapping({"/c01_2/h5", "/c01_2/h6", "/c01_2/h7"})
+@ResponseBody
+public String handler5() {
+    return "/c01_2/h5,h6,h7";
+}
+→ @RequestMapping(value={"/c01_2/h1"}) 정석!
+→ value 대신 path 가능
+
+다른 방법
+@Controller
+@RequestMapping("/c01_3") // 핸들러에 적용될 기본 URL을 지정한다.
+public class Controller01_3 {
+  @RequestMapping("h1") // 기본 URL에 뒤에 붙는 상세 URL. 예) /c01_3/h1 → / 생략 가능
+  @ResponseBody
+  public String handler() {
+    return "h1";
+  }
+}
 -------------------------------------------------------------------------------------
-→
+GET/POST 요청 분리
+
+GET
+@RequestMapping(method = RequestMethod.GET) // GET 요청일 때만 호출된다.
+@GetMapping
+@GetMapping(params = "name") // @GetMapping(params = {"name", "age"})
+
+POST
+@RequestMapping(method = RequestMethod.POST) // POST 요청일 때만 호출된다.
+@PostMapping
+@PostMapping(params = "name") // @PostMapping(params = {"name", "age"})
+
+
+
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
