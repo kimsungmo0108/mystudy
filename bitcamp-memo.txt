@@ -9791,9 +9791,56 @@ MultipartFile[] photo // 배열로 받기
       int age,
       @RequestBody String data
 -------------------------------------------------------------------------------------
-→
+★ 컨텐츠 직접 리턴하기(디코딩 제어)
+    // 리턴 값이 클라이언트에게 보내는 콘텐트라면
+    // 메서드 선언부에 @ResponseBody를 붙인다.
+    // => 붙이지 않으면 프론트 컨트롤러는 view URL로 인식한다.
+    // => 출력 콘텐트는 브라우저에서 기본으로 HTML로 간주한다.
+    //    단 한글은 ISO-8859-1 문자표에 정의된 코드가 아니기 때문에
+    //    클라이언트로 보낼 때 '?' 문자로 바꿔 보낸다.
+@GetMapping(value = "h2", produces = "text/html;charset=UTF-8")
+
+응답 헤더에 직접 Content-Type을 설정할 수 있다(HttpEntity<String> 리턴)
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Content-Type", "text/html;charset=UTF-8");
+
+    HttpEntity<String> entity = new HttpEntity<>(
+        "<html><body><h1>abc가각간<h1></body></html>",
+        headers);
+
+    return entity;
+
+
+응답 헤더에 직접 Content-Type을 설정할 수 있다(ResponseEntity<String> 리턴)
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Content-Type", "text/html;charset=UTF-8");
+
+    ResponseEntity<String> entity = new ResponseEntity<>(
+        "<html><body><h1>abc가각간<h1></body></html>",
+        headers,
+        HttpStatus.OK // 응답 상태 코드를 설정할 수 있다.
+    );
+
+    return entity;
 -------------------------------------------------------------------------------------
-→
+jsp 페이지(view) 리턴하기
+    // 메서드 선언부에 @ResponseBody를 붙이지 않으면
+    // 프론트 컨트롤러는 view URL로 간주한다.
+    // => 리턴 URL의 '/'는 웹 애플리케이션 루트를 의미한다.
+    return "/jsp/c05_2.jsp";
+
+    // MVC 패턴에서는 항상 Controller에 의해 View가 통제되어야 한다.
+    // Controller를 경유하지 않고 View를 실행하게 해서는 안된다.
+    // 그래야 View에 대해 일관성 있는 제어가 가능하다.
+    // 문제는 jsp 파일을 웹 애플리케이션의 일반 폴더에 두게 되면
+    // 다음과 같이 클라이언트에서 직접 실행을 요청할 수 있다.
+    // http://localhost:9999/eomcs-spring-webmvc/jsp/c05_2.jsp
+    //
+    // 이것을 막으려면, 다음과 같이 WEB-INF 폴더 밑에 JSP 파일을 두어라.
+    // /WEB-INF 폴더에 있는 파일은 클라이언트에서 직접 실행을 요청할 수 없다.
+    return "/WEB-INF/jsp/c05_2.jsp";
+
+
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
