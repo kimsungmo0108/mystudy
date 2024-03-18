@@ -9465,7 +9465,7 @@ public class Controller01_3 {
   }
 }
 -------------------------------------------------------------------------------------
-GET/POST 요청 분리
+★ GET/POST 요청 분리 ★
 
 GET
 @RequestMapping(method = RequestMethod.GET) // GET 요청일 때만 호출된다.
@@ -9559,23 +9559,202 @@ java 코드로 멀티파트 설정
             1024 * 1024 * 1));
   }
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.03.18(월)
 -------------------------------------------------------------------------------------
-→
+★ GET/POST 요청 분리 ★
+
+GET
+@RequestMapping(method = RequestMethod.GET) // GET 요청일 때만 호출된다.
+@GetMapping
+@GetMapping(params = "name") // @GetMapping(params = {"name", "age"})
+@RequestMapping(method = RequestMethod.GET, headers = {"name", "age}) // @GetMapping(headers={"name", "age})
+
+POST
+@RequestMapping(method = RequestMethod.POST) // POST 요청일 때만 호출된다.
+@PostMapping
+@PostMapping(params = "name") // @PostMapping(params = {"name", "age"})
+@RequestMapping(method = RequestMethod.POST, headers = {"name", "age}) // @PostMapping(headers={"name", "age})
 -------------------------------------------------------------------------------------
-→
+프론트 컨트롤러(DispatcherServlet)로부터 받고 싶은 값이 있다면
+요청 핸들러를 정의할 때 받고 싶은 타입의 파라미터를 선언하라!
+그러면 프론트 컨트롤러가 메서드를 호출할 때 해당 타입의 값을 넘겨줄 것이다.
+
+// ServletContext는 의존 객체로 주입 받아야 한다.
+// 요청 핸들러에서 파라미터로 받을 수 없다.
+@Autowired
+ServletContext sc;
+
+public void handler1(
+// ServletContext sc,
+// ServletContext는 파라미터로 받을 수 없다. 예외 발생!
+// 의존 객체로 주입 받아야 한다.
+ServletRequest request,
+ServletResponse response,
+HttpServletRequest request2,
+HttpServletResponse response2,
+HttpSession session,
+Map<String, Object> map, // JSP에 전달할 값을 담는 임시 보관소
+Model model, // Map과 같다. 둘 중 한 개만 받으면 된다.
+PrintWriter out // 클라이언트에게 콘텐트를 보낼 때 사용할 출력 스트림
+)
 -------------------------------------------------------------------------------------
-→
+GET 방식에서 파라미터 값 받기
+
+옛날방식
+out.printf("name=%s\n", request.getParameter("name"));
+
+스프링 프레임워크 방식
+@RequestParam(value = "name") String name1
+@RequestParam(name = "name") String name
+// 요청 파라미터 이름과 메서드 파라미터(아규먼트)의 이름이 같다면
+// 애노테이션을 생략해도 된다.
+// 필수 항목이다
+
+String name2, // 애노테이션을 붙이지 않으면 선택 항목으로 간주한다.
+// 따라서 파라미터 값이 없으면 null을 받는다.
+
+@RequestParam(value = "name3", required = false) String name3,
+// required 프로퍼티를 false로 설정하면 선택 항목으로 간주한다.
+
+@RequestParam(value = "name4", defaultValue = "ohora") String name4
+// 기본 값을 지정하면 파라미터 값이 없어도 된다.
+
+Car car
+// 아규먼트가 값 객체이면 요청 파라미터 중에서 값 객체의 프로퍼티 이름과 일치하는
+// 항목에 대해 값을 넣어준다.
+// 값 객체 안에 또 값 객체가 있을 때는 OGNL 방식으로 요청 파라미터 값을
+// 지정하면 된다.
+// 예) ...&engine.model=ok&engine.cc=1980&engine.valve=16
 -------------------------------------------------------------------------------------
-→
+개발자가 원하는 파라미터 타입으로 변환하기
+
+// 페이지 컨트롤러의 request handler를 호출할 때 
+// 요청 파라미터의 값을 request handler의 아규먼트로 바꿀 때마다 호출되는 메소드
+// => 이 메소드에서 파라미터 값을 형변환시키는 도구를 설정한다
+  @InitBinder
+  public void ok(WebDataBinder 데이터변환등록기) {
+    System.out.println("ok()......");
+    PropertyEditor 파라미터값변환기 = new DatePropertyEditor();
+    데이터변환등록기.registerCustomEditor(
+        java.sql.Date.class, // String 값을 어떤 타입으로 바꿀 것인지 지정
+        파라미터값변환기 // String 값을 해당 타입으로 변환해줄 변환기 지정
+    );
+  }
+
+파라미터 값 변환 해주는 클래스
+public class DatePropertyEditor extends PropertyEditorSupport {
+
+  @Override
+  public void setAsText(String text) throws IllegalArgumentException {
+    this.setValue(Date.valueOf(text)); // yyyy-mm-dd ===> java.sql.Date 객레초 변환
+  }
+}
 -------------------------------------------------------------------------------------
-→
+Car(사용자 정의) 타입으로 변환하기
+
+public class CarPropertyEditor extends PropertyEditorSupport {
+
+  @Override
+  public void setAsText(String text) throws IllegalArgumentException {
+    String[] values = text.split(","); // model,maker,capacity,auto,createdDate
+    Car car = new Car();
+    car.setModel(values[0]);
+    car.setMaker(values[1]);
+    car.setCapacity(Integer.parseInt(values[2]));
+    car.setAuto(Boolean.parseBoolean(values[3]));
+    car.setCreatedDate(Date.valueOf(values[4]));
+    this.setValue(car);
+  }
+}
+
+@InitBinder가 붙은 메소드의 등록기 설정
+데이터변환등록기.registerCustomEditor(
+        Car.class, // String 값을 Car 객체로 만들 것이라고 지정
+        new CarPropertyEditor() // String 값을 Car 객체로 변환해줄 변환기 지정
+);
 -------------------------------------------------------------------------------------
-→
+★ 모든 페이지 컨트롤러에게 적용(별도의 클래스 만들어서 적용)
+
+@ControllerAdvice
+public class GlobalInitBinder {
+
+  // 페이지 컨트롤러의 request handler를 호출할 때
+  // 요청 파라미터의 값을 request handler의 아규먼트로 바꿀 때마다 호출되는 메소드
+  // => 이 메소드에서 파라미터 값을 형변환시키는 도구를 설정한다
+  @InitBinder
+  public void initBinder(WebDataBinder 데이터변환등록기) {
+    System.out.println("ok()......");
+
+    데이터변환등록기.registerCustomEditor(
+        java.sql.Date.class, // String 값을 어떤 타입으로 바꿀 것인지 지정
+        new DatePropertyEditor() // String 값을 해당 타입으로 변환해줄 변환기 지정
+    );
+
+    데이터변환등록기.registerCustomEditor(
+        Car.class, // String 값을 Car 객체로 만들 것이라고 지정
+        new CarPropertyEditor() // String 값을 Car 객체로 변환해줄 변환기 지정
+    );
+
+    데이터변환등록기.registerCustomEditor(
+        Engine.class, // String 값을 Car 객체로 만들 것이라고 지정
+        new EnginePropertyEditor() // String 값을 Car 객체로 변환해줄 변환기 지정
+    );
+}
 -------------------------------------------------------------------------------------
-→
+// 클라이언트의 HTTP 요청 헤더를 받고 싶으면
+// request handler의 아규먼트 앞에 @RequestHeader(헤더명) 애노테이션을 붙여라!
+@RequestHeader("Accept") String accept
+@RequestHeader("User-Agent") String userAgent
 -------------------------------------------------------------------------------------
-→
+쿠키 주고 받기
+
+쿠키 보내기
+response.addCookie(new Cookie("name2", URLEncoder.encode("AB가각", "UTF-8")));
+
+쿠키 받기
+@CookieValue(value = "name2", defaultValue = "") String name2
+-------------------------------------------------------------------------------------
+쿠키에서 인코딩 디코딩
+
+    // 1) URLEncoder.encode("AB가각", "UTF-8")
+    // ==> JVM 문자열은 UTF-16 바이트 배열이다.
+    //     0041 0042 ac00 ac01
+    // ==> UTF-8 바이트로 변환한다.
+    //     41 42 ea b0 80 ea b0 81
+    // ==> 8비트 데이터가 짤리지 않도록 URL 인코딩으로 7비트화 시킨다.
+    //     "AB%EA%B0%80%EA%B0%81"
+    //     41 42 25 45 41 25 42 30 25 38 30 25 45 41 25 42 30 25 38 31
+    // ==> 웹 브라우저에서는 받은 값을 그대로 저장
+    //
+    // 2) 쿠키를 다시 서버로 보내기
+    // ==> 웹 브라우저는 저장된 값을 그대로 전송
+    //     "AB%EA%B0%80%EA%B0%81"
+    //     41 42 25 45 41 25 42 30 25 38 30 25 45 41 25 42 30 25 38 31
+    // ==> 프론트 컨트롤러가 쿠키 값을 꺼낼 때 자동으로 URL 디코딩을 수행한다.
+    //     즉 7비트 문자화된 코드를 값을 원래의 8비트 코드로 복원한다.
+    //     41 42 ea b0 80 ea b0 81
+    // ==> 디코딩 하여 나온 바이트 배열을 UTF-16으로 만든다.
+    //     문제는 바이트 배열을 ISO-8859-1로 간주한다는 것이다.
+    //     그래서 UTF-16으로 만들 때 무조건 앞에 00 1바이트를 붙인다.
+    //     0041 0042 00ea 00b0 0080 00ea 00b0 0081
+    //     그래서 한글이 깨진 것이다.
+    //
+    // 해결책:
+    // => UTF-16을 ISO-8859-1 바이트 배열로 변경한다.
+    //    41 42 ea b0 80 ea b0 81
+    byte[] originBytes = name2.getBytes("ISO-8859-1");
+
+    // => 다시 바이트 배열을 UTF-16으로 바꾼다.
+    //    이때 바이트 배열이 UTF-8로 인코딩된 값임을 알려줘야 한다.
+    //    0041 0042 ac00 ac01
+    String namex = new String(originBytes, "UTF-8");
+
+    return String.format(//
+        "name1=%s\n name2=%s\n name2=%s\n name3=%s\n age=%d\n", //
+        name1, name2, namex, name3, age);
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
