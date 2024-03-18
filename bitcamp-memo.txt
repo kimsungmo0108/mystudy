@@ -9756,9 +9756,40 @@ response.addCookie(new Cookie("name2", URLEncoder.encode("AB가각", "UTF-8")));
         "name1=%s\n name2=%s\n name2=%s\n name3=%s\n age=%d\n", //
         name1, name2, namex, name3, age);
 -------------------------------------------------------------------------------------
-→
+스프링 프레임워크에서 multipart 받기
+
+Part photo // Servlet API의 객체
+
+    String filename = null;
+    if (photo != null && photo.getSize() > 0) {
+      filename = UUID.randomUUID().toString();
+      String path = sc.getRealPath("/upload/" + filename);
+      photo.write(path);
+    }
+
+MultipartFile photo // Spring API의 객체
+    String filename = null;
+    if (photo != null && !photo.isEmpty()) {
+      filename = UUID.randomUUID().toString();
+      String path = sc.getRealPath("/upload/" + filename);
+      photo.transferTo(new File(path));
+    }
+
+MultipartFile[] photo // 배열로 받기
+    for (MultipartFile f : photo) {
+      if (!f.isEmpty()) {
+        String filename = UUID.randomUUID().toString();
+        String path = sc.getRealPath("/upload/" + filename);
+        f.transferTo(new File(path));
+        out.printf("<p><img src='../../upload/%s'></p>\n", filename);
+      }
+    }
 -------------------------------------------------------------------------------------
-→
+클라이언트가 보내는 데이터를 한 덩어리로 받기
+// 클라이언트가 보낸 데이터를 통째로 받으려면 파라미터 앞에 @RequestBody 애노테이션을 붙인다.
+      String name,
+      int age,
+      @RequestBody String data
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
