@@ -9941,13 +9941,80 @@ ViewResolver IoC 컨테이너에 설정
     return vr;
   }
 -------------------------------------------------------------------------------------
-→
+기존 방법인 URL에 Query String이 아니라 경로에 파라미터 값 삽입하기
+
+http://localhost:8888/app2/c02_1/aaa/30
+
+  @GetMapping("{name}/{age}")
+  @ResponseBody
+  public String handler2(
+      /*
+      @PathVariable("name") String name,
+      @PathVariable("age") int age
+       */
+      // URL의 변수 이름을 생략하면 아규먼트 이름을 사용한다.
+      @PathVariable String name,
+      @PathVariable int age
+  ) {
+    // URL path에 값을 포함하여 전달할 수 있고, 그 값을 아규먼트로 받을 수 있다.
+    // URL path에 포함된 값을 받으려면 request handler의 URL을 설정할 때
+    // 다음의 문법으로 선언해야 한다.
+    // => .../{변수명}/{변수명}
+    // 이렇게 선언된 변수 값을 받으려면 다음과 같이 아규먼트를 선언해야 한다.
+    // => @PathVariable(변수명) String 아규먼트
+    // 변수명과 아규먼트의 이름이 같다면, 다음과 같이 변수명을 생략할 수 있다.
+    // => @PathVariable String 아규먼트
+    //
+    return String.format("name=%s, age=%d", name, age);
+  }
 -------------------------------------------------------------------------------------
-→
+MatrixVariable 사용하기
+ 
+  @GetMapping(value = "{value}", produces = "text/plain;charset=UTF-8")
+  @ResponseBody
+  public String handler2(
+      @PathVariable("value") String value,
+      @MatrixVariable String name,
+      @MatrixVariable int age) {
+    return String.format("value:%s \n name:%s, age:%d", value, name, age);
+  }
+
+      @MatrixVariable(name = "name", pathVar = "team") String name1,
+      @MatrixVariable(name = "qty", pathVar = "team") int qty1,
+      @MatrixVariable(name = "name", pathVar = "task") String name2,
+      @MatrixVariable(name = "qty", pathVar = "task") int qty2
+
+→ ; 으로 구분해서 파라미터 값을 받을 수 있다
+http://localhost:8888/app2/c02_2/name=aaa;qty=6/title=bbb;state=2
 -------------------------------------------------------------------------------------
-→
+MatrixVariable 설정
+
+    // 1) XML 설정
+    //    => <mvc:annotation-driven enable-matrix-variables="true"/>
+    // 2) Java Config 설정
+    //    => @EnableWebMvc 애노테이션을 활성화시킨다.
+    //    => WebMvcConfigurer 구현체를 정의한다.
+    //    => configurePathMatch 메소드 재정의한다
+    //    => UrlPathHelper 객체의 setRemoveSemicolonContent 프로퍼티 값을 false로 설정한다.
 -------------------------------------------------------------------------------------
-→
+정규표현식
+
+  @GetMapping(
+      value="h2/{name:[a-zA-Z0-9]+}/{tel:[0-9]+-[0-9]+-[0-9]+}/{gender:man|woman}", 
+      produces="text/plain;charset=UTF-8")
+  @ResponseBody
+  public String handler2(
+      @PathVariable String name, 
+      @PathVariable String tel,
+      @PathVariable String gender) {
+    
+    // 패스 변수를 사용할 때,
+    // 패스 변수의 값 규칙을 정규표현식으로 정의할 수 있다.
+    // 정규 표현식에 어긋간 URL의 경우 예외가 발생할 것이다.
+    //
+    return String.format("name: %s\n tel: %s \n gender: %s", 
+        name, tel, gender);
+  }
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------

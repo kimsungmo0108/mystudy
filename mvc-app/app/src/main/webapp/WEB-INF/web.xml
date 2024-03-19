@@ -28,9 +28,10 @@
   </error-page>
   -->
   <!-- 2)오류가 발생했을 때 페이지 컨트롤러를 경유하여 JSP 실행  -->
+  <!--
   <error-page>
     <location>/app2/error</location>
-  </error-page>
+  </error-page>-->
 </web-app>
 
 
