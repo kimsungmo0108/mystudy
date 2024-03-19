@@ -7,6 +7,6 @@ public class DatePropertyEditor extends PropertyEditorSupport {
 
   @Override
   public void setAsText(String text) throws IllegalArgumentException {
-    this.setValue(Date.valueOf(text)); // yyyy-mm-dd ===> java.sql.Date 객레초 변환
+    this.setValue(Date.valueOf(text)); // yyyy-mm-dd ===> java.sql.Date 객체로 변환
   }
 }

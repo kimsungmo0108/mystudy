@@ -9601,7 +9601,7 @@ Model model, // Map과 같다. 둘 중 한 개만 받으면 된다.
 PrintWriter out // 클라이언트에게 콘텐트를 보낼 때 사용할 출력 스트림
 )
 -------------------------------------------------------------------------------------
-GET 방식에서 파라미터 값 받기
+★ GET 방식에서 파라미터 값 받기
 
 옛날방식
 out.printf("name=%s\n", request.getParameter("name"));
@@ -9840,15 +9840,73 @@ jsp 페이지(view) 리턴하기
     // /WEB-INF 폴더에 있는 파일은 클라이언트에서 직접 실행을 요청할 수 없다.
     return "/WEB-INF/jsp/c05_2.jsp";
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.03.19(화)
 -------------------------------------------------------------------------------------
-→
+jsp 객체 리턴
+  @GetMapping("h3")
+  public View handler3() {
+    return new JstlView("/WEB-INF/jsp/c05_2.jsp");
+  }
 -------------------------------------------------------------------------------------
-→
+모델/jsp 객체 리턴
+  @GetMapping("h4")
+  public ModelAndView handler4() {
+    System.out.println("===> /app1/c05_2/h4");
+    ModelAndView mv = new ModelAndView();
+    mv.setViewName("/WEB-INF/jsp/c05_2.jsp");
+    return mv;
+  }
 -------------------------------------------------------------------------------------
-→
+리타이렉트/포워드
+ @GetMapping("h6")
+  public String handler6() {
+     return "redirect:h4";
+     return "forward:h4";
+}
 -------------------------------------------------------------------------------------
-→
+프론트 컨트롤러에게 값 전달하기
+
+1)
+@GetMapping("h3")
+public String handler3(ServletRequest request, Map<String, Object> map, Model model) {
+
+    request.setAttribute("name", "홍길동");
+    request.setAttribute("age", 20); // auto-boxing: int ===> Integer 객체
+    request.setAttribute("working", true); // auto-boxing: boolean ===> Boolean 객체
+
+    map.put("name", "홍길동");
+    map.put("age", 20); // auto-boxing
+    map.put("working", true); // auto-boxing
+
+    model.addAttribute("name", "홍길동");
+    model.addAttribute("age", 20); // auto-boxing
+    model.addAttribute("working", true); // auto-boxing
+
+    return "/WEB-INF/jsp/c05_3.jsp";
+}
+
+2)
+@GetMapping("h4")
+public ModelAndView handler4() {
+
+    // request handler에서 ModelAndView 객체를 만들어 리턴한다.
+    // => 이 객체의 용도는 Model과 view URL을 함께 리턴하는 것이다.
+    //
+    ModelAndView mv = new ModelAndView();
+
+    // JSP가 사용할 데이터를 담고
+    mv.addObject("name", "홍길동");
+    mv.addObject("age", 20); // auto-boxing
+    mv.addObject("working", true); // auto-boxing
+
+    // JSP 주소도 담는다.
+    mv.setViewName("/WEB-INF/jsp/c05_3.jsp");
+
+    return mv;
+  }
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
