@@ -10134,11 +10134,59 @@ JSON 컨텐츠 넣고 출력하기
 //    리턴 값은 HttpMessageConverter에 의해 자동으로 변환된다.
 // => @ResponseBody를 붙일 필요가 없다.
 -------------------------------------------------------------------------------------
-→
+JSON 객체 통채로 받기
+@RestController
+@RequestMapping("/c05_3")
+public class Controller05_3 {
+
+  @RequestMapping(value="h3", produces="text/plain;charset=UTF-8")
+  public Object handler3(@RequestBody String content) throws Exception {
+    System.out.println(content);
+    System.out.println(URLDecoder.decode(content, "UTF-8"));
+    return "OK!";
+  }
+
+  @RequestMapping(value="h4", produces="text/plain;charset=UTF-8")
+  public Object handler4(@RequestBody Map<String,Object> content) throws Exception {
+    System.out.println(content);
+    return "OK!";
+  }
+
+  @RequestMapping(value="h5", produces="text/plain;charset=UTF-8")
+  public Object handler5(@RequestBody Board content) throws Exception {
+    System.out.println(content);
+    return "OK!";
+  }
+}
 -------------------------------------------------------------------------------------
-→
+jacksom ==> json 형태로 변환
+  @JsonFormat(shape= JsonFormat.Shape.STRING,pattern="yyyy-MM-dd")
+  public void setCreatedDate(Date createdDate) {
+    this.createdDate = createdDate;
+  }
 -------------------------------------------------------------------------------------
-→
+오류 처리
+  @ExceptionHandler
+  public ModelAndView exceptionHandler(Exception ex) {
+    System.out.println("Controller06_1.exceptionHandler() 호출됨!");
+    ModelAndView mv = new ModelAndView();
+    mv.addObject("error", ex);
+    mv.setViewName("error6");
+    return mv;
+  }
+
+    // Request Handler에서 예외를 던졌을 때 처리 절차!
+    // 1) 페이지 컨트롤러 안에 예외 처리기가 있다면,
+    // => 해당 메서드를 호출한다.
+    // 2) @ControllerAdvice 객체에 예외 처리기가 있다면,
+    // => 해당 메서드를 호출한다.
+    // 3) web.xml 에 지정된 오류 처리 기본 페이지가 설정되어 있다면,
+    // => 해당 페이지를 실행한다.
+    // 4) 서블릿 컨테이너의 기본 오류 처리 페이지를 실행한다.
+
+  <error-page>
+    <location>/app2/error</location>
+  </error-page>
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------

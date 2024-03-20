@@ -7,8 +7,8 @@
 <title>jsp</title>
 </head>
 <body>
-<h1>/WEB-INF/jsp2/error2.jsp</h1>
-<p>상태 코드: ${status}</p>
-<p>오류 내용: ${reason}</p>
+<h1>/WEB-INF/jsp2/error.jsp</h1>
+<p>상태코드: ${request.getAttribute("javax.servlet.error.status_code")}</p>
+<p>오류메시지: ${request.getAttribute("javax.servlet.error.message")}</p>
 </body>
 </html>

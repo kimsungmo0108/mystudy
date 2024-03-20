@@ -7,8 +7,9 @@
 <title>jsp</title>
 </head>
 <body>
-<h1>/WEB-INF/jsp2/error2.jsp</h1>
-<p>상태 코드: ${status}</p>
-<p>오류 내용: ${reason}</p>
+<h1>/WEB-INF/jsp2/get.jsp</h1>
 </body>
 </html>
+<%
+System.out.println("c04_1.jsp 실행");
+%>

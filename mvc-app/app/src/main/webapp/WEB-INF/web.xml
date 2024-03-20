@@ -24,14 +24,15 @@
   <!-- 1)오류가 발생했을 때 직접 JSP를 실행  -->
   <!--  
   <error-page>
-    <location>/WEB-INF/jsp2/error1.jsp</location>
+    <location>/WEB-INF/jsp2/error.jsp</location>
   </error-page>
   -->
-  <!-- 2)오류가 발생했을 때 페이지 컨트롤러를 경유하여 JSP 실행  -->
-  <!--
+  <!-- 2)오류가 발생했을 때 페이지 컨트롤러를 경유하여 JSP 실행-->
+
   <error-page>
-    <location>/app2/error</location>
-  </error-page>-->
+    <location>/app2/error2</location>
+  </error-page>
+
 </web-app>
 
 
