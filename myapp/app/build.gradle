@@ -22,6 +22,9 @@ dependencies {
     // Spring IoC 컨테이너
 //    implementation 'org.springframework:spring-context:5.3.32'
 
+    // log4j 2.x 라이브러리
+    implementation 'org.apache.logging.log4j:log4j-core:2.23.1'
+    
     // Spring WebMVC 라이브러리
     implementation 'org.springframework:spring-webmvc:5.3.32'
 
