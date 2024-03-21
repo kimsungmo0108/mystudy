@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<jsp:include page="/header.jsp"></jsp:include>
+<jsp:include page="../header.jsp"></jsp:include>
 
 <h1>회원</h1>
 <a href='/app/member/form'>새 회원</a>
@@ -37,7 +37,7 @@
     </tbody>
 </table>
 
-<jsp:include page="/footer.jsp"></jsp:include>
+<jsp:include page="../footer.jsp"></jsp:include>
 
 </body>
 </html>

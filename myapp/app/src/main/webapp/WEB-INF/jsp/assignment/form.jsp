@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<jsp:include page="/header.jsp"></jsp:include>
+<jsp:include page="../header.jsp"></jsp:include>
 
 <h1>과제 관리 시스템</h1>
 
@@ -28,7 +28,7 @@
   </div>
 </form>
 
-<jsp:include page="/footer.jsp"></jsp:include>
+<jsp:include page="../footer.jsp"></jsp:include>
 
 </body>
 </html>

@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<jsp:include page="/header.jsp"></jsp:include>
+<jsp:include page="../header.jsp"></jsp:include>
 
 <h1>로그인</h1>
 <c:if test="${not empty loginUser}">
@@ -24,7 +24,7 @@
   <p>이메일 또는 암호가 맞지 않습니다.</p>
 </c:if>
 
-<jsp:include page="/footer.jsp"></jsp:include>
+<jsp:include page="../footer.jsp"></jsp:include>
 
 </body>
 </html>
