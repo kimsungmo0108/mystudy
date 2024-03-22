@@ -36,26 +36,26 @@
 
   <select id="findAllByBoardNo" resultMap="AttachedFileMap" parameterType="int">
     select
-    file_no,
-    file_path,
-    board_no
+      file_no,
+      file_path,
+      board_no
     from
-    board_files
+      board_files
     where
-    board_no=#{value}
+      board_no=#{value}
     order by
-    file_no asc
+      file_no asc
   </select>
 
   <select id="findByNo" resultMap="AttachedFileMap" parameterType="int">
     select
-    file_no,
-    file_path,
-    board_no
+      file_no,
+      file_path,
+      board_no
     from
-    board_files
+      board_files
     where
-    file_no=#{value}
+      file_no=#{value}
   </select>
 
 </mapper>

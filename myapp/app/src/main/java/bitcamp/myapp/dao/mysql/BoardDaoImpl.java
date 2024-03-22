@@ -2,7 +2,6 @@ package bitcamp.myapp.dao.mysql;
 
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
-import bitcamp.util.DBConnectionPool;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,12 +13,10 @@ import org.springframework.stereotype.Repository;
 public class BoardDaoImpl implements BoardDao {
 
   private final Log log = LogFactory.getLog(this.getClass());
-  DBConnectionPool connectionPool;
   SqlSessionFactory sqlSessionFactory;
 
-  public BoardDaoImpl(DBConnectionPool connectionPool, SqlSessionFactory sqlSessionFactory) {
+  public BoardDaoImpl(SqlSessionFactory sqlSessionFactory) {
     log.debug("BoardDaoImpl() 호출됨!");
-    this.connectionPool = connectionPool;
     this.sqlSessionFactory = sqlSessionFactory;
   }
 

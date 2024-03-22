@@ -2,7 +2,6 @@ package bitcamp.myapp.dao.mysql;
 
 import bitcamp.myapp.dao.AssignmentDao;
 import bitcamp.myapp.vo.Assignment;
-import bitcamp.util.DBConnectionPool;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -15,12 +14,10 @@ public class AssignmentDaoImpl implements AssignmentDao {
 
 
   private final Log log = LogFactory.getLog(this.getClass());
-  DBConnectionPool connectionPool;
   SqlSessionFactory sqlSessionFactory;
 
-  public AssignmentDaoImpl(DBConnectionPool connectionPool, SqlSessionFactory sqlSessionFactory) {
+  public AssignmentDaoImpl(SqlSessionFactory sqlSessionFactory) {
     log.debug("AssignmentDaoImpl() 호출됨!");
-    this.connectionPool = connectionPool;
     this.sqlSessionFactory = sqlSessionFactory;
   }
 
