@@ -17,5 +17,8 @@
   </environments>
   <mappers>
     <mapper resource="mapper/MemberMapper.xml"/>
+    <mapper resource="mapper/AssignmentMapper.xml"/>
+    <mapper resource="mapper/BoardMapper.xml"/>
+    <mapper resource="mapper/AttachedFileMapper.xml"/>
   </mappers>
 </configuration>

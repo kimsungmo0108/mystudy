@@ -10250,9 +10250,30 @@ Mybatis
 → 개발자가 SQL문을 몰라도 된다
 → DBMS의 성능을 최대로 활용할 수 없다
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.03.22(금)
 -------------------------------------------------------------------------------------
-→
+SqlSession 과 Connection, Transaction
+
+1) 트랜잭션을 시작하지 않았을 때
+					      DataSource
+						↑↓ 생성/반납
+SqlSessionFactory → openSession() → SqlSession → Connection1 → Thread1
+			        → SqlSession → Connection2 → Thread2
+			        → SqlSession → Connection3 → Thread3
+→ SqlSession.close() 하면 Connection 반납
+
+2) 트랜잭션을 시작했을 때
+					      DataSource
+						↑↓ 생성/반납
+SqlSessionFactory → openSession() → SqlSession → Connection1 → Thread1
+			        → SqlSession		→ 커넥션 공유
+			        → SqlSession 
+→ TransationManager가 commit/rollback 하고 스레드의 작업이 종료 되었을 때 Connection 반납
+→ commit 하면 실제 테이블에 반영
+→ rollback 하면 임시 테이블 삭제
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
