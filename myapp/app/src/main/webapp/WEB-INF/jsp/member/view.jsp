@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang='en'>
   <head>
@@ -35,7 +36,7 @@
   암호: <input name='password' type='password'>
 </div>
 <div>
-  가입일: <input readonly type='text' value='${member.createdDate}'>
+  가입일: <input readonly type='text' value=<fmt:formatDate value="${member.createdDate}" pattern="yyyy-MM-dd hh:mm:ss"/>>
 </div>
 <div>
   <button>변경</button>

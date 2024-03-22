@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!DOCTYPE html>0
 <html lang='en'>
   <head>
   <meta charset='UTF-8'>
@@ -23,7 +24,7 @@
       <td>${board.no}</td>
       <td><a href='/app/board/view?category=${category}&no=${board.no}'>${board.title}</a></td>
       <td>${board.writer.name}</td>
-      <td>${board.createdDate}</td>
+      <td><fmt:formatDate value="${board.createdDate}" pattern="yyyy-MM-dd hh:mm:ss"/></td>
       <td>${board.fileCount}</td>
     </tr>
 </c:forEach>

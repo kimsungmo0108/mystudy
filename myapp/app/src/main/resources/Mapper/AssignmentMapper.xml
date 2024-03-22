@@ -5,7 +5,14 @@
 
 <mapper namespace="AssignmentDao">
 
-  <insert id="add" parameterType="bitcamp.myapp.vo.Assignment">
+  <resultMap id="AssignmentMap" type="Assignment">
+    <id column="assignment_no" property="no"/>
+    <result column="title" property="title"/>
+    <result column="content" property="content"/>
+    <result column="deadline" property="deadline"/>
+  </resultMap>
+
+  <insert id="add" parameterType="Assignment">
     insert into assignments(title,content,deadline) values(#{title},#{content},#{deadline})
   </insert>
 
@@ -13,9 +20,9 @@
     delete from assignments where assignment_no=#{value}
   </delete>
 
-  <select id="findAll" resultType="bitcamp.myapp.vo.Assignment">
+  <select id="findAll" resultMap="AssignmentMap">
     select
-      assignment_no as no,
+      assignment_no,
       title,
       deadline
     from
@@ -24,16 +31,16 @@
       assignment_no desc
   </select>
 
-  <select id="findBy" parameterType="int" resultType="bitcamp.myapp.vo.Assignment">
+  <select id="findBy" parameterType="int" resultMap="AssignmentMap">
     select
-      assignment_no as no,
+      assignment_no,
       title,
       content,
       deadline
     from assignments where assignment_no=#{value}
   </select>
 
-  <update id="update" parameterType="bitcamp.myapp.vo.Assignment">
+  <update id="update" parameterType="Assignment">
     update assignments set
       title=#{title},
       content=#{content},
