@@ -14,10 +14,8 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.PlatformTransactionManager;
 
-@ComponentScan(value = {
-    "bitcamp.myapp.dao",
-    "bitcamp.util"
-})
+
+@ComponentScan(value = {"bitcamp.myapp.dao"})
 @PropertySource({
     "classpath:config/jdbc.properties"
 })
@@ -52,4 +50,6 @@ public class RootConfig {
 
     return sqlSessionFactoryBean.getObject();
   }
+
+
 }

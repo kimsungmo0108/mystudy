@@ -10281,7 +10281,32 @@ SqlSessionFactory → openSession() → SqlSession → Connection1 → Thread1
   - 'mybatis-spring' 라이브러리 추가
   - 'spring-jdbc' 라이브러리 추가
 -------------------------------------------------------------------------------------
-→
+@Transactional을 이용한 트랜잭션 제어
+→ @Transactional이 붙으면 프록시 객체를 만든다
+→ Spring IoC 컨테이너가 자동 생성한다
+→ @Transactional 애노테이션이 붙은 메소드가 있으면
+
+BoardController{
+	@Transactional 
+	add(){}
+}
+
+BoardController의 Proxy{
+	BoardController original; → 스프링부트가 주입
+
+	@Transactional 
+	add(){
+		트랜잭션 시작
+		try{
+			original.add();
+			commit;
+		}catch(Exception e){
+			rollback;
+		}
+	}
+}
+/board/add 요청 → DispatcherServlet → add() → Proxy → add() → BoardController → 처리 후 리턴
+
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
