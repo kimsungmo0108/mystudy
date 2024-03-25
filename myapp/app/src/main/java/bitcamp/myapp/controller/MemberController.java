@@ -1,6 +1,5 @@
 package bitcamp.myapp.controller;
 
-import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.service.MemberService;
 import bitcamp.myapp.vo.Member;
 import java.io.File;
@@ -20,14 +19,12 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberController {
 
   private final Log log = LogFactory.getLog(this.getClass());
-  private MemberDao memberDao;
   private MemberService memberService;
   private String uploadDir;
 
-  public MemberController(MemberDao memberDao, MemberService memberService, ServletContext sc) {
+  public MemberController(MemberService memberService, ServletContext sc) {
     log.debug("MemberController() 호출됨!");
     this.memberService = memberService;
-    this.memberDao = memberDao;
     this.uploadDir = sc.getRealPath("/upload");
   }
 
