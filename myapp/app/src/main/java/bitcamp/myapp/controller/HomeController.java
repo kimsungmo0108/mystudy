@@ -10,7 +10,6 @@ public class HomeController {
 
   private static final Log log = LogFactory.getLog(HomeController.class);
 
-
   @GetMapping("/home")
   public void home() {
   }

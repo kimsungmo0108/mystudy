@@ -13,11 +13,13 @@
   </resultMap>
 
   <insert id="add" parameterType="Assignment">
-    insert into assignments(title,content,deadline) values(#{title},#{content},#{deadline})
+    insert into assignments(title,content,deadline)
+    values(#{title}, #{content}, #{deadline})
   </insert>
 
   <delete id="delete" parameterType="int">
-    delete from assignments where assignment_no=#{value}
+    delete from assignments
+    where assignment_no=#{value}
   </delete>
 
   <select id="findAll" resultMap="AssignmentMap">
@@ -31,13 +33,16 @@
       assignment_no desc
   </select>
 
-  <select id="findBy" parameterType="int" resultMap="AssignmentMap">
+  <select id="findBy" resultMap="AssignmentMap" parameterType="int">
     select
       assignment_no,
       title,
       content,
       deadline
-    from assignments where assignment_no=#{value}
+    from
+      assignments
+    where
+      assignment_no=#{value}
   </select>
 
   <update id="update" parameterType="Assignment">

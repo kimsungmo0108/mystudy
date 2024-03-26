@@ -22,10 +22,9 @@ public class AuthController {
 
   private static final Log log = LogFactory.getLog(AuthController.class);
   private final MemberService memberService;
-  
 
   @GetMapping("form")
-  public void form(@CookieValue(value = "email", required = false) String email, Model model) {
+  public void form(@CookieValue(required = false) String email, Model model) {
     model.addAttribute("email", email);
   }
 
@@ -51,12 +50,13 @@ public class AuthController {
     if (member != null) {
       session.setAttribute("loginUser", member);
     }
+
     return "auth/login";
   }
 
   @GetMapping("logout")
   public String logout(HttpSession session) throws Exception {
     session.invalidate();
-    return "redirect:/app/home";
+    return "redirect:/index.html";
   }
 }

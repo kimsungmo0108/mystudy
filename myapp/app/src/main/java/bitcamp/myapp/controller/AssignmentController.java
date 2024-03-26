@@ -18,7 +18,6 @@ public class AssignmentController {
 
   private static final Log log = LogFactory.getLog(AssignmentController.class);
   private final AssignmentService assignmentService;
-  
 
   @GetMapping("form")
   public void form() throws Exception {

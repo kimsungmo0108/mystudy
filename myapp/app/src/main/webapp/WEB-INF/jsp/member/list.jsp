@@ -32,7 +32,7 @@
   </c:choose>
         <a href='/app/member/view?no=${member.no}'>${member.name}</a></td>
         <td>${member.email}</td>
-        <td><fmt:formatDate value="${member.createdDate}" pattern="yyyy-MM-dd hh:mm:ss"/></td>
+        <td><fmt:formatDate value="${member.createdDate}" pattern="yyyy-MM-dd"/></td>
       </tr>
 </c:forEach>
     </tbody>

@@ -16,6 +16,7 @@ public interface MemberDao {
 
   public int update(Member member);
 
-  public Member findByEmailAndPassword(@Param("email") String email,
+  public Member findByEmailAndPassword(
+      @Param("email") String email,
       @Param("password") String password);
 }

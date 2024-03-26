@@ -1,6 +1,5 @@
 package bitcamp.myapp.config;
 
-
 import java.io.File;
 import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
@@ -36,17 +35,18 @@ public class AppWebApplicationInitializer extends
 
   @Override
   protected void customizeRegistration(Dynamic registration) {
-    registration.setMultipartConfig(
-        new MultipartConfigElement(
-            new File("./temp").getAbsolutePath(),
-            //new File(System.getProperty("java.io.tmpdir")).getAbsolutePath(),
-            1024 * 1024 * 10,
-            1024 * 1024 * 100,
-            1024 * 1024 * 1));
+    registration.setMultipartConfig(new MultipartConfigElement(
+        new File("./temp").getAbsolutePath(),
+        //new File(System.getProperty("java.io.tmpdir")).getAbsolutePath(),
+        1024 * 1024 * 10,
+        1024 * 1024 * 100,
+        1024 * 1024 * 1
+    ));
   }
 
   @Override
   protected Filter[] getServletFilters() {
     return new Filter[]{new CharacterEncodingFilter("UTF-8")};
   }
+
 }

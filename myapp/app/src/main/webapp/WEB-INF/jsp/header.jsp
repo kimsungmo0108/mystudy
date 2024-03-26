@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <header>
-  <a href="/app/home"><img src='https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png'></a>
+  <img src='https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png'>
   <a href='/app/assignment/list'>과제</a>
   <a href='/app/board/list?category=1'>게시글</a>
   <a href='/app/member/list'>회원</a>

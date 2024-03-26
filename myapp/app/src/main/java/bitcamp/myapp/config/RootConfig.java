@@ -18,10 +18,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
 @MapperScan("bitcamp.myapp.dao")
-@ComponentScan(value = {"bitcamp.myapp.dao", "bitcamp.myapp.service"})
-@PropertySource({
-    "classpath:config/jdbc.properties"
-})
+@ComponentScan({"bitcamp.myapp.dao", "bitcamp.myapp.service"})
+@PropertySource({"classpath:config/jdbc.properties"})
 public class RootConfig {
 
   private final Log log = LogFactory.getLog(this.getClass());
@@ -31,19 +29,20 @@ public class RootConfig {
   }
 
   @Bean
-  public DataSource dataSource(
-      @Value("${jdbc.url}") String url,
-      @Value("${jdbc.username}") String userName,
-      @Value("${jdbc.password}") String password) {
-    return new DriverManagerDataSource(url, userName, password);
-  }
-
-  @Bean
   public PlatformTransactionManager transactionManager(DataSource dataSource) {
     return new DataSourceTransactionManager(dataSource);
   }
 
   @Bean
+  public DataSource dataSource(
+      @Value("${jdbc.url}") String url,
+      @Value("${jdbc.username}") String username,
+      @Value("${jdbc.password}") String password) {
+    return new DriverManagerDataSource(url, username, password);
+  }
+
+  @Bean
+
   public SqlSessionFactory sqlSessionFactory(ApplicationContext ctx, DataSource dataSource)
       throws Exception {
     SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
@@ -53,6 +52,4 @@ public class RootConfig {
 
     return sqlSessionFactoryBean.getObject();
   }
-
-
 }

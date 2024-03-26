@@ -24,7 +24,7 @@
       <td>${board.no}</td>
       <td><a href='/app/board/view?category=${category}&no=${board.no}'>${board.title}</a></td>
       <td>${board.writer.name}</td>
-      <td><fmt:formatDate value="${board.createdDate}" pattern="yyyy-MM-dd hh:mm:ss"/></td>
+      <td><fmt:formatDate value="${board.createdDate}" pattern="yyyy-MM-dd"/></td>
       <td>${board.fileCount}</td>
     </tr>
 </c:forEach>

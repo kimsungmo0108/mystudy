@@ -51,14 +51,14 @@
       email=#{email},
       name=#{name},
       photo=#{photo}
-      <if test="password != ''">
-        , password=sha2(#{password},256)
-      </if>
+    <if test="password != ''">
+      , password=sha2(#{password},256)
+    </if>
     where
       member_no=#{no}
   </update>
 
-  <select id="findByEmailAndPassword" resultMap="MemberMap" parameterType="map">
+  <select id="findByEmailAndPassword" resultMap="MemberMap">
     select
       member_no,
       email,

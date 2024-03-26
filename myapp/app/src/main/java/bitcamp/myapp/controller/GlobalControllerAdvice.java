@@ -15,23 +15,22 @@ public class GlobalControllerAdvice {
 
   @InitBinder
   public void initBinder(WebDataBinder webDataBinder) {
-
-    webDataBinder.registerCustomEditor(Date.class,
-        new PropertyEditorSupport() {
-          public void setAsText(String text) throws IllegalArgumentException {
-            this.setValue(Date.valueOf(text));
-          }
-        });
+    webDataBinder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
+      public void setAsText(String text) throws IllegalArgumentException {
+        this.setValue(Date.valueOf(text));
+      }
+    });
   }
 
   @ExceptionHandler
-  public ModelAndView exceptionrHandler(Exception e) {
+  public ModelAndView exceptionHandler(Exception e) {
     ModelAndView mv = new ModelAndView();
     mv.addObject("message", e.getMessage());
 
     StringWriter stringWriter = new StringWriter();
     PrintWriter out = new PrintWriter(stringWriter);
     e.printStackTrace(out);
+
     mv.addObject("detail", stringWriter.toString());
 
     mv.setViewName("error");

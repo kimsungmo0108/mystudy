@@ -14,9 +14,8 @@ public interface BoardService {
 
   int update(Board board);
 
-
   int delete(int no);
-
+  
   List<AttachedFile> getAttachedFiles(int no);
 
   AttachedFile getAttachedFile(int fileNo);
