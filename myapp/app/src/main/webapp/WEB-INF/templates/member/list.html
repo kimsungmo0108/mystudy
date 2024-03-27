@@ -21,9 +21,10 @@
   </thead>
   <tbody>
   <tr data-th-each="member : ${list}" data-th-object="${member}">
-    <td data-th-data="*{no}">100</td>
+    <td data-th-text="*{no}">100</td>
     <td>
-      <img data-th-if="*{photo}" data-th-src="@{'/upload/' + *{photo}}" height='20px'
+      <img data-th-if="*{photo}"
+           data-th-src="@{'https://ftcenq4m2682.edge.naverncp.com/2td0FEnJRm/member/' + *{photo}(type=f,w=20,h=20,align=4,ttype=jpg)}"
            src="/img/default-photo.jpeg">
       <img data-th-unless="*{photo}" height='20px' src='/img/default-photo.jpeg'>
       <a data-th-href="@{view(no=*{no})}" data-th-text="*{name}" href="view.html">홍길동</a></td>

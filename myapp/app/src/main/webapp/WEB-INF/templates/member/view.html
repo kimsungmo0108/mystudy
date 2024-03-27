@@ -14,8 +14,10 @@
       method='post'>
   <div>
     사진:
-    <a data-th-href="@{'/upload/' + *{photo}}" data-th-if="*{photo}">
-      <img data-th-src="@{'/upload/' + *{photo}}" height='80px'></a><br>
+    <a data-th-href="@{'https://ftcenq4m2682.edge.naverncp.com/2td0FEnJRm/member/'+*{photo}(type=m,w=80,h=80,ttype=jpg)}"
+       data-th-if="*{photo}">
+      <img
+          data-th-src="@{'https://ftcenq4m2682.edge.naverncp.com/2td0FEnJRm/member/'+*{photo}(type=m,w=80,h=80,ttype=jpg)}"></a><br>
     <a data-th-unless="*{photo}" href='/img/default-photo.jpeg'>
       <img height='80px' src='/img/default-photo.jpeg'></a><br>
     <input name='file' type='file'>
