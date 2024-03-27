@@ -10,7 +10,7 @@
 
 <h1>과제</h1>
 
-<form action='/app/assignment/update' data-th-object="${assignment}" method='post'>
+<form action="update" data-th-action="@{update}" data-th-object="${assignment}" method='post'>
   <div>
     번호: <input data-th-value="*{no}" name='no' readonly type='text' value="100">
   </div>
@@ -18,14 +18,14 @@
     과제명: <input data-th-value="*{title}" name='title' type='text' value="자바 조건문 예제 만들기">
   </div>
   <div>
-    내용: <textarea data-th-text="*{content}" name='content'>과제내용</textarea>
+    내용: <textarea data-th-text="*{content}" name='content'>과제 내용</textarea>
   </div>
   <div>
     제출마감일: <input data-th-value="*{deadline}" name='deadline' type='date' value="2024-03-27">
   </div>
   <div>
     <button>변경</button>
-    <a data-th-href='@{delete?(no=${assignment.no})}' href="delete.html">[삭제]</a>
+    <a data-th-href="@{delete(no=*{no})}" href="delete.html">[삭제]</a>
   </div>
 </form>
 
