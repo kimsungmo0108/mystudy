@@ -10396,9 +10396,33 @@ class Board{
 → HTML5 문법을 준수하기 때문에 실행 전 파일도 그대로 화면에 출력해 볼 수 있다
 → 미리보기 효과가 있어 페이지 디자인에 편리하다
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.03.27(수)
 -------------------------------------------------------------------------------------
-→
+타임리프 문법
+
+반복문
+data-th-each="assignment : ${list}" data-th-object="${assignment}"
+
+값 출력
+data-th-text="*{title}"
+data-th-text="${assignment.title}"
+
+footer.html의 footer 부분
+data-th-replace="footer :: footer"
+data-th-replace="header :: header"
+
+부분 지정
+data-th-fragment="footer"
+data-th-fragment="header"
+
+조건문
+data-th-if="${session.loginUser != null}"
+
+링크 URL
+data-th-href='@{delete?(no=${assignment.no})}'
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
