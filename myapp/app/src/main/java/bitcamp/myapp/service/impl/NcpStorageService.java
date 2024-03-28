@@ -47,6 +47,12 @@ public class NcpStorageService implements StorageService, InitializingBean {
   }
 
   @Override
+  public void delete(String bucketNaem, String path, String objectName) throws Exception {
+    s3.deleteObject(bucketNaem, path + objectName);
+    log.debug(String.format("Object %s has been delete.\n", objectName));
+  }
+
+  @Override
   public String upload(String bucketName, String path, MultipartFile multipartFile)
       throws Exception {
     try (InputStream fileIn = multipartFile.getInputStream()) {
