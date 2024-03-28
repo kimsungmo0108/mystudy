@@ -10436,9 +10436,62 @@ data-th-href='@{delete?(no=${assignment.no})}'
 
 2024.03.28(목)
 -------------------------------------------------------------------------------------
-→
+과제 87. Spring Boot 도입
+
+1) 배포 - 기존방식 ------------> build -------------> *.war(배포 파일)
+web poject/
+  - src/
+    - main/
+      - java/
+      - resources/
+      - webapp
+        - WEB-INF/
+          - web.xml
+  - build.gradle
+↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+*.war
+/WEB-INF/
+  - classes/*.calss, *.properties, *.xml, web.xml
+/static resource/
+  - .html, .gif, .js ...
+→ java/, resoures/, build.gradle → 컴파일, 복사, 빌드스크림트 파일에 적혀있는 의존 라이브러리 → /WEB-INF/으로 이동
+
+2) 배포 - Spring Boot 방식
+Mocolithic(web app) → Microservice
+회원관리         →    회원관리(web app) + tomcat server
+게시글관리         →    게시글관리(web app) + tomcat server
+결제관리         →    결제관리(web app) + tomcat server
+강의관리         →    강의관리(web app) + tomcat server
+...
+→ Microservice 방식으로 쪼갠다
+→ Spring Boot는 Microservice 방식을 지원하기 위해 탄생
+
+web project
+  - src/
+    - main/
+      - java/
+      - resources/
+        - static/
+        - templates/
+  - build.gradle
+↓↓↓↓↓↓↓↓↓↓↓↓↓
+.zip
+app.jar + tomcat.jar + *.jar
 -------------------------------------------------------------------------------------
-→
+배치 방법
+
+1)
+app.war → 배치 → Tomcat/
+                            - webapps/
+                            - app/ *.*
+→ 압축 풀어서 놓는다
+
+2)
+app.zip → 배치 → 리눅스 서버
+회원관리 + Tomcat Server → 배치 → Docker
+강의관리 + Tomcat Server → 배치 → Docker
+→ Docker = 작은 독립적인 컴퓨터(가상 네트워크 카드, 가상 RAM, 가상 외부저장장치)
+→ Microservice 구동에 적합한 클라우드 아키텍처 기술!
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
