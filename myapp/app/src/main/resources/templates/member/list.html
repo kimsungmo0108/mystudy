@@ -21,7 +21,7 @@
   </thead>
   <tbody>
   <tr data-th-each="member : ${list}" data-th-object="${member}">
-    <td data-th-text="*{no}">100</td>
+    <td data-th-data="*{no}">100</td>
     <td>
       <img data-th-if="*{photo}"
            data-th-src="@{'https://ftcenq4m2682.edge.naverncp.com/2td0FEnJRm/member/' + *{photo}(type=f,w=20,h=20,align=4,ttype=jpg)}"
@@ -33,6 +33,21 @@
   </tr>
   </tbody>
 </table>
+
+<p>
+  [
+  <a data-th-if="${pageNo <= 1}">이전</a>
+  <a data-th-href="@{list(category=${category},pageNo=${pageNo - 1},pageSize=${pageSize})}"
+     data-th-if="${pageNo > 1}"
+     href="list">이전</a>
+  ]
+  [
+  <a data-th-if="${pageNo >= numOfPage}">다음</a>
+  <a data-th-href="@{list(category=${category},pageNo=${pageNo + 1},pageSize=${pageSize})}"
+     data-th-if="${pageNo < numOfPage}"
+     href="list">다음</a>
+  ]
+</p>
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 

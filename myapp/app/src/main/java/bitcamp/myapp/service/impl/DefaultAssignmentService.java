@@ -19,8 +19,8 @@ public class DefaultAssignmentService implements AssignmentService {
   }
 
   @Override
-  public List<Assignment> list() {
-    return assignmentDao.findAll();
+  public List<Assignment> list(int pageNo, int pageSize) {
+    return assignmentDao.findAll(pageSize * (pageNo - 1), pageSize);
   }
 
   @Override
@@ -36,5 +36,10 @@ public class DefaultAssignmentService implements AssignmentService {
   @Override
   public int delete(int no) {
     return assignmentDao.delete(no);
+  }
+
+  @Override
+  public int countAll() {
+    return assignmentDao.countAll();
   }
 }

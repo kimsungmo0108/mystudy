@@ -93,5 +93,43 @@ insert into assignments(assignment_no,title,content,deadline)
   values(4,'과제4','내용4','2024-4-4');
 insert into assignments(assignment_no,title,content,deadline)
   values(5,'과제5','내용5','2024-5-5');
-
-
+insert into assignments(assignment_no,title,content,deadline)
+  values(6,'과제1','내용1','2024-1-1');
+insert into assignments(assignment_no,title,content,deadline)
+  values(7,'과제2','내용2','2024-2-2');
+insert into assignments(assignment_no,title,content,deadline)
+  values(8,'과제3','내용3','2024-3-3');
+insert into assignments(assignment_no,title,content,deadline)
+  values(9,'과제4','내용4','2024-4-4');
+insert into assignments(assignment_no,title,content,deadline)
+  values(10,'과제5','내용5','2024-5-5');
+insert into assignments(assignment_no,title,content,deadline)
+  values(11,'과제1','내용1','2024-1-1');
+insert into assignments(assignment_no,title,content,deadline)
+  values(12,'과제2','내용2','2024-2-2');
+insert into assignments(assignment_no,title,content,deadline)
+  values(13,'과제3','내용3','2024-3-3');
+insert into assignments(assignment_no,title,content,deadline)
+  values(14,'과제4','내용4','2024-4-4');
+insert into assignments(assignment_no,title,content,deadline)
+  values(15,'과제5','내용5','2024-5-5');
+insert into assignments(assignment_no,title,content,deadline)
+  values(16,'과제1','내용1','2024-1-1');
+insert into assignments(assignment_no,title,content,deadline)
+  values(17,'과제2','내용2','2024-2-2');
+insert into assignments(assignment_no,title,content,deadline)
+  values(18,'과제3','내용3','2024-3-3');
+insert into assignments(assignment_no,title,content,deadline)
+  values(19,'과제4','내용4','2024-4-4');
+insert into assignments(assignment_no,title,content,deadline)
+  values(20,'과제5','내용5','2024-5-5');
+insert into assignments(assignment_no,title,content,deadline)
+  values(21,'과제1','내용1','2024-1-1');
+insert into assignments(assignment_no,title,content,deadline)
+  values(22,'과제2','내용2','2024-2-2');
+insert into assignments(assignment_no,title,content,deadline)
+  values(23,'과제3','내용3','2024-3-3');
+insert into assignments(assignment_no,title,content,deadline)
+  values(24,'과제4','내용4','2024-4-4');
+insert into assignments(assignment_no,title,content,deadline)
+  values(25,'과제5','내용5','2024-5-5');

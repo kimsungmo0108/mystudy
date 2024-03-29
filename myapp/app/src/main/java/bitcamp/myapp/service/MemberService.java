@@ -7,7 +7,7 @@ public interface MemberService {
 
   void add(Member member);
 
-  List<Member> list();
+  List<Member> list(int pageNo, int pageSize);
 
   Member get(int no);
 
@@ -16,4 +16,6 @@ public interface MemberService {
   int update(Member member);
 
   int delete(int no);
+
+  int countAll();
 }

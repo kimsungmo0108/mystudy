@@ -31,6 +31,7 @@
       assignments
     order by
       assignment_no desc
+    limit ${rowCount} offset ${offset}
   </select>
 
   <select id="findBy" resultMap="AssignmentMap" parameterType="int">
@@ -53,5 +54,9 @@
     where
       assignment_no=#{no}
   </update>
+
+  <select id="countAll" parameterType="int" resultType="int">
+    select count(*) from assignments;
+  </select>
 
 </mapper>

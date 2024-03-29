@@ -24,50 +24,57 @@
 
   <select id="findAll" resultMap="MemberMap">
     select
-      member_no,
-      email,
-      name,
-      photo,
-      created_date
+    member_no,
+    email,
+    name,
+    photo,
+    created_date
     from
-      members
+    members
+    order by
+    name
+    limit #{rowCount} offset #{offset}
   </select>
 
   <select id="findBy" resultMap="MemberMap" parameterType="int">
     select
-      member_no,
-      email,
-      name,
-      photo,
-      created_date
+    member_no,
+    email,
+    name,
+    photo,
+    created_date
     from
-      members
+    members
     where
-      member_no=#{value}
+    member_no=#{value}
   </select>
 
   <update id="update" parameterType="Member">
     update members set
-      email=#{email},
-      name=#{name},
-      photo=#{photo}
+    email=#{email},
+    name=#{name},
+    photo=#{photo}
     <if test="password != ''">
       , password=sha2(#{password},256)
     </if>
     where
-      member_no=#{no}
+    member_no=#{no}
   </update>
 
   <select id="findByEmailAndPassword" resultMap="MemberMap">
     select
-      member_no,
-      email,
-      name,
-      created_date
+    member_no,
+    email,
+    name,
+    created_date
     from
-      members
+    members
     where
-      email= #{email}
-      and password=sha2(#{password},256)
+    email= #{email}
+    and password=sha2(#{password},256)
+  </select>
+
+  <select id="countAll" resultType="int">
+    select count(*) from members;
   </select>
 </mapper>
