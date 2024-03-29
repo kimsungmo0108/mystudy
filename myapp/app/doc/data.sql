@@ -16,11 +16,62 @@ insert into boards(board_no,title,content,writer,category)
 insert into boards(board_no,title,content,writer,category)
   values(2, '제목2','내용2',102, 1);
 insert into boards(board_no,title,content,writer,category)
-  values(3, '제목3','내용3',102, 2);
+  values(3, '제목3','내용3',102, 1);
 insert into boards(board_no,title,content,writer,category)
-  values(4, '제목4','내용4',104, 2);
+  values(4, '제목4','내용4',104, 1);
 insert into boards(board_no,title,content,writer,category)
-  values(5, '제목5','내용5',104, 2);
+  values(5, '제목5','내용5',104, 1);
+  insert into boards(board_no,title,content,writer,category)
+    values(6, '제목6','내용6',104, 1);
+  insert into boards(board_no,title,content,writer,category)
+    values(7, '제목5','내용5',104, 1);
+  insert into boards(board_no,title,content,writer,category)
+    values(8, '제목5','내용5',104, 1);
+  insert into boards(board_no,title,content,writer,category)
+    values(9, '제목5','내용5',104, 1);
+  insert into boards(board_no,title,content,writer,category)
+    values(10, '제목5','내용5',104 1);
+  insert into boards(board_no,title,content,writer,category)
+    values(11, '제목5','내용5',104, 1);
+  insert into boards(board_no,title,content,writer,category)
+    values(12, '제목5','내용5',104, 1);
+  insert into boards(board_no,title,content,writer,category)
+    values(13, '제목5','내용5',104, 1);
+  insert into boards(board_no,title,content,writer,category)
+    values(14, '제목5','내용5',104, 1);
+  insert into boards(board_no,title,content,writer,category)
+    values(15, '제목5','내용5',104, 1);
+    insert into boards(board_no,title,content,writer,category)
+      values(21, '제목1','내용1',101, 2);
+    insert into boards(board_no,title,content,writer,category)
+      values(22, '제목2','내용2',102, 2);
+    insert into boards(board_no,title,content,writer,category)
+      values(23, '제목3','내용3',102, 2);
+    insert into boards(board_no,title,content,writer,category)
+      values(24, '제목4','내용4',104, 2);
+    insert into boards(board_no,title,content,writer,category)
+      values(25, '제목5','내용5',104, 2);
+      insert into boards(board_no,title,content,writer,category)
+        values(26, '제목6','내용6',104, 2);
+      insert into boards(board_no,title,content,writer,category)
+        values(27, '제목5','내용5',104, 2);
+      insert into boards(board_no,title,content,writer,category)
+        values(28, '제목5','내용5',104, 2);
+      insert into boards(board_no,title,content,writer,category)
+        values(29, '제목5','내용5',104, 2);
+      insert into boards(board_no,title,content,writer,category)
+        values(30, '제목5','내용5',104 2);
+      insert into boards(board_no,title,content,writer,category)
+        values(31, '제목5','내용5',104, 2);
+      insert into boards(board_no,title,content,writer,category)
+        values(32, '제목5','내용5',104, 2);
+      insert into boards(board_no,title,content,writer,category)
+        values(33, '제목5','내용5',104, 2);
+      insert into boards(board_no,title,content,writer,category)
+        values(34, '제목5','내용5',104, 2);
+      insert into boards(board_no,title,content,writer,category)
+        values(35, '제목5','내용5',104, 2);
+
 
 -- board_files 테이블 데이터
 insert into board_files(file_no,file_path,board_no) values

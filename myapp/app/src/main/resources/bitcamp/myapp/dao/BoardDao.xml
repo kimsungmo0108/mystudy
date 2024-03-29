@@ -37,23 +37,24 @@
     where board_no=#{value}
   </delete>
 
-  <select id="findAll" resultMap="BoardMap" parameterType="int">
-    select  
+  <select id="findAll" resultMap="BoardMap">
+    select
       b.board_no,
-      b.title,  
+      b.title,
       b.created_date,
       count(file_no) file_count,
       m.member_no,
       m.name
     from
-      boards b left outer join board_files bf on b.board_no=bf.board_no  
-      inner join members m on b.writer=m.member_no  
+      boards b left outer join board_files bf on b.board_no=bf.board_no
+      inner join members m on b.writer=m.member_no
     where
-      b.category=#{value}
+      b.category=#{category}
     group by
-      board_no  
+      board_no
     order by
       board_no desc
+    limit #{rowCount} offset #{offset}
   </select>
 
   <select id="findBy" resultMap="BoardMap" parameterType="int">
@@ -80,4 +81,8 @@
     where
       board_no=#{no}
   </update>
+
+  <select id="countAll" resultType="int" parameterType="int">
+    select count(*) from boards where category=#{value};
+  </select>
 </mapper>
