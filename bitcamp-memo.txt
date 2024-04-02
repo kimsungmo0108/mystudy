@@ -10673,31 +10673,168 @@ macOS에서 이미지를 다운로드 받고 싶다면 플랫폼 이름을 명�
     - 도커 엔진은 컨테이너에게 내부 IP를 172.17.0.2, 3, 4, ... 와 같이 순차적으로 할당.
     - 테스트: `$ sudo docker exec wordpress curl mysql:3306 --silent`
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.04.02(화)
 -------------------------------------------------------------------------------------
-→
+sudo docker run -d --name wordpressdb_hostvolume -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=wordpress -v /home/wordpress_db:/var/lib/mysql mysql:5.7
+docker volume
+Host 디렉토리 → /home/wordpress_db
+docker container 디렉토리 → /var/lib/mysql
+mysql → wordpress_db
+→ Host의 디렉토리를 컨테이너와 공유할 수 있다
 -------------------------------------------------------------------------------------
-→
+docker Host 디렉토리 공유 vs docker volume 공유
+
+1) 디렉토리 공유
+Host → /dir
+container → /var/lib → /dir
+container → /var/lib → /dir
+container → /var → /dir
+
+단점
+→ 공유 디렉토리를 옮기기가 쉽지 않다
+
+2) 볼륨 공유
+Host → volume(가상 하드디스크)
+container → Host의 volume을 공유
+container → Host의 volume을 공유
+container → Host의 volume을 공유
+
 -------------------------------------------------------------------------------------
-→
+호스트 볼륨 공유하기
+- `$ sudo docker run -d --name wordpressdb_hostvolume -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=wordpress -v /home/wordpress_db:/var/lib/mysql mysql:5.7 `
+  - `-v 호스트의공유디렉토리:컨테이너의공유디렉토리`
+  - 호스트의 공유 디렉토리가 없으면 도커가 자동 생성한다.
+- `$ sudo docker run -d --name wordpress_hostvolume -e WORDPRESS_DB_HOST=mysql -e WORDPRESS_DB_USER=root -e WORDPRESS_DB_PASSWORD=password --link wordpressdb_hostvolume:mysql -p 80 wordpress`
+
+컨테이너 삭제 후에도 데이터가 보존되는 것을 확인하기
+- `$ sudo docker stop wordpress_hostvolume wordpressdb_hostvolume`
+- `$ sudo docker rm wordpress_hostvolume wordpressdb_hostvolume`
+
+호스트 디렉토리를 컨테이너의 존재하는 디렉토리와 연결할 때
+- `$ sudo docker run -i -t --name volume_dummy alicek106/volume_test`
+  - 컨테이너에 존재하는 디렉토리 확인: `# ls /home/testdir_2/`
+- `$ sudo docker run -i -t --name volume_override -v /home/wordpress_db:/home/testdir_2 alicek106/volume_test`
+  - 컨테이너에 존재하는 디렉토리 확인: `# ls /home/testdir_2/`
+    - 기존의 디렉토리를 호스트 디렉토리로 대체한다.
 -------------------------------------------------------------------------------------
-→
+볼륨 컨테이너 공유하기
+
+volume_override 컨테이너의 볼륨을 공유하기
+- `$ sudo docker run -i -t --name volumes_from_container --volumes-from volume_override ubuntu:14.04`
+  - 컨테이너에 추가된 디렉토리 확인: `# ls /home/testdir_2/`
 -------------------------------------------------------------------------------------
-→
+도커 볼륨 사용하기
+
+도커 볼륨 생성하기
+- `$ sudo docker volume create --name myvolume`
+
+도커 볼륨 조회하기
+- `$ sudo docker volume ls`
+
+도커 볼륨 사용하기
+- `$ sudo docker run -i -t --name docker1 -v myvolume:/root/ ubuntu:14.04`
+  - `# echo Hello, volume! >> /root/test`
+
+도커 볼륨 공유하기
+- `$ sudo docker run -i -t --name docker2 -v myvolume:/root/ ubuntu:14.04`
+  - `# cat /root/volume`
+
+도커 볼륨의 실제 위치 알아내기
+- `$ sudo docker inspect --type volume myvolume`
+  - `docker inspect` 명령: 컨테이너, 이미지, 볼륨 등 도커의 모든 구성 단위의 정보를 확인할 때 사용
+    - `--type [image|volume|container]`
+
+도커 볼륨 자동 생성하기
+- `$ sudo docker run -i -t --name volume_auto -v /root/ ubuntu:14.04`
+
+컨테이너가 사용하는 도커 볼륨 확인하기
+- `$ sudo docker container inspect volume_auto`
+
+사용하지 않는 볼륨을 자동으로 삭제하기
+- `$ sudo docker volume prune`
 -------------------------------------------------------------------------------------
-→
+mount 옵션
+
+mount 옵션으로 도커 볼륨 연결하기
+- `$ sudo docker run -i -t --name mount_option_1 --mount type=volume,source=myvolume,target=/root/ ubuntu:14.04`
+
+mount 옵션으로 호스트 디렉토리를 컨테이너에 연결하기
+- `$ sudo docker run -i -t --name mount_option_2 --mount type=bind,source=/home/wordpress_db,target=/root/ ubuntu:14.04`
 -------------------------------------------------------------------------------------
-→
+컨테이너의 네트워크
+
+도커에서 기본적으로 쓸 수 있는 네트워크 확인하기
+- `$ sudo docker network ls`
+  - bridge: 컨테이너를 생성할 때 자동으로 연결되는 docker0 브리지를 활용하도록 설정됨
+    - 172.17.0.x IP 대역을 컨테이너에 순차적으로 할당한다.
+
+도커 엔진의 네트워크 목록 조회
+- `$ sudo docker network ls`
+
+특정 네트워크의 상태 조사하기
+- `$ sudo docker network inspect 네트워크이름`
+- `$ sudo docker network inspect bridge`
 -------------------------------------------------------------------------------------
-→
+브릿지 바인딩 조회
+
+브릿지 바인딩 정보 조회를 위한 도구 설치
+- `$ sudo apt-get install bridge-utils`
+
+브릿지 바인딩 정보 조회하기
+- `$ brctl show docker0`
+
+브릿지 네트워크 생성
+
+새 브릿지 네트워크 생성하기
+- `$ sudo docker network create --driver bridge mybridge`
+
+새 컨테이너에 브릿지 네트워크 연결하기
+- `$ sudo docker run -it --network="mybridge" --name network1 ubuntu:14.04`
+
+브릿지 네트워크 상세 정보 보기
+- `$ sudo docker network inspect mybridge`
 -------------------------------------------------------------------------------------
-→
+브릿지 네트워크 생성
+
+새 브릿지 네트워크 생성하기
+- `$ sudo docker network create --driver bridge mybridge`
+
+새 컨테이너에 브릿지 네트워크 연결하기
+- `$ sudo docker run -it --network="mybridge" --name network1 ubuntu:14.04`
+
+브릿지 네트워크 상세 정보 보기
+- `$ sudo docker network inspect mybridge`
 -------------------------------------------------------------------------------------
-→
+컨테이너에 브릿지 네트워크를 붙이기/떼기
+
+컨테이너에 브릿지 네트워크 떼기
+- `$ sudo docker network disconnect mybridge network1`
+- `$ sudo docker attach network1`
+- `# ifconfig`
+  - eth0 네트워크 인터페이스가 제거된 것을 확인할 수 있다.
+
+컨테이너에 브릿지 네트워크 붙이기
+- `$ sudo docker network connect bridge network1`
+- `$ sudo docker attach network1`
+- `# ifconfig`
+  - eth0가 생성된다.
+  - bidge 네터워크의 주소가 컨테이너에 연결된 순서대로 설정된다.(예: 172.17.0.\*)
 -------------------------------------------------------------------------------------
-→
+도커 이미지 다루기
+
+도커 허브라는 중앙 이미지 저장소에서 도커 이미지 검색하기
+- `$ sudo docker search 키워드`
 -------------------------------------------------------------------------------------
-→
+Docker Image
+ubuntu:14.04 이미지(기본 utility) → dokcer container(ubuntu:14.04의 기본 utility, OS(Linux) 핵심 기능 사용) → Docker Engine → Linux의 kernel 사용 → Linux OS(kernel + utility + application)
+새 도커 컨테이너 + ∂ → 이미지 파일 생성 → myubuntu:first → 도커 허브의 push → pull → create → start → attach
+
+kernel → cpu 스케쥴링, 메모리 관리, 파일 시스템
+utility → apt, ifconfig
+application → MySQL, jdk, apache 웹 서버, Spring Boot
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
