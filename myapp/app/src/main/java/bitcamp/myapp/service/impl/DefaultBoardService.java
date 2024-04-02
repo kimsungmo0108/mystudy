@@ -21,11 +21,11 @@ public class DefaultBoardService implements BoardService {
   @Override
   public void add(Board board) {
     boardDao.add(board);
-    if (board.getFiles() != null && board.getFiles().size() > 0) {
-      for (AttachedFile attachedFile : board.getFiles()) {
+    if (board.getFileList() != null && board.getFileList().size() > 0) {
+      for (AttachedFile attachedFile : board.getFileList()) {
         attachedFile.setBoardNo(board.getNo());
       }
-      attachedFileDao.addAll(board.getFiles());
+      attachedFileDao.addAll(board.getFileList());
     }
   }
 
@@ -44,11 +44,11 @@ public class DefaultBoardService implements BoardService {
   @Override
   public int update(Board board) {
     int count = boardDao.update(board);
-    if (board.getFiles() != null && board.getFiles().size() > 0) {
-      for (AttachedFile attachedFile : board.getFiles()) {
+    if (board.getFileList() != null && board.getFileList().size() > 0) {
+      for (AttachedFile attachedFile : board.getFileList()) {
         attachedFile.setBoardNo(board.getNo());
       }
-      attachedFileDao.addAll(board.getFiles());
+      attachedFileDao.addAll(board.getFileList());
     }
     return count;
   }

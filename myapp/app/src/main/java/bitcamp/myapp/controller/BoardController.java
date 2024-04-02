@@ -65,7 +65,7 @@ public class BoardController {
       }
     }
     if (files.size() > 0) {
-      board.setFiles(files);
+      board.setFileList(files);
     }
 
     boardService.add(board);
@@ -147,7 +147,7 @@ public class BoardController {
       }
     }
     if (files.size() > 0) {
-      board.setFiles(files);
+      board.setFileList(files);
     }
 
     boardService.update(board);

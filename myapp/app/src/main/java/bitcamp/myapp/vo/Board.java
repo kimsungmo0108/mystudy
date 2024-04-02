@@ -17,7 +17,7 @@ public class Board implements Serializable {
   private String content;
   private Member writer;
   private Date createdDate;
-  private List<AttachedFile> files;
+  private List<AttachedFile> fileList;
   private int fileCount;
 
 }

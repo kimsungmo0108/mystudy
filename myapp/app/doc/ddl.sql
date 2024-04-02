@@ -8,7 +8,7 @@ drop table if exists members restrict;
 create table boards(
   board_no int not null,
   title varchar(255) not null,
-  content text not null,
+  content mediumtext not null,
   writer int not null,
   category int not null,
   created_date datetime null default now()
@@ -32,7 +32,7 @@ alter table board_files
 create table assignments(
   assignment_no int not null,
   title varchar(255) not null,
-  content text not null,
+  content mediumtext not null,
   deadline date not null
 );
 
