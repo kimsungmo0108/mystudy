@@ -4,11 +4,11 @@ import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import java.util.List;
 
-public interface BoardService {
+public interface Board2Service {
 
   void add(Board board);
 
-  List<Board> list(int category, int pageNo, int pageSize);
+  List<Board> list(int pageNo, int pageSize);
 
   Board get(int no);
 
@@ -22,5 +22,5 @@ public interface BoardService {
 
   int deleteAttachedFile(int fileNo);
 
-  int countAll(int category);
+  int countAll();
 }

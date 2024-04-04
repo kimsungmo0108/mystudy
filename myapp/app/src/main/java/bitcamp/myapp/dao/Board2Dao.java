@@ -6,14 +6,13 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
-public interface BoardDao {
+public interface Board2Dao {
 
   void add(Board board);
 
   int delete(int no);
 
   List<Board> findAll(
-      @Param("category") int category,
       @Param("offset") int offset,
       @Param("rowCount") int rowCount);
 
@@ -21,5 +20,5 @@ public interface BoardDao {
 
   int update(Board board);
 
-  int countAll(int category);
+  int countAll();
 }

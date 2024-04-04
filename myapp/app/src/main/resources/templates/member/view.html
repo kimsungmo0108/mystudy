@@ -14,10 +14,10 @@
       method='post'>
   <div>
     사진:
-    <a data-th-href="@{'https://kr.object.ncloudstorage.com/bitcamp-devops5-125/member/' + *{photo}}"
+    <a data-th-href="@{'https://kr.object.ncloudstorage.com/bitcamp-devops5-118/member/' + *{photo}}"
        data-th-if="*{photo}">
       <img
-          data-th-src="@{'https://ftcenq4m2682.edge.naverncp.com/2td0FEnJRm/member/'+*{photo}(type=m,w=80,h=80,ttype=jpg)}"></a><br>
+          data-th-src="@{'https://rljiyddk2675.edge.naverncp.com/68i0l8DhXa/member/' + *{photo}(type=f,w=80,h=80,ttype=jpg)}"></a><br>
     <a data-th-unless="*{photo}" href='/img/default-photo.jpeg'>
       <img height='80px' src='/img/default-photo.jpeg'></a><br>
     <input name='file' type='file'>

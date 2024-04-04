@@ -10979,11 +10979,115 @@ commit102	commit102	commit102
 도커 컨테이너에 들어가기
 - `$ sudo docker attach hello1`
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.04.04(목)
 -------------------------------------------------------------------------------------
-→
+웹 애플리케이션 배포 - 직접 컨테이너 구성 및 배치하기
+
+MariaDB 컨테이너 생성
+
+MariaDB 도커 이미지 가져오기
+- `$ sudo docker pull mariadb`
+
+MariaDB 컨테이너 생성 및 실행
+- `$ sudo docker run -p 3306:3306 --detach --name mariadb --env MARIADB_USER=study --env MARIADB_PASSWORD=1111 --env MARIADB_ROOT_PASSWORD=1111  mariadb`
+
+MariaDB 컨테이너 접속
+- `$ sudo docker exec -it mariadb /bin/bash`
+
+MariaDB 버전 확인
+- `# mysql --version`
+
+MariaDB 클라이언트 실행 및 root 사용자로 서버 접속
+- `# mysql -u root -p`
+
+웹애플리케이션의 DB 환경 구축
+- `studydb` 데이터베이스 생성
+  - `CREATE DATABASE studydb CHARACTER SET utf8 COLLATE utf8_general_ci`
+- `study` 사용자에게 `studydb` 데이터베이스 사용권한 부여
+  - `GRANT ALL ON studydb.* TO 'study'@'%'`
+- `study` 사용자로 로그인
+  - `# mysql -u study -p`
+- `study` 사용자가 사용할 수 있는 데이터베이스 확인
+  - `show databases`
+- 웹 애플리케이션 테이블 생성
+  - myapp/app-server/doc/
+    - ddl.sql 실행
+    - ddl2.sql 실행
+    - ddl3.sql 실행
+    - ddl4.sql 실행
+    - data4.sql 실행
 -------------------------------------------------------------------------------------
-→
+myapp 웹 애플리케이션 컨테이너 생성
+
+Ubuntu 22.04 컨테이너 생성 및 실행
+- `$ sudo docker run -p 80:80 -it --name myapp ubuntu`
+
+ifconfig 등 네트워킹 관련 프로그램 추가
+- `# apt update`
+- `# apt install net-tools`
+
+nano 에디터 설치
+- `# apt install nano`
+
+JDK 17 설치
+- `# apt install openjdk-21-jdk -y`
+
+JAVA_HOME 환경 변수 설정
+- `# echo 'export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64' | tee /etc/profile.d/java21.sh`
+  - `# source /etc/profile.d/java21.sh`
+  - docker 컨테이너에서 적용 안됨.
+- `# echo 'export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64' | tee -a /etc/bash.bashrc`
+  - `# source /etc/bash.bashrc`
+  - docker 컨테이너에서 적용됨
+  - Apple silicon에서 실행하는 macOS 에서 JDK 설치하면 디렉토리 이름이 다른다.
+    - `/usr/lib/jvm/java-21-openjdk-arm64`
+
+git 설치
+- `# apt install git -y`
+
+wget 설치
+- `# apt install wget -y`
+
+unzip 설치
+- `# apt install unzip -y`
+
+gradle 다운로드 및 설치
+- `# VERSION=8.7`
+- `# wget https://services.gradle.org/distributions/gradle-${VERSION}-bin.zip -P /tmp`
+- `# unzip -d /opt/gradle /tmp/gradle-${VERSION}-bin.zip`
+- `# ln -s /opt/gradle/gradle-${VERSION} /opt/gradle/latest`
+- `# echo 'export GRADLE_HOME=/opt/gradle/latest' | tee -a /etc/bash.bashrc`
+- `# echo 'export PATH=${GRADLE_HOME}/bin:${PATH}' | tee -a /etc/bash.bashrc`
+- `# source /etc/bash.bashrc`
+
+nodejs 및 npm 설치
+- `# apt install nodejs -y`
+- `# apt install npm -y`
+
+myapp git 저장소 가져오기
+- `# mkdir git`
+- `# cd git`
+- `# git clone https://github.com/eomjinyoung/bitcamp-study`
+
+myapp 자바스크립트 라이브러리 설치
+- `# cd ~/git/bitcamp-study/myapp/app-server/src/main/webapp`
+- `~/git/bitcamp-study/myapp/app-server/src/main/webapp# npm install`
+
+myapp 빌드
+- `# cd ~/git/bitcamp-study/myapp`
+- `~/git/bitcamp-study/myapp# gradle build`
+
+ping 설치
+- `# apt-get install iputils-ping -y`
+
+mariadb 접속 확인
+- `# ping 172.17.0.2`
+
+myapp 실행
+- `~# java -jar ~/git/bitcamp-study/myapp/app-server/build/libs/app-server-0.0.1-SNAPSHOT.jar`
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------

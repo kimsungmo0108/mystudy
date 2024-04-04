@@ -1,8 +1,8 @@
 package bitcamp.myapp.service.impl;
 
-import bitcamp.myapp.dao.AttachedFileDao;
-import bitcamp.myapp.dao.BoardDao;
-import bitcamp.myapp.service.BoardService;
+import bitcamp.myapp.dao.AttachedFile2Dao;
+import bitcamp.myapp.dao.Board2Dao;
+import bitcamp.myapp.service.Board2Service;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import java.util.List;
@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class DefaultBoardService implements BoardService {
+public class DefaultBoard2Service implements Board2Service {
 
-  private final BoardDao boardDao;
-  private final AttachedFileDao attachedFileDao;
+  private final Board2Dao boardDao;
+  private final AttachedFile2Dao attachedFileDao;
 
   @Transactional
   @Override
@@ -30,8 +30,8 @@ public class DefaultBoardService implements BoardService {
   }
 
   @Override
-  public List<Board> list(int category, int pageNo, int pageSize) {
-    return boardDao.findAll(category, pageSize * (pageNo - 1), pageSize);
+  public List<Board> list(int pageNo, int pageSize) {
+    return boardDao.findAll(pageSize * (pageNo - 1), pageSize);
   }
 
   @Override
@@ -43,6 +43,8 @@ public class DefaultBoardService implements BoardService {
   @Override
   public int update(Board board) {
     int count = boardDao.update(board);
+    attachedFileDao.deleteAll(board.getNo());
+
     if (board.getFileList() != null && board.getFileList().size() > 0) {
       for (AttachedFile attachedFile : board.getFileList()) {
         attachedFile.setBoardNo(board.getNo());
@@ -75,7 +77,7 @@ public class DefaultBoardService implements BoardService {
   }
 
   @Override
-  public int countAll(int category) {
-    return boardDao.countAll(category);
+  public int countAll() {
+    return boardDao.countAll();
   }
 }

@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="bitcamp.myapp.dao.BoardDao">
+<mapper namespace="bitcamp.myapp.dao.Board2Dao">
 
   <resultMap id="BoardMap" type="Board">
     <id column="board_no" property="no"/>
@@ -11,7 +11,6 @@
     <result column="content" property="content"/>
     <result column="created_date" property="createdDate"/>
     <result column="file_count" property="fileCount"/>
-    <result column="category" property="category"/>
 
     <association property="writer" javaType="Member">
       <id column="member_no" property="no"/>
@@ -28,12 +27,12 @@
 
   <insert id="add" parameterType="Board"
     useGeneratedKeys="true" keyColumn="board_no" keyProperty="no">
-    insert into boards(title,content,writer,category) 
-    values(#{title},#{content},#{writer.no},#{category})
+    insert into boards2(title,content,writer)
+    values(#{title},#{content},#{writer.no})
   </insert>
 
   <delete id="delete" parameterType="int">
-    delete from boards 
+    delete from boards2
     where board_no=#{value}
   </delete>
 
@@ -46,10 +45,8 @@
       m.member_no,
       m.name
     from
-      boards b left outer join board_files bf on b.board_no=bf.board_no  
-      inner join members m on b.writer=m.member_no  
-    where
-      b.category=#{category}
+      boards2 b left outer join board_files2 bf on b.board_no=bf.board_no
+      inner join members m on b.writer=m.member_no
     group by
       board_no  
     order by
@@ -68,14 +65,14 @@
       bf.file_no,
       bf.file_path
     from
-      boards b inner join members m on b.writer=m.member_no
-      left outer join board_files bf on b.board_no=bf.board_no
+      boards2 b inner join members m on b.writer=m.member_no
+      left outer join board_files2 bf on b.board_no=bf.board_no
     where
       b.board_no=#{value}
   </select>
 
   <update id="update" parameterType="Board">
-    update boards set
+    update boards2 set
       title=#{title},
       content=#{content}
     where
@@ -83,6 +80,6 @@
   </update>
 
   <select id="countAll" resultType="int" parameterType="int">
-    select count(*) from boards where category=#{value}
+    select count(*) from boards2
   </select>
 </mapper>
