@@ -11089,11 +11089,37 @@ mariadb 접속 확인
 myapp 실행
 - `~# java -jar ~/git/bitcamp-study/myapp/app-server/build/libs/app-server-0.0.1-SNAPSHOT.jar`
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.04.05(금)
 -------------------------------------------------------------------------------------
-→
+Spring Boot 설정 분리
+
+1) 한 파일에서 설정 분리
+application.properties
+→ application.dev.
+  → 개발 모드에서 사용할 설정
+
+#-- ===> 모드를 구분하는 표시
+
+→ application-prod.properties
+  → 운영 모드에서 사용할 설정
+
+2) 파일 분리
+application.properties
+→ application-dev.properties(개발 모드)
+
+→ application-prod.properties(운영 모드)
+
 -------------------------------------------------------------------------------------
-→
+Spring Boot를 실행할 때 모드 지정
+
+1) JVM argument
+$ java -Dspring.profiles.active=dev -jar app/build/libs/app-0.0.1-SNAPSHOT.jar
+
+2) Application argument
+$ java -jar app/build/libs/app-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
