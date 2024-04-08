@@ -29,6 +29,7 @@
 <form action="update" data-th-action="@{update}" data-th-object="${board}"
       enctype='multipart/form-data'
       method='post'>
+  <input type="hidden" id="filenames" name="filenames">
   <div>
     번호: <input data-th-value="*{no}" name='no' readonly type='text' value="100">
   </div>
@@ -42,19 +43,6 @@
     작성자: <input data-th-value="*{writer.name}" readonly type='text' value="홍길동">
   </div>
 
-  <div data-th-if="${category == 1}">
-    첨부파일: <input multiple name='attachedFiles' type='file'>
-    <ul data-th-if="*{fileList[0].filePath}">
-      <li data-th-each="file : *{fileList}" data-th-object="${file}">
-        <a data-th-href="@{'https://kr.object.ncloudstorage.com/bitcamp-devops5-118/board/' + *{filePath}}"
-           data-th-text="*{filePath}"
-           href="file.html">a.gif</a>
-        [<a data-th-href="@{file/delete(no=*{no})}"
-            href="file-delete.html">삭제</a>]
-      </li>
-    </ul>
-  </div>
-
   <div>
     <button>변경</button>
     <a data-th-href="@{delete(no=*{no})}">[삭제]</a>
@@ -64,15 +52,49 @@
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 <script>
+  let filenames = [];
+
   $(document).ready(function() {
 
     $('#summernote').summernote({
       height: 300,
-      width: 500
+      width: 500,
+      callbacks: {
+        onInit: function() {
+          console.log('Summernote is launched');
+        },
+        onImageUpload: function(files) {
+          let data = new FormData();
+          for (const file of files) {
+            data.append("files", file);
+          }
+          $.ajax({
+            url: 'file/upload',
+            type: 'POST',
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            data: data
+          })
+          .done(function(result) {
+            if (result.length == 0) {
+              alert('로그인 하세요!');
+              return;
+            }
+
+            for (const attachedFile of result) {
+              $('#summernote').summernote('insertImage',
+                'https://kr.object.ncloudstorage.com/bitcamp-devops5-118/board/'
+                + attachedFile.filePath);
+              filenames.push(attachedFile.filePath);
+            }
+            $('#filenames').val(filenames.join());
+          });
+        }
+      }
     });
 
   });
-
 </script>
 
 </body>

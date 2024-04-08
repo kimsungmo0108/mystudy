@@ -11098,20 +11098,18 @@ Spring Boot 설정 분리
 
 1) 한 파일에서 설정 분리
 application.properties
-→ application.dev.
+→ application.dev.active=true
   → 개발 모드에서 사용할 설정
 
 #-- ===> 모드를 구분하는 표시
 
-→ application-prod.properties
+→ application.prod.active=true
   → 운영 모드에서 사용할 설정
 
 2) 파일 분리
 application.properties
 → application-dev.properties(개발 모드)
-
 → application-prod.properties(운영 모드)
-
 -------------------------------------------------------------------------------------
 Spring Boot를 실행할 때 모드 지정
 
@@ -11121,19 +11119,80 @@ $ java -Dspring.profiles.active=dev -jar app/build/libs/app-0.0.1-SNAPSHOT.jar
 2) Application argument
 $ java -jar app/build/libs/app-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev
 -------------------------------------------------------------------------------------
-→
+Docker 컨테이너가 사용할 설정파일을 다루기
+
+HOST				Container
+~/config/*.properties 	→	/rot/config/
+			→	/rot/config/
+			→	/rot/config/
+→ 볼륨 연결
+→ git pull로 이미지 갖고 오기
+→ 서버 빌드 후 실행
+→ 접속
 -------------------------------------------------------------------------------------
-→
+Spring Boot를 docker container에서 실행하기
+
+1) 방법1 
+Host → Container (jdk, git, gradle, 프로젝트 소스 가져오기(git clone), 프로젝트 빌드(app.jar 생성), App 실행)
+개발 pc → 파일 변경 → commit → github.com에 push
+운영 pc(docker container) → pull → checkout → build → 실행
+
+2) 방법2
+Host (jdk, git, gradle, 프로젝트 소스 가져오기(git clone), 프로젝트 빌드(app.jar 생성), App 실행) → build(Docker 이미지 파일 생성) → container
+→ sudo docker build -t kimsuongmo/bitcamp/myapp .
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.04.08(월)
 -------------------------------------------------------------------------------------
-→
+JavaScript Rich TextEditor에서 컨텐트에 그림을 삽입하는 방법
+
+1) 컨텐트 + 이미지
+→ HTML tag + <img src=""> 
+→ src=Base64 인코딩
+→ DB 컬럼에 입력
+  → 다루기 편하다
+  → DB 데이터 조회가 느리다
+  → 이미지에 대해 별도로 썸네일 생성이 어렵다
+
+2) 컨텐트 + 이미지 링크
+→ Object Storage에 파일을 저장
+→ HTML tag + <img src=""> 
+→ src=이미지 링크
+→ DB 컬럼에 입력
+  → 다루기가 번거롭다
+  → DB 데이터 조회가 빠르다
+  → 이미지에 대해 별도로 썸네일 생성이 가능하다
 -------------------------------------------------------------------------------------
-→
+summernote 사용 - 에디터 만들기
+
+<textarea id='summernote'></textarea>
+$('#summernote').summernote(옵션);
+→ summernote 에디터 생성
+→ 데이터를 가져와서 출력, 편집한 콘텐트를 HTML로 만들어 저장
 -------------------------------------------------------------------------------------
-→
+summernote 사용 - 이미지 분리 저장
+
+이미지 삽입 → 등록한 함수가 있다면 호출한다 
+→ onImageUpload(삽입한 이미지 파일들 정보){
+  사용자가 삽입하는 이미지는 NCP Storage Service에 업로드한다
+  업로드한 이미지의 파일명을 리턴받는다
+  리턴 받은 파일명을 <img> 태그에 설정
+  파일명은 서버에서 처리할 수 있도록 
+<form>의 <input> 태그에 보관한다
+}
+
+→ onImageUpload(삽입한 이미지 파일들 정보){}
+→ 파일 정보를 갖고 FormData 객체 준비
+→ /board2/file/upload 요청
+→ $.ajax(FormData) → 요청 → Spring Boot
+→ 서버에서 업로드한 이미지 파일명 받기
+→ Spring Boot → 응답 Json 포맷 → 자바스크립트 객체로 변환
 -------------------------------------------------------------------------------------
-→
+summernote 사용 - 이미지 분리 저장
+summernote → 이미지 삽입 → 파일 업로드 요청 → NCP Object Storage에 저장 → 파일명 반환
+저장 버튼 클릭 → 게시글 저장 요청 → 콘텐트에 없는 이미지는 삭제한다 → DBMS에 insert(board2, board_file2)
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------

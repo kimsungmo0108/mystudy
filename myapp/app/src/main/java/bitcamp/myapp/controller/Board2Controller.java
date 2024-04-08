@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
@@ -40,7 +41,7 @@ public class Board2Controller {
   @PostMapping("add")
   public String add(
       Board board,
-      MultipartFile[] files,
+      String filenames,
       HttpSession session) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
@@ -49,17 +50,18 @@ public class Board2Controller {
     }
     board.setWriter(loginUser);
 
-    ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
-    for (MultipartFile file : files) {
-      if (file.getSize() == 0) {
+    ArrayList<AttachedFile> files = new ArrayList<>();
+    for (String filename : filenames.split(",")) {
+      if (board.getContent().indexOf(filename) != -1) {
+        files.add(AttachedFile.builder().filePath(filename).build());
         continue;
       }
-      String filename = storageService.upload(this.bucketName, this.uploadDir, file);
-      attachedFiles.add(AttachedFile.builder().filePath(filename).build());
+      // Object Storage에 업로드 한 파일 중에서 게시글 콘텐트에 포함되지 않은 것은 삭제한다.
+      storageService.delete(this.bucketName, this.uploadDir, filename);
+      log.debug(String.format("%s 파일 삭제!", filename));
     }
-
-    if (attachedFiles.size() > 0) {
-      board.setFileList(attachedFiles);
+    if (files.size() > 0) {
+      board.setFileList(files);
     }
 
     boardService.add(board);
@@ -107,7 +109,7 @@ public class Board2Controller {
   @PostMapping("update")
   public String update(
       Board board,
-      MultipartFile[] files,
+      String filenames,
       HttpSession session) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
@@ -123,27 +125,30 @@ public class Board2Controller {
       throw new Exception("권한이 없습니다.");
     }
 
-    ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
-    for (MultipartFile file : files) {
-      if (file.getSize() == 0) {
+    ArrayList<String> filenameList = new ArrayList<>();
+    for (String filename : filenames.split(",")) {
+      filenameList.add(filename);
+    }
+    for (AttachedFile attachedFile : board.getFileList()) {
+      filenameList.add(attachedFile.getFilePath());
+    }
+
+
+    ArrayList<AttachedFile> files = new ArrayList<>();
+    for (String filename : filenameList) {
+      if (board.getContent().indexOf(filename) != -1) {
+        files.add(AttachedFile.builder().filePath(filename).build());
         continue;
       }
-      String filename = storageService.upload(this.bucketName, this.uploadDir, file);
-      attachedFiles.add(AttachedFile.builder().filePath(filename).build());
+      // Object Storage에 업로드 한 파일 중에서 게시글 콘텐트에 포함되지 않은 것은 삭제한다.
+      storageService.delete(this.bucketName, this.uploadDir, filename);
+      log.debug(String.format("%s 파일 삭제!", filename));
     }
-
-    if (attachedFiles.size() > 0) {
-      board.setFileList(attachedFiles);
+    if (files.size() > 0) {
+      board.setFileList(files);
     }
-
-    // 네이버 스토리지에 저장된 이미지를 지우기 위함
-    List<AttachedFile> oldFiles = boardService.getAttachedFiles(board.getNo());
 
     boardService.update(board);
-
-    for (AttachedFile file : oldFiles) {
-      storageService.delete(this.bucketName, this.uploadDir, file.getFilePath());
-    }
 
     return "redirect:list";
 
@@ -199,5 +204,27 @@ public class Board2Controller {
     storageService.delete(this.bucketName, this.uploadDir, file.getFilePath());
 
     return "redirect:../view?no=" + file.getBoardNo();
+  }
+
+  @PostMapping("file/upload")
+  @ResponseBody
+  public Object fileUpload(MultipartFile[] files, HttpSession session) throws Exception {
+
+    ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      return attachedFiles;
+    }
+
+    for (MultipartFile file : files) {
+      if (file.getSize() == 0) {
+        continue;
+      }
+      String filename = storageService.upload(this.bucketName, this.uploadDir, file);
+      attachedFiles.add(AttachedFile.builder().filePath(filename).build());
+    }
+
+    return attachedFiles;
   }
 }
