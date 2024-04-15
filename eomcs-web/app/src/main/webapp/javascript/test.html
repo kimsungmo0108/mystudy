@@ -15,16 +15,33 @@
 
 <script>
   "use strict"
-  let a = 100;
 
-  function f1(){
-    var a = 1000;
-    console.log(a);
-    console.log(window.a);
+  function createStudent(name, age){
+    if(this != undefined){
+      this.sname = name;
+      this.age = age;
+    }else{
+      return {
+        sname:name,
+        age:age,
+        print() {
+          console.log(this.sname, "===", this.age);
+        }
+      }
     }
+  }
 
-  f1();
-  window.f1();
+  createStudent.prototype.print = function() {
+      console.log(this.sname, this.age);
+  };
+
+  let s1 = new createStudent("홍길동", 20);
+  let s2 = new createStudent("임꺽정", 30);
+  let s3 = createStudent("유관순", 18);
+
+  s1.print();
+  s2.print();
+  s3.print();
 
 </script>
 

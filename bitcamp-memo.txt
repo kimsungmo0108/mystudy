@@ -11756,19 +11756,175 @@ Dynamic Type Binding
   f1();
   window.f1();
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.04.15(월)
 -------------------------------------------------------------------------------------
-→
+JavaScript - function
+function f1(){} → function 객체(200)
+f1 => 200
+let f2 = f1;
+f2 => 200
+let f2
 -------------------------------------------------------------------------------------
-→
+함수 선언
+  console.log(play(100, 200, plus)); → hoisting 기법 → 자바스크립트 엔진은 변수와 함수를 먼저 정의한다
+
+  function play(a, b, cb){
+    console.log(arguments);
+    return cb(a, b);
+  }
+  function plus(a, b){
+    return a + b;
+  }
+    function minus(a, b){
+    return a - b;
+  }
+
+  console.log(play(100, 200, plus));
 -------------------------------------------------------------------------------------
-→
+중첩 함수
+  function a() {
+    let name = "임꺽정";
+
+    let f1 = function() { // closure(클로저)
+      console.log(name);
+    }
+    return f1;
+  }
+
+  let b = a();
+  b();
+→ 자바와 마찬가지로 바깥 함수에 있는 변수를 중첩 함수에 로컬 변수로 자동 저장해서 사용된다
+
+  function a() {
+    let name = "임꺽정";
+
+    let setter = function(n) {
+      name = n;
+    };
+
+    let getter = function() {
+      return name;
+    };
+
+    return [setter, getter];
+  }
+
+  let [setName, getName] = a();
+
+  setName("홍길동");
+  console.log(getName());
+→ 배열로 받을 수 있지만 arr[0](), arr[1]() 함수를 배열 이름으로 호출 하려니까 가독성이 떨어진다
+→ 리턴 받을 때 변수 이름을 지정해서 받을 수 있다
+→ destructuring 기법이다
 -------------------------------------------------------------------------------------
-→
+객체 안에 함수
+  let s1 = new Object();
+  s1.sname = "홍길동";
+  s1.age = 20;
+  s1.print = function() {
+    console.log(this.sname, this.age);
+  };
+→ 자바는 this를 생략 가능하지만 자바스크림트는 this 생략 불가능하다
+
+  function createStudent(name, age){
+    let obj = new Object();
+    obj.sname = name;
+    obj.age = age;
+    obj.print = function() {
+      console.log(this.sname, this.age);
+    };
+
+    return obj;
+  };
+
+  let s1 = createStudent("홍길동", 20);
+  let s2 = createStudent("홍길동", 30);
+
+  s1.print();
+  s2.print();
+
+객체 리터럴
+  function createStudent(name, age){
+    let obj = {
+      sname:name,
+      age:age,
+      print() {
+      console.log(this.sname, this.age);
+      }
+    };
+    return obj;
+  };
+
+new를 함수 앞에 붙이면 가능
+  function createStudent(name, age){
+    this.sname = name;
+    this.age = age;
+    this.print = function() {
+      console.log(this.sname, this.age);
+    };
+  }
+
+  let s1 = new createStudent("홍길동", 20);
+→ 객체를 만들 때마다 함수도 같이 만들어진다
+
+개선 방식
+  function createStudent(name, age){
+    this.sname = name;
+    this.age = age;
+  }
+
+  createStudent.prototype.print = function() {
+      console.log(this.sname, this.age);
+  };
+
+  let s1 = new createStudent("홍길동", 20);
+
+  s1.print();
 -------------------------------------------------------------------------------------
-→
+★ 일반 객체 vs 함수 객체
+
+let obj = new Object();
+obj.age=20;
+obj.tel = "1111-1111";
+
+let obj = new createStudent("홍길동", 20);
+obj.prototype.print = function(){}
+obj.print();
+→ 객체에서 print()를 찾는다 없으면
+→ 객체를 초기화시킨 함수의 prototype에서 print()를 찾는다
+→ 객체에 함수를 저장하는 곳 → prototype 저장소
+→ createStudent() 객체 → constructor(생성자)
 -------------------------------------------------------------------------------------
-→
+★ 객체를 만드는 함수 이름은 대문자로
+  function Student(name, age){
+    if(this != undefined){
+      this.sname = name;
+      this.age = age;
+    }else{
+      return {
+        sname:name,
+        age:age,
+        print() {
+          console.log(this.sname, "===", this.age);
+        }
+      }
+    }
+  }
+
+  createStudent.prototype.print = function() {
+      console.log(this.sname, this.age);
+  };
+
+  let s1 = new Student("홍길동", 20);
+  let s2 = new Student("임꺽정", 30);
+  let s3 = Student("유관순", 18);
+
+  s1.print();
+  s2.print();
+  s3.print();
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
