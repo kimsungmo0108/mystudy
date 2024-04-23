@@ -12473,6 +12473,1217 @@ div#d3 {
   */
 background: red url('img02.png') no-repeat right 100px top 10px;
 -------------------------------------------------------------------------------------
+
+
+
+2024.04.18(목)
+-------------------------------------------------------------------------------------
+<html>
+  <head>
+    <title></title>
+  <body>
+    <h1></h1>
+    <p></p>
+  </body>
+</html>
+
+객체
+- html
+  - head
+    - title
+  - body
+    - h1
+    - p
+→ DOM Tree
+-------------------------------------------------------------------------------------
+HTML Rendering
+HTML tag
+→ DOM Tree
+→ Render Tree
+  → DOM Tree에서 화면에 출력하는 대상을 선별하는 것
+  → CSS 적용
+  → 어떻게 출력할지 크기, 색상, 위치 등 설정
+  → 출력
+
+DOM API(표준 API)
+→ 특정 언어용이 아니다, 범용이다!
+-------------------------------------------------------------------------------------
+DOM API를 이용하여 이메일 입력 상자를 알아낸다.
+
+var email = document.getElementById('email');
+var btn = document.getElementById('signupBtn');
+
+// 사용자가 버튼을 클릭하는 사건(event)이 발생했을 때
+// 호출될 함수(event listener = event handler = callback)를 등록한다.
+btn.addEventListener('click', function() {
+  // 입력 상자에 들어있는 값을 검사하여 이메일 중복 여부에 따라
+  // 아이콘을 출력한다.
+  if (email.value == "hong@test.com") { // 존재하는 사용자일 경우
+    email.style["background-image"] = "url('no.jpeg')";
+  } else {
+    email.style["background-image"] = "url('ok.jpeg')";
+  }
+
+  /* 이 방식의 문제점:
+    => 각각의 이미지가 별도의 파일로 되어 있다.
+       그래서 파일을 받을 때 네트워크 오버헤드(overhead)가 커진다.
+       즉 파일을 받기 위해 연결하고 연결을 끊는데 시간을 많이 소모한다.
+    => 해결책?
+       작은 이미지(bullet) 여러 개를 한 파일에 넣는다.
+       출력할 때는 이 파일에 있는 그림의 위치를 조정해서 출력한다.
+       다음 예제를 확인하라!
+  */
+-------------------------------------------------------------------------------------
+css 스타일과 자바스크립트 스타일 객체
+
+backgroud-coler	backgroundColor
+→ 대응하는 프로퍼티가 존재한다
+→ 100% X 9x%O
+
+// 사용자가 버튼을 클릭하는 사건(event)이 발생했을 때
+// 호출될 함수(event listener = event handler = callback)를 등록한다.
+btn.addEventListener('click', function() {
+  // 입력 상자에 들어있는 값을 검사하여 이메일 중복 여부에 따라
+  // 아이콘을 출력한다. 
+  if (email.value == "hong@test.com") { // 존재하는 사용자일 경우
+    state.style.backgroundPosition = "-204px -1px";
+    messageSpan.innerHTML = "중복된 이메일입니다.";
+    messageSpan.style["color"] = "red";
+  } else {
+    state.style["background-position"] = "-167px -1px";
+    messageSpan.innerHTML = "사용할 수 있는 이메일입니다.";
+    messageSpan.style["color"] = "blue";
+  }
+});
+-------------------------------------------------------------------------------------
+/* display 속성 : block, inline, inline-block
+    => block
+       => 한 줄을 모두 점유한다.
+       => 자신의 너비와 높이를 가질 수 있다.
+       => 예) h1 ~ h6, div, p, address, ul, ol 등
+    => inline
+       => 한 줄 속에 포함되어 다른 태그와 그 줄을 함께 공유한다.
+       => 자신의 너비와 높이를 가질 수 없다.
+          콘텐츠의 크기에 따라 너비와 높이가 결정된다.
+       => a, i, b, strong, span 등
+    => inline-block
+       => inline 처럼 한 줄을 다른 태그와 공유한다.
+       => block 처럼 자신의 너비와 높이를 가질 수 있다.
+  */
+-------------------------------------------------------------------------------------
+  /*
+    display: none
+    => 출력 대상에서 제외시킨다.
+    => 태그가 차지했던 영역은 사라진다.
+
+    visibility: hidden
+    => 출력 대상이 존재하지만, 화면에만 보이지 않게 한다.
+    => 따라서 태그가 차지했던 영역은 그대로 둔다.
+  */
+-------------------------------------------------------------------------------------
+  /* 위치 조정
+    0) 기본
+      => 특별하게 위치를 조정하지 않으면,
+         좌에서 우로 출력한다.
+         위에서 아래로 출력한다.
+      => 웹브라우저의 경계에 도달하면,
+         자동으로 줄을 바꿔 출력한다.
+      => 태그는 선언된 순서로 출력한다.
+  */
+
+  /* float
+    => 태그가 출력되는 현재 위치에서 공중부양시킨다.
+    => 다음 태그가 현재 태그의 자리를 차지할 것이다.
+    => left 또는 right 정렬만 가능하다.
+    => float일 때 유의할 점
+      1) width와 height를 지정하지 않으면, inline 처럼 콘텐츠의 크기에 따라
+          너비, 높이가 결정된다.
+      2) margin이 서로 겹치지 않고 그대로 유지한다.
+         일반적인 경우 위,아래 margin은 서로 겹쳐 표현한다.
+
+  */
+
+  /* position: absolute
+    => 가장 가까운 조상 중에 absolute나 relative, fixed 타입 조상이 있으면 
+       그 조상을 기준으로 자신의 위치를 조정한다.
+       테두리 안쪽을 기준으로 위치를 계산한다.
+    => 만약 조상 중에 absolute나 relative, fixed가 없다면,
+       문서 가장자리를 기준으로 자신의 위치를 조정한다.
+    => absolute 태그는 width, height를 지정하지 않으면 콘텐츠의 크기에 맞춘다.
+    => 기준이 되는 태그가 움직이면 자신도 같이 움직인다.
+  */
+
+  /*
+    position: fixed
+    => 웹브라우저의 클라이언트 영역을 기준으로 위치를 지정한다.
+    => 클라이언트 영역?
+       웹브라우저의 툴바 아래에 내용이 출력되는 영역이다.
+    => 내용을 위,아래로 스크롤하더라도 fixed 타입의 태그는 움직이지 않는다.
+    => 화면 스크롤과 상관없이 웹브라우저의 특정 영역에
+       내용을 띄우고 싶을 때 사용한다.
+  */
+
+margin: 0px auto;
+-------------------------------------------------------------------------------------
+
+
+
+2024.04.19(금)
+-------------------------------------------------------------------------------------
+DOM 객체 다루기
+
+// 자바스크립트는 태그를 다루는 도구를 제공한다.
+// 그 도구를 "DOM(Document Object Model) API"라 부른다.
+//
+// document 객체
+// => 웹브라우저에서 기본으로 제공하는 객체이다.
+// => 태그를 찾고, 생성하고, 제어하는 함수를 갖고 있다.
+// => var document = new HTMLDocument();
+//
+
+// document의 타입은?
+// => 즉 document 객체를 초기화시킨 생성자는?
+console.log(document.constructor.name);
+
+// document 객체를 통해 사용할 수 있는 함수나 변수는?
+// => HTMLDocument 생성자가 추가한 함수나 변수이다.
+// => 어떤 함수와 변수가 있는지 알고 싶다면 문서 보세요.
+// => HTMLDocument 생성자의 문서를 보라!
+// => 상속 관계
+//    Document() --> Node() ---> EventTarget() ---> Object()
+
+console.log(document);
+
+console.log(Document.prototype);
+
+// Document()의 함수
+console.log(document.createElement); // document ---> Document.prototype
+
+// Node()의 함수
+console.log(document.appendChild); // document ---> Document.prototype ---> Node.prototype
+
+// EventTarget()의 함수
+console.log(document.addEventListener); // document ---> Document.prototype ---> Node.prototype ---> EventTarget.prototype
+
+// Object()의 함수
+console.log(document.toString); // document ---> Document.prototype ---> Node.prototype ---> EventTarget.prototype ---> Object.prototype
+-------------------------------------------------------------------------------------
+DOM API - document
+
+Document() <---- HTMLDocument()
+인터페이스 <---- 생성자
+→ 초기화 
+→ document 
+→ 웹 브라우저가 제공하는 객체
+→ window
+  → document
+  → location
+  → history
+  → console
+  → navigator
+-------------------------------------------------------------------------------------
+JavaScript 생성자와 상속 관게
+
+Object() <--- Member() <--- Manager()
+→ 모든 객체는 Object()를 상속
+
+new Manager()
+→ 빈 객체 생성
+→ Object()가 초기화
+→ Member()가 초기화
+→ Manager()가 초기화
+→ 각 초기화 단계마다 key:toString, value:f(){} 을 빈 객체에 저장한다
+→ 완성된 객체
+-------------------------------------------------------------------------------------
+new HTMLDocument() - 생성자 상속 관계
+
+document 
+→ Object()가 초기화
+→ EventTarget()가 초기화
+→ Node()가 초기화
+→ Document()가 초기화
+-------------------------------------------------------------------------------------
+// Document.prototype.getElementById("태그아이디")
+// => 리턴 값: HTMLElement 하위 생성자에 의해 초기화된 객체를 리턴
+var e1 = document.getElementById("header4"); // vanilla JS 방식
+//var e1 = jQuery("#header4");
+//var e1 = $("#header4");
+
+console.log(e1);
+console.log(e1.name); // undefined
+console.log(e1.localName); // 태그명
+console.log(e1.constructor.name); // 객체의 생성자 이름
+
+// => 생성자 상속 관계: HTMLHeadingElement() ---> HTMLElement() ---> Element() ---> Node() ---> EventTarget() ---> Object()
+console.log(e1 instanceof XXXXX); // true
+-------------------------------------------------------------------------------------
+// Document.prototype.getElementsByTagName("태그이름")
+// => HTMLCollection 객체 리턴
+// => HTMLCollection은 배열이 아니다!
+//
+var el = document.getElementsByTagName("h2");
+//var e1 = $("h2");
+
+console.log(el.constructor.name);
+
+// HTMLCollection 객체는 배열은 아니지만,
+// 배열처럼 length 프로퍼티가 있고,
+// 인덱스 번호를 이용하여 찾은 태그들을 꺼낼 수 있다.
+// => 그래서 반복문을 사용할 수 있다.
+for (var i = 0; i < el.length; i++) {
+    console.log(i, el[i].innerHTML);
+}
+console.log("--------------------------");
+
+// 그러나 for...in 문법을 사용하는 것은 조심해야 한다.
+// for...in 에서는 배열이 아니고 일반 객체인 경우
+// 프로퍼티 개수 만큼 반복한다.
+// 그래서 프로퍼티 이름이 인덱스가 아닌 프로퍼티까지 반복하는 문제가 있다.
+// 즉 HTMLCollection에 대해 다음과 같이 반복문을 사용하지 말라!
+for (var i in el) { //el은 객체이기 때문에 i 변수에는 프로퍼티 이름이 저장된다.
+    //console.log(i, el[i]);
+    console.log(i, el[i].innerHTML);
+}
+console.log("--------------------------");
+
+// HTMLCollection은 iterable 규칙을 구현하였기 때문에
+// for...of 반복문을 사용할 수 있다.
+// => for (var 변수 of 배열 또는 iterable 구현체) {...}
+for (var e of el) {
+    console.log(e.innerHTML);
+}
+
+innerHTML → 태그 안에 들어있는 content
+-------------------------------------------------------------------------------------
+// Document.prototype.getElementsByClassName("분류명")
+// => HTMLCollection 객체 리턴
+// => HTMLCollection은 배열이 아니다!
+// => 찾지 못하더라도 HTMLCollection 객체를 리턴한다.
+//
+var el = document.getElementsByClassName("g3");
+//var e1 = $(".g3");
+
+console.log(el);
+for (var e of el) {
+    console.log(e.innerHTML);
+}
+-------------------------------------------------------------------------------------
+★ querySelector("CSS selector 문법") ★
+// => Element 객체 리턴
+// => 만약 여러 개를 찾았다 할 지라도 그 중 첫 번째 것만 리턴한다.
+//
+// 1) 아이디로 찾기
+var e = document.querySelector("#header3"); // $("#header3")
+console.log(e);
+console.log("---------------------");
+
+// 2) 태그 이름으로 찾기
+// => 조건에 해당하는 태그가 여러 개일지라도 그 중 첫 번째 것만 리터한다.
+e = document.querySelector("h2"); // $("h2")
+console.log(e);
+console.log("---------------------");
+
+//3) 분류명으로 찾기
+//=> 조건에 해당하는 태그가 여러 개일지라도 그 중 첫 번째 것만 리터한다.
+e = document.querySelector(".g2"); // $(".g2")
+console.log(e);
+console.log("---------------------");
+
+//4) CSS selector 문법을 사용하기 때문에 복잡한 조건을 기술할 수 있다.
+//=> 조건에 해당하는 태그가 여러 개일지라도 그 중 첫 번째 것만 리터한다.
+e = document.querySelector(".g2.g3"); // $(".g2.g3")
+console.log(e);
+console.log("---------------------");
+
+//5) 조건에 해당하는 태그를 찾지 못했다면?
+// => 리턴 값은 null이다.
+e = document.querySelector(".g2.g3.g4"); // $(".g2.g3.g1")
+console.log(e);
+-------------------------------------------------------------------------------------
+★ querySelectorAll("CSS selector 문법") ★
+// => NodeList 객체 리턴
+//
+// 1) 아이디로 찾기
+var list = document.querySelectorAll("#header3");
+console.log("1) for...of ---------------------");
+for (var e of list) {
+    console.log(e);
+}
+// NodeList는 배열이 아니다. 따라서 다음 반복문을 사용하면 필요없는 프로퍼티까지 반복하게 된다.
+console.log("1) for...in ---------------------");
+for (var i in list) {
+    console.log(list[i]);
+}
+// NodeList가 배열이 아니지만, 배열처럼 length 라는 변수가 있고,
+// 인덱스를 통해 항목을 꺼낼 수 있다. 따라서 다음과 같이 반복문을 사용할 수 있다.
+console.log("1) for(;;) ---------------------");
+for (var i = 0; i < list.length; i++) {
+    console.log(list[i]);
+}
+
+// 2) 태그 이름으로 찾기
+list = document.querySelectorAll("h2");
+console.log("2) ---------------------");
+for (var e of list) {
+    console.log(e);
+}
+
+//3) 분류명으로 찾기
+list = document.querySelectorAll(".g2");
+console.log("3) ---------------------");
+for (var e of list) {
+    console.log(e);
+}
+
+//4) CSS selector 문법을 사용하기 때문에 복잡한 조건을 기술할 수 있다.
+list = document.querySelectorAll(".g2.g3");
+console.log("4) ---------------------");
+for (var e of list) {
+    console.log(e);
+}
+
+//5) 조건에 해당하는 태그를 찾을 수 없다면?
+// => 빈 NodeList 객체이다.
+list = document.querySelectorAll(".g2.g3.g1");
+console.log("5) ---------------------");
+for (var e of list) {
+    console.log(e);
+}
+-------------------------------------------------------------------------------------
+var list1 = document.getElementsByTagName("li");
+var list2 = document.querySelectorAll("li");
+
+console.log(list1);
+console.log(list2);
+
+document.querySelector("#btn1").onclick = function() {
+  var e = document.querySelector("li:first-child");
+<!--  e.parentElement.removeChild(e);-->
+  e.parentNode.removeChild(e);
+
+  console.log(list1); // HTMLCollection 은 현재 태그 상태를 반영한다.
+  console.log(list2); // NodeList는 리턴 받은 값을 그대로 유지한다.
+  console.log("-------------------------");
+};
+-------------------------------------------------------------------------------------
+// Element.innerHTML : DOMString
+// => Element() 생성자가 추가한 프로퍼티이다.
+// => 태그의 콘텐트를 HTML 코드 그대로 리턴한다.
+//
+var e = document.querySelector("article:first-child > p");
+console.log(e)
+console.log(e.innerHTML)
+console.log("----------------------")
+
+// Node.textContent
+// => Node() 생성자가 추가한 프로퍼티이다.
+// => 태그의 콘텐트에서 HTML 코드를 제거한 후 텍스트만 리턴한다.
+console.log(e.textContent)
+console.log("----------------------")
+
+// HTMLElement.innerText
+// => HTMLElement() 생성자가 추가한 프로퍼티이다.
+// => 태그의 콘텐트에서 HTML 코드를 제거한 후 텍스트만 리턴한다.
+console.log(e.innerText)
+console.log("----------------------")
+-------------------------------------------------------------------------------------
+document.querySelector('#btn1').onclick = function() {
+  // Element.innerHTML : DOMString
+  // => Element() 생성자가 추가한 프로퍼티이다.
+  // => HTML 코드로 태그의 콘텐트를 설정할 수 있다.
+  // => HTML 태그가 그대로 렌더링 된다.
+  //
+  var e = document.querySelector("article:first-child > p");
+  e.innerHTML = "오호라 <b>비트캠프</b>입니다.<br> 반갑습니다.";
+
+  // Node.textContent
+  // => Node() 생성자가 추가한 프로퍼티이다.
+  // => 텍스트를 설정할 때 사용한다. 텍스트 안에 HTML 코드는 그냥 일반 텍스트로 취급한다.
+  //    즉 텍스트 안에 있는 HTML 코드는 웹브라우저가 인식하지 않는다.
+  e = document.querySelector("article:nth-child(2) > p");
+  e.textContent = "우헤헤 <b>비트캠프</b>입니다.<br> 반갑습니다.";
+
+  // HTMLElement.innerText
+  // => HTMLElement() 생성자가 추가한 프로퍼티이다.
+  // => 텍스트를 설정할 때 사용한다. 텍스트 안에 HTML 코드는 그냥 일반 텍스트로 취급한다.
+  //    즉 텍스트 안에 있는 HTML 코드는 웹브라우저가 인식하지 않는다.
+  e = document.querySelector("article:last-child > p");
+  e.innerText = "헐... <b>비트캠프</b>입니다.<br> 반갑습니다.";
+};
+-------------------------------------------------------------------------------------
+★ 태그의 속성 바꾸기
+//
+var e = document.querySelector("article:nth-child(2) a");
+//console.log(e.href)
+console.log(e.getAttribute('href'));
+
+document.querySelector('#btn1').onclick = function() {
+  // 1) 방법1
+  // => 원래 태그에 있던 속성 값을 바꿀 때!
+  //      태그객체.속성명 = "값"
+  //e.href = "http://www.daum.net";
+
+  // 2) 방법2
+  // => 원래 태그에 있던 속성 값을 바꿀 때
+  //      태그객체.setAttribute("속성명", "값")
+  // => 이 메서드를 사용하면 개발자가 임의로 추가한 프로퍼티 값도 바꿀 수 있다.
+  //    즉 원래 태그 객체에 없던 프로퍼티 값도 설정할 수 있다.
+  e.setAttribute("href", "http://www.google.com");
+};
+-------------------------------------------------------------------------------------
+// 태그에 임의의 속성을 추가할 수 있다.
+//
+var e = document.querySelector("article:nth-child(2) a");
+
+// 1) 방법1
+// => 사용자(개발자)가 태그 객체에 없던 
+//    임의의 속성(태그의 공식적인 속성이 아닌 경우)을 추가할 때는
+//    기존의 속성 이름과 같은 이름으로 덮어쓰지 않도록 하기 위해
+//    HTML5에서는 "data-xxxx" 형식으로 이름을 짓도록 권고하고 있다.
+// => '-' 문자는 일반 프로퍼티 명으로 사용할 수 없다.
+//    따라서 "객체.프로퍼티명" 이 아닌 "객체['프로퍼티명']" 문법을 사용해야 한다.
+//
+//e.data-no = 200; // 프로퍼티 이름 중간에 - 가 있는 경우 일반적인 방식으로 사용할 수 없다.
+e["data-no"] = 200;
+console.log(e["data-no"]);
+console.log(e.getAttribute("data-no")); // 객체에 직접 저장한 프로퍼티는 꺼낼 수 없다.
+// 위의 방식으로 태그에 임의의 속성(태그의 공식 속성이 아닌 경우)을 추가하게 되면 
+// 값을 넣고 꺼낼 수는 있으나
+// 웹브라우저의 개발 도구에서 디버깅할 때 추가된 속성을 볼 수 없다.
+// 디버깅을 쉽게 하려면 다음 방식을 사용하라!
+
+// 2) 방법2
+e.setAttribute("data-no2", 300);
+console.log(e.getAttribute("data-no2"));
+console.log(e["data-no2"]); // setAttribute()로 추가한 속성은 꺼낼 수 없다.
+-------------------------------------------------------------------------------------
+// 태그를 만들고 추가하는 방법
+//
+var section = document.querySelector("section");
+
+// 1) 태그 만들기
+// => Document.prototype.createElement("태그명")를 사용하여 태그 객체를 만든다.
+//
+var article = document.createElement("article"); // <article></article>
+var h1 = document.createElement("h1"); // <h1></h1>
+var text = document.createTextNode("제목입니다."); // 제목입니다.
+var p = document.createElement("p"); // <p></p>
+var text2 = document.createTextNode("내용입니다."); // 내용입니다.
+
+// 2) 태그에 자식 노드를 붙이기
+// => appendChild(자식노드)를 사용하여 자식 태그나 노드를 붙인다.
+//    appendChild()는 자식노드(태그)를 맨 뒤에 붙인다.
+//
+
+// Node의 함수를 사용해서 콘텐트를 설정할 수 있다.
+h1.appendChild(text); // <h1>제목입니다.</h1>
+// h1.innerHTML = "제목입니다."; // innerHTML에 직접 값을 넣을 수 도 있다.
+
+p.appendChild(text2); // <p>내용입니다.</p>
+// p.innerHTML = "내용입니다.";
+
+article.appendChild(h1); // <article><h1>제목입니다.</h1></article>
+article.appendChild(p); // <article><h1>제목입니다.</h1><p>내용입니다.</p></article>
+
+document.querySelector('#btn1').onclick = function() {
+  // 새로 만든 article 태그를 section 태그의 막내 자식태그로 붙인다.
+  section.appendChild(article);
+  // <section>
+  //   <article>...</article>
+  //   <article>...</article>
+  //   <article><h1>제목입니다.</h1><p>내용입니다.</p></article>
+  // </section>
+};
+-------------------------------------------------------------------------------------
+★ 태그를 만들고 추가하는 방법 II
+// 
+var section = document.querySelector("section");
+
+document.querySelector('#btn1').onclick = function() {
+  // 태그 객체를 만들지 않고 텍스트를 사용하여 자식 태그를 추가할 수 있다.
+  var originContent = section.innerHTML;
+  console.log(originContent);
+
+  section.innerHTML = originContent + 
+      "<article><h1>제목이래요!</h1><p>내용이지요!</p></article>";
+};
+-------------------------------------------------------------------------------------
+// 태그를 삭제하기
+//
+document.querySelector('#btn1').onclick = function() {
+  // 방법1) 부모 태그를 알고 있다면 removeChild()를 이용하여 삭제한다.
+  // => 삭제할 태그를 찾는다.
+  var e = document.querySelector("article:first-child");
+
+  // => 부모 태그를 찾는다.
+  var parent = document.querySelector("section");
+
+  // => 부모 태그에서 자식 태그를 제거한다.
+  parent.removeChild(e);
+};
+-------------------------------------------------------------------------------------
+// 태그를 삭제하기 II
+// 
+document.querySelector('#btn1').onclick = function() {
+  // 방법2) 부모 태그를 모른다면 찾은 태그에서 부모 태그를 알아낸다.
+  // => 삭제할 태그를 찾는다.
+  var e = document.querySelector("article:first-child");
+
+  // => 부모 태그를 알아낸다.
+  // => Node.parentElement 또는 Node.parentNode를 사용한다.
+  var parent = e.parentElement;
+
+  // => 부모 태그에서 자식 태그를 제거한다.
+  parent.removeChild(e);
+};
+-------------------------------------------------------------------------------------
+★ appendChild()를 이용하여 이미지 회전하기
+// 
+// img 태그의 부모 태그를 찾는다.
+var parent = document.querySelector("section");
+
+// 2초마다 부모 태그의 첫 번째 자식을 막내 자식으로 보낸다.
+window.setInterval(() => {
+    // 첫 번째 이미지를 찾는다.
+    var img = document.querySelector("section > img:first-child");
+    
+    // 찾은 이미지를 부모의 막내 자식으로 추가한다.
+    // => 이미 존재하는 태그를 추가하면 또 추가되는 것이 아니라 
+    //    기존 위치에서 맨 끝으로 이동하게 된다.
+    parent.appendChild(img);
+}, 1000);
+→ 화살표 함수(Arrow Function)
+-------------------------------------------------------------------------------------
+
+
+
+2024.04.22(월)
+-------------------------------------------------------------------------------------
+// 이벤트(event)
+// => 사용자나 시스템에 의해 태그의 상태가 바뀌는 것을 가리킨다.
+// => 각 태그 별로 발생하는 이벤트가 정해져 있다.
+// => 물론 개발자가 임의의 이벤트를 발생시킬 수 있다.
+//
+// 리스너(listener) = 이벤트 핸들러(event handler)
+// => 이벤트가 발생할 때 호출되는 메서드이다.
+// => HTML 태그나 자바스크립트 코드에서 이벤트에 대해 함수를 등록해야 한다.
+//
+// click 이벤트
+// => 사용자가 태그를 클릭할 때 발생한다.
+//
+// click 이벤트에 대해 리스너를 등록하는 방법
+// 1) HTML 태그의 onclick 속성에 자바스크립트 코드를 넣는다.
+//    => 사용자가 태그를 클릭하면 이 속성에 등록된 자바스크립트 코드가 실행된다.
+//    => 이 방식은 태그 안에 자바스크립트 코드가 섞여 있기 때문에
+//       유지보수할 때 힘들다.
+//    => HTML 태그는 태그대로, 자바스크립트 코드는 코드대로 분리되어 있어야
+//       유지보수가 쉽다.
+//    => 태그 안에 자바스크립트 코드를 넣어야 하기 때문에 긴 코드를 넣기가 불편한다.
+//
+// 2) 태그 객체의 onclick 프로퍼티에 함수를 등록한다.
+//    => 사용자가 태그를 클릭하면 onclick이라는 이름으로 등록된 함수를 호출한다.
+//    => HTML 태그와 자바스크립트 코드가 분리되어 있어서 유지보수하기 쉽다.
+//    => 이 방식은 이벤트에 대해 한 개의 리스너만 등록할 수 있다.
+//
+// 3) 태그 객체의 addEventListener()를 이용하여 호출될 함수를 등록한다.
+//    => 사용자가 태그를 클릭하면 해당 이벤트에 등록된 함수가 호출된다.
+//    => 이 또한 HTML 태그와 자바스크립트 코드가 분리되어 있어서 유지보수에 좋다.
+//    => 특히 여러 개의 리스너를 등록할 수 있다.
+
+// 방법1:
+function btn1Click() {
+  var msg = document.getElementById('input1'); 
+  if (msg.value == 'ok') {
+    console.log('하하하');
+  } else {
+    console.log('-.-');
+  }
+}
+
+// 방법2:
+//var btn2 = document.getElementById("btn2");
+var btn2 = document.querySelector("#btn2"); // 둘 중 아무거나 사용하면 된다.
+//var btn2 = $("#btn2");
+
+/*
+function f1() {
+    var str = "Hello2a!";
+    window.alert(str);
+    console.log(this); // this는 이 함수가 소속된 객체를 통해 호출될 때 그 객체를 가리킨다.
+}
+btn2.onclick = f1; // 함수의 주소를 객체 프로퍼티로 저장하는 순간 그 객체에 소속된다.
+*/
+
+/*
+btn2.onclick = function() {
+    var str = "Hello2b!";
+    window.alert(str);
+    console.log(this); // 일반 함수에서 this는 그 함수가 소속된 객체이다.
+};
+*/
+
+
+
+btn2.onclick = () => {
+  var str = "Hello2c!";
+  window.alert(str);
+  console.log(this); // arrow function에서 this는 window 객체이다.
+};
+
+
+// 방법3:
+// => addEventListener(이벤트명, 리스너);
+// => 주의!
+//    클릭 이벤트의 이름은 "onclick"이 아니라, "click"이다.
+//
+var btn3 = document.querySelector("#btn3");
+
+btn3.addEventListener("click", btn3Click);
+function btn3Click() {
+  var str = "Hi1!!";
+  window.alert(str);
+  console.log(this); // this는 btn3 객체이다.
+}
+
+btn3.addEventListener("click", function() {
+  var str = "Hi2!!";
+  window.alert(str);
+  console.log(this); // this는 btn3 객체이다.
+});
+
+btn3.addEventListener("click", () => {
+  var str = "Hi3!!";
+  window.alert(str);
+  console.log(this); // this는 window 객체이다.
+});
+-------------------------------------------------------------------------------------
+// 한 태그에 세가지 방법으로 등록된 리스너가 있을 때 호출되는 순서는?
+// => 만약 태그 객체에 대해 onclick 프로퍼티로 리스너를 등록했다면,
+//    태그의 onclick 속성에 등록된 자바스크립트 코드는 실행되지 않는다.
+// => 태그 객체에 대해 onclick 프로퍼티로 등록한 리스너가 먼저 실행된다.
+//    그런 후에 addEventListener()로 등록한 리스너를 호출한다.
+// => 주의!
+//    이 호출 순서에 의존하여 코드를 작성하지 말라!
+//    또한 세가지 방법 중에 한 가지 방법으로 리스너를 등록하라!
+//    그렇게 일관성이 있어야 유지보수가 쉬워진다.
+-------------------------------------------------------------------------------------
+// querySelectorAll()의 리턴 값은 NodeList 이다.
+// 태그 객체가 아니다.
+// 따라서 addEventListener() 함수가 없다.
+// 또한 onclick 프로퍼티도 없다.
+// 따라서 다음 코드는 의미 없다.
+function f1() {
+	console.log(this);
+}
+for (var e of el) {
+	  e.onclick = f1
+}
+-------------------------------------------------------------------------------------
+<button id="btn1" onclick="console.log(event)">버튼1</button><br>
+// 이벤트가 발생하면
+// 웹브라우저는 이벤트 정보를 객체에 담아서
+// 리스너를 호출할 때 파라미터로 전달한다.
+// 이벤트 객체는 이벤트 종류에 따라 미리 정의된 생성자에 의해서 초기화된다.
+// 즉 이벤트 종류에 따라 특정 생성자가 이벤트 객체를 준비한다.
+// 예)
+// => 마우스 클릭, 더블클릭, 누를 때, 뗄 때 - MouseEvent() 생성자가 초기화시킨다.
+// => 키보드에서 키를 누를 때, 뗄 때, 눌렀다 땔 때 - KeyboardEvent() 생성자가 초기화시킨다.
+// => 콘텐트를 편집할 때 - InputEvent() 생성자가 초기화시킨다.
+// => UI 객체가 포커스를 얻었을 때, 잃었을 때 - FocusEvent() 생성자가 초기화시킨다.
+//
+// 태그의 onclick 속성에 자바스크립트 코드를 둘 때 이벤트 정보를 사용하는 방법?
+// => "event" 라는 이름으로 정의된 객체가 있다. 그 객체를 사용하면 된다.
+// => 이 event 객체는 MouseEvent()가 초기화시킨 객체이다.
+// => 즉 MouseEvent() 생성자가 추가한 속성을 사용할 수 있다.
+//
+// MouseEvent 주요 속성
+// => altKey : Alt 키 누름 여부
+// => ctrlKey : Ctrl 키 누름 여부
+// => button : 누른 버튼 번호
+// => offsetX/Y : 버튼 영역을 기준으로 X/Y 좌표
+// => clientX/Y : 웹브라우저 내용창을 기준으로 X/Y 좌표
+// => screenX/Y : 바탕화면 영역을 기준으로 X/Y 좌표
+-------------------------------------------------------------------------------------
+// HTML 태그의 onclick 속성에 많은 자바스크립트 코드를 넣을 수 없을 때,
+// 함수를 만들고 호출하라!
+// => 물론 event 객체를 함수를 호출할 때 넘겨줘야 한다.
+//    당연히 함수에서는 event 객체를 받는 파라미터가 있어야 한다.
+function btn1Click(e) {
+  console.log(e);
+  console.log(e.constructor.name);
+  console.log(e instanceof MouseEvent);
+	console.log(
+			e.altKey, e.ctrlKey, e.button,
+			e.offsetX, e.offsetY,
+			e.clientX, e.clientY,
+			e.screenX, e.screenY)
+}
+-------------------------------------------------------------------------------------
+// addEventListener() 사용
+document.getElementById("btn1").addEventListener("click", function(e) {
+	console.log(
+		e.altKey, e.ctrlKey, e.button,
+		e.offsetX, e.offsetY,
+		e.clientX, e.clientY,
+		e.screenX, e.screenY)
+});
+-------------------------------------------------------------------------------------
+// 리스너가 일반 함수나 익명 함수일 경우,
+// this가 가리키는 객체가 이벤트가 발생된 객체이다.
+//
+document.getElementById("btn1").addEventListener("click", function(e) {
+	console.log(this);
+
+	// 이벤트가 발생한 객체의 속성 값 알아내기
+	// => 개발자가 임의로 추가한 속성인 경우 반드시 getAttribute()를 사용해야 한다.
+	console.log(this.getAttribute("data-no"));
+	
+	// 개발자가 태그에 임의로 추가한 속성은 다음과 같이 일반적인 방법으로 꺼낼 수 없다. 
+	console.log(this["data-no"]); // undefined
+	
+	// 태그에 원래 있던 속성이라면 일반적인 문법으로 접근할 수 있다.
+	console.log(this.id);
+});
+-------------------------------------------------------------------------------------
+// arrow function인 경우
+// this는 window 객체를 가리킨다.
+//
+document.getElementById("btn1").addEventListener("click", (e) => {
+  console.log(this); // window 객체이다.
+
+  // 그럼 arrow function(자바에서는 Lambda라 부른다)에서는
+  // 이벤트가 발생된 객체를 알 수 없는가?
+  // => 있다!
+  //    이벤트 객체에 이벤트가 발생된 태그의 주소가 들어 있다.
+★  console.log(e.target);
+
+  // 이벤트가 발생한 객체의 속성 값 알아내기
+  console.log(e.target.getAttribute("data-no"));
+});
+-------------------------------------------------------------------------------------
+JavaScript Event 단계
+이벤트 전달 → capture phase
+최종 이벤트 → target phase
+이벤트 리턴 → bubble phase
+
+JavaScript Event 단계와 리스너 호출
+captuer phase에서는 리스너가 호출되지 않는다
+target에 등록된 리스너 호출 후 
+bubble phase에서 각 element에 등록된 리스너 호출됨
+-------------------------------------------------------------------------------------
+// 이벤트가 발생하면 다음 3단계로 전달 된다.
+// 1) capture phase
+//    => 부모 태그에서 자식 태그로 내려가는 단계
+// 2) target phase
+//    => 이벤트가 발생된 목적지에 도달한 단계
+// 3) bubble phase
+//    => 다시 목적지에서 부모 태그로 올라가는 단계
+//
+// 다음과 같은 방법으로 이벤트 리스너를 등록하면,
+// 이벤트가 발생했을 때,
+// capture phase 단계는 건너뛰고
+// target과 bubble 단계에서 호출된다.
+// => <태그 onclick="자바스크립트 코드"></태그>
+// => 태그객체.onclick = function() {};
+// => 태그객체.addEventListener("click", function() {});
+
+// #btn1이나 #btn2를 클릭하면,
+// => 버튼에 등록된 click 리스너가 호출된다.
+// => 부모들에 등록된 click 리스너도 위로 올라가면서 순차적으로 호출된다.
+-------------------------------------------------------------------------------------
+// onclick 프로퍼티에 직접 등록하는 리스너는
+// => target 단계와 bubble 단계에서 호출된다.
+//
+// addEventListener(이벤트타입, 리스너, 캡쳐여부)에서
+// 세 번째 파라미터의 값을 true로 설정하라. 기본은 false이다.
+// => true : target 또는 capture 단계에서 호출된다.
+// => false(기본) : target 또는 bubble 단계에서 호출된다.
+document.getElementById("btn1").addEventListener("click", function(e) {
+	console.log("버튼1...");
+}, true);
+
+// target, bubble  단계에서 호출되도록 설정한다.
+document.getElementById("btn2").addEventListener("click", function(e) {
+    console.log("버튼2...");
+});
+
+// capture, target 단계에서 호출되도록 설정한다.
+document.getElementById("d2").addEventListener("click", function(e) {
+    console.log("d2...");
+}, true);
+
+// capture, target 단계에서 호출되도록 설정한다.
+document.getElementById("d1").addEventListener("click", function(e) {
+    console.log("d1...");
+}, true);
+
+// capture, target  단계에서 호출되도록 설정한다.
+document.body.addEventListener("click", function(e) {
+    console.log("body...");
+}, true);
+
+
+// 정리!
+// => addEventListener(이벤트, 리스너, false) : target, bubble 단계일 때 리스너가 호출된다.
+//    - 세 번째 파라미터가 없으면 기본이 false이다.
+// => addEventListener(이벤트, 리스너, true) : capture, target 단계일 때 리스너가 호출된다.
+-------------------------------------------------------------------------------------
+// 이벤트가 발생하면 capture-target-bubble 단계로 진행한다.
+// target 단계에서 bubble 단계로 진행하는 것을 막지 않으면
+// 부모 태그에 등록된 리스너까지 호출되는 문제가 발생한다.
+//
+// 방법1: Event.stopPropagation()을 호출하라!
+// => 이벤트 bubbling을 막는다.
+// => 단 target에 등록된 함수는 모두 호출된다.
+//
+document.getElementById("btn1").addEventListener("click", function(e) {
+	console.log("버튼1...1");
+	e.stopPropagation(); // 버블링을 하지 않도록 설정한다.
+});
+document.getElementById("btn1").addEventListener("click", function(e) {
+    console.log("버튼1...2");
+});
+document.getElementById("btn1").addEventListener("click", function(e) {
+    console.log("버튼1...3");
+});
+
+//방법2: Event.stopImmediatePropagation()을 호출하라!
+//=> 이벤트 bubbling을 막는다.
+//=> target에 등록된 함수라도 즉시 현 함수에서 실행을 마감한다.
+//
+document.getElementById("btn2").addEventListener("click", function(e) {
+    console.log("버튼2...1");
+    e.stopImmediatePropagation(); // 이 리스너까지만 실행한다.
+});
+document.getElementById("btn2").addEventListener("click", function(e) {
+    console.log("버튼2...2");
+});
+document.getElementById("btn2").addEventListener("click", function(e) {
+    console.log("버튼2...3");
+});
+
+document.getElementById("d2").addEventListener("click", function(e) {
+    console.log("d2...");
+});
+
+document.getElementById("d1").addEventListener("click", function(e) {
+    console.log("d1...");
+});
+
+document.body.addEventListener("click", function(e) {
+    console.log("body...");
+});
+-------------------------------------------------------------------------------------
+    // target: target 단계의 태그를 가리킨다.
+    // => td 태그를 클릭하면 target이 가리키느 ㄴ태그 객체는 td 태그이고,
+    //    a 태그를 클릭하면 target이 가리키는 태그 객체는 a 태그이다.
+    console.log(e.target);
+
+    // 어느 태그를 클릭하느냐에 따라 target이 가리키는 태그가 다르기 때문에
+    // URL을 a 태그와 td 태그에 모두 설정했다.
+
+    // 자바스크립트에서 다른 페이지로 이동시킨다.
+    window.location.href = e.target.getAttribute("href");
+-------------------------------------------------------------------------------------
+    // target은 실제 click 이벤트가 발생된 객체를 가리킨다
+    console.log(e.target);
+
+    // 우리가 원하는 것은 a 태그를 클릭하나 td 태그를 클릭하나 모두 동이랗게 처리하고 싶다
+    // 그럴려면 target 단계가 아닌 bubble 단계에서 리스너가 호출될 때 처리해야 한다
+    // 버블 단계의 리스너에서 태그 객체의 정보를 알고 싶다면 
+    // target 변수 대신 currentTarget 변수를 사용하다!!
+    // currentTarget은 리스너가 호출될 때, 그 리스너가 소속된 태그 객체를 가리킨다
+    console.log(e.currentTarget);
+
+    // 자바스크립트에서 다른 페이지로 이동시킨다.
+    window.location.href = e.currentTarget.getAttribute("href");
+-------------------------------------------------------------------------------------
+  e.addEventListener("click", function(e) {
+    // 자바스크립트에서 다른 페이지로 이동시킨다.
+    window.location.href = "/board/view?no-="+e.currentTarget.getAttribute(["data-no"]);
+-------------------------------------------------------------------------------------
+
+
+
+2024.04.23(화)
+-------------------------------------------------------------------------------------
+★ 사용자의 행위가 아닌 프로그래밍으로 특정 이벤트를 발생시킬 수 있다.
+//
+//
+document.getElementById("btn1").addEventListener("click", function(e) {
+	// #btn1을 눌렀을 때 #btn2에 click 이벤트 발생시키기
+	// 1) MouseEvent 만들기
+	var myEvent = new MouseEvent("click");
+
+	// 2) 위에서 생성한 이벤트 객체를 #btn2에 보낸다.
+	document.getElementById("btn2").dispatchEvent(myEvent);
+});
+
+document.getElementById("btn2").addEventListener("click", function(e) {
+    console.log("버튼2...");
+});
+-------------------------------------------------------------------------------------
+// javascript에 정의된 이벤트가 아닌 개발자가 임의의 이벤트를 만들어 발생시킬 수 있다.
+// => Event() 생성자를 사용해서 이벤트 객체를 만들어야 한다.
+//
+document.getElementById("btn1").addEventListener("click", function(e) {
+  // #btn1을 눌렀을 때 #btn2에 "ohora" 이벤트를 발생시키기
+	// 1) Event 만들기
+	var myEvent = new Event("ohora");
+
+	// 2) 위에서 생성한 이벤트 객체를 #btn2에 보낸다.
+	document.getElementById("btn2").dispatchEvent(myEvent);
+});
+
+// "ohora" 이벤트를 처리하고 싶다면,
+// 다음과 같이 이벤트 이름을 "ohora"로 지정하라!
+document.getElementById("btn2").addEventListener("ohora", function(e) {
+  console.log("버튼2...");
+});
+-------------------------------------------------------------------------------------
+★ 커스텀 이벤트에 데이터를 첨부해서 보내기
+// => CustomEvent() 생성자를 사용해서 이벤트 객체를 만들어야 한다.
+//
+document.getElementById("btn1").addEventListener("click", function(e) {
+	// #btn1을 눌렀을 때 #btn2에 "ohora" 이벤트를 발생시키기
+	// 1) CustomEvent 만들기
+	// => 이벤트 객체에 데이터를 첨부할 때는 "detail"이라는 이름으로 데이터를 첨부하라!
+  var myEvent = new CustomEvent("ohora", {
+    detail: "Hello!!!"
+  });
+
+	// 2) 위에서 생성한 이벤트 객체를 #btn2에 보낸다.
+	document.getElementById("btn2").dispatchEvent(myEvent);
+});
+
+// "ohora" 이벤트를 처리하고 싶다면,
+// 다음과 같이 이벤트 이름을 "ohora"로 지정하라!
+document.getElementById("btn2").addEventListener("ohora", function(e) {
+    console.log("버튼2...", e.detail);
+});
+-------------------------------------------------------------------------------------
+★ 커스텀 이벤트에 여러 개의 데이터를 첨부해서 보내기.
+// => CustomEvent() 생성자를 사용해서 이벤트 객체를 만들어야 한다.
+//
+document.getElementById("btn1").addEventListener("click", function(e) {
+	// #btn1을 눌렀을 때 #btn2에 "ohora" 이벤트를 발생시키기
+	// 1) CustomEvent 만들기
+	// => 이벤트 객체에 데이터를 첨부할 때는 "detail"이라는 이름으로 데이터를 첨부하라!
+	var myEvent = new CustomEvent("ohora",{
+        detail: {
+            name:"홍길동", 
+            age:20, 
+            tel:"1111-2222"
+        }
+    });
+
+	// 2) 위에서 생성한 이벤트 객체를 #btn2에 보낸다.
+	★ document.getElementById("btn2").dispatchEvent(myEvent);
+});
+
+// "ohora" 이벤트를 처리하고 싶다면,
+// 다음과 같이 이벤트 이름을 "ohora"로 지정하라!
+document.getElementById("btn2").addEventListener("ohora", function(e) {
+    console.log("버튼2...");
+    console.log("name=", e.detail.name);
+    console.log("age=", e.detail.age);
+    console.log("tel=", e.detail.tel);
+});
+-------------------------------------------------------------------------------------
+<a href="http://www.daum.net"
+   onclick="alert('OK!')">a 태그의 기본 동작 계속</a><br>
+
+<!-- 기본 동작을 막고 싶다면 onclick 속성에 작성하는 스크립트의 리턴 값을 false로 지정하라! -->
+<a href="http://www.daum.net"
+   onclick="alert('OK!'); return false">a 태그의 기본 동작 취소 1</a><br>
+
+<!-- a 태그의 onclick에 작성할 스크립트가 많다면 별도의 함수에 작성하고 호출한다.
+     이때 함수의 리턴 값에 따라 a 태그의 기본 동작을 제어하는 기법이
+     다음 예이다. -->
+<a href="http://www.daum.net"
+   onclick="return f1()">a 태그의 기본 동작 취소 2</a><br>
+
+<!-- 태그.onclick = 함수() {} -->
+<a id="link3" href="http://www.daum.net">a 태그의 기본 동작 취소 3</a><br>
+
+<!-- 태그.onclick = 함수() {} : preventDefault() -->
+<a id="link4" href="http://www.daum.net">a 태그의 기본 동작 취소 4</a><br>
+
+<!-- 태그.addEventListener("click", 함수() {}) -->
+<a id="link5" href="http://www.daum.net">a 태그의 기본 동작 취소 5</a><br>
+
+<!-- 태그.addEventListener("click", 함수() {}) : preventDefault() -->
+<a id="link6" href="http://www.daum.net">a 태그의 기본 동작 취소 6</a><br>
+
+<script>
+"use strict"
+
+function f1() {
+  alert("OK!");
+  return false
+}
+
+document.querySelector("#link3").onclick = function() {
+  alert("OK!");
+  return false; // false를 리턴하면 a 태그의 기본 동작을 취소한다.
+};
+
+document.querySelector("#link4").onclick = function(e) {
+  e.preventDefault(); // a 태그의 기본 동작을 비활성화시킨다. 리스너 호출이 끝난 후 서버에 요청하지 않는다.
+  alert("OK!");
+};
+
+document.querySelector("#link5").addEventListener("click", function() {
+  alert("OK!");
+  return false; // addEventListener()로 함수를 등록하면
+                // return 값으로 a 태그의 기본 동작을 취소할 수 없다.
+});
+
+document.querySelector("#link6").addEventListener("click", function(e) {
+  // addEventListener()로 함수를 등록한다면
+  // Event.preventDefault()를 사용하여 a 태그의 기본 동작을 취소해야 한다.
+  e.preventDefault();
+  alert("OK!");
+});
+-------------------------------------------------------------------------------------
+<form action="https://www.daum.net" onsubmit="return false">
+  <input type="text" name="title">
+  <button>전송 막기1</button>
+</form>
+
+<form action="https://www.daum.net" id="form2">
+  <input type="text" name="title">
+  <button>전송 막기2</button>
+</form>
+
+<form action="https://www.daum.net" id="form3">
+  <input type="text" name="title">
+  <button>전송 막기3</button>
+</form>
+
+<form action="https://www.daum.net" id="form4">
+  <input type="text" name="title">
+  <button>전송 막기4</button>
+</form>
+
+<form action="https://www.daum.net" id="form5">
+  <input type="text" name="title">
+  <button>전송 막기5</button>
+</form>
+
+<form action="https://www.daum.net" id="form6">
+  <input type="text" name="title">
+  <!-- 일반 버튼은 서버에 전송을 수행하지 않는다. -->
+  <button type="button">전송 막기6</button>
+  <input type="button" value="전송 막기6">
+</form>
+
+<script>
+"use strict"
+
+// "submit" 이벤트가 발생했을 때 호출될 리스너를 등록한다.
+// "submit" 이벤트는 언제 발생하는가?
+// - submit 버튼을 클릭할 때 발생한다!
+// 
+document.querySelector("#form2").onsubmit = () => {
+  return false;
+};
+
+document.querySelector("#form3").onsubmit = (e) => {
+  e.preventDefault();
+};
+
+document.querySelector("#form4").addEventListener("submit", (e) => {
+  e.preventDefault();
+});
+
+document.querySelector("#form5").addEventListener("submit", (e) => {
+  return false; 
+  // addEventListener()로 이벤트 핸들러를 등록할 때는
+  // return false 가 의미없다. 동작되지 않는다.
+  // 반드시 e.preventDefault()를 호출하라!
+});
+-------------------------------------------------------------------------------------
+document.querySelector("#form1").onsubmit = () => {
+  // submit 타입의 버튼을 클릭하면 onsubmit 으로 등록한 함수가 호출된다.
+  // 여기에서 입력 폼 값을 검증하는 일을 한다.
+  //
+  var name = document.querySelector("#name1");
+  if (name.value == "") {
+    alert("필수 입력 항목이 비어 있습니다.");
+    return false; // false를 리턴하면 입력 폼의 값을 서버에 제출하지 않는다.
+                  // 즉 HTTP 요청을 수행하지 않는다.
+  }
+
+  // true를 리턴하거나 아무것도 리턴하지 않으면 원래대로
+  // 입력 폼의 값을 서버에 제출한다. 즉 HTTP 요청을 수행한다.
+};
+-------------------------------------------------------------------------------------
+document.querySelector("#btn2").onclick = () => {
+  var name = document.querySelector("#name2");
+  if (name.value == "") {
+    alert("필수 입력 항목이 비어 있습니다.");
+    return; // submit 버튼이 아니라 일반 버튼이기 때문에 false를 리턴할 필요가 없다.
+  }
+
+  // 일반 버튼을 클릭했을 때 입력 폼의 값을 서버에 제출하려면
+  // form 태그 객체에 대해 submit() 함수를 호출하라!
+  //
+  document.querySelector("#form2").submit();
+}
+-------------------------------------------------------------------------------------
+document.querySelector("#form3").addEventListener("submit", (e) => {
+  console.log("okok!");
+  var name = document.querySelector("#name3");
+  if (name.value.length < 2) {
+    alert("2자 이상을 입력하세요.");
+    //return false; // addEventListener()로 등록한 경우 return false는 안 먹힌다.
+    e.preventDefault();
+    return;
+  }
+});
+-------------------------------------------------------------------------------------
+Node.js
+웹 브라우저(HTML Renderer, JavaScript(V8)) → 보안 때문에 막았다 → File System
+→ 자바스크립트는 멀티 OS를 지원한다 
+→ JavaScript App은 멀티 os에서 실행시킬 수 있다
+-------------------------------------------------------------------------------------
+NPM(Nodejs Package Manager)
+npm → package.json(Nodejs로 만든 App 정보, App이 사용하는 의존 모듈) → 읽어서 모듈을 준비
+                          → init → install → 파일 생성, 모듈 설치 및 모듈 정보 등록
+-------------------------------------------------------------------------------------
+CORS(Cross-Origin Resource Sharing)
+→ 동일 출처 정책(Same-Origin policy)을 우회
+→ HTML을 받아온 서버로만 AJAX 요청을 허락한다
+
+웹 서버A → get → a.html → AJAX 요청 ok!(Same-Origin)
+		        → 웹 서버B로 AJAX 요청은 보안상 제한!
+		        → Cross-Origin (시큐리티)
+		        → CORS 설정을 해서 B 서버에 요청을 하면 응답 헤더에 승인헤더를 포함해서 응답 받는다
+		        → Access-Control-Allow-Origin에 설정
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
+→
+-------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
 →
