@@ -11,29 +11,35 @@ version = '0.0.1-SNAPSHOT'
 //sourceCompatibility = '11'
 
 repositories {
-  mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-  // spring-webmvc 관련 라이브러리
-  implementation 'org.springframework.boot:spring-boot-starter-web'
-  
-  // Undertow 서블릿 컨테이너로 교체
-  // implementation ('org.springframework.boot:spring-boot-starter-web') {
-  //   exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
-  // }  
-  // implementation 'org.springframework.boot:spring-boot-starter-undertow'
-    
-  // Thymeleaf 관련 라이브러리
-  implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    // spring-webmvc 관련 라이브러리
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 
-  implementation 'org.apache.commons:commons-text:1.9'
-  developmentOnly 'org.springframework.boot:spring-boot-devtools'
-  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // Undertow 서블릿 컨테이너로 교체
+    // implementation ('org.springframework.boot:spring-boot-starter-web') {
+    //   exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    // }
+    // implementation 'org.springframework.boot:spring-boot-starter-undertow'
+
+    // Thymeleaf 관련 라이브러리
+//    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    // 임베디드 Tomcat 서버
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.85'
+
+    // JSTL 라이브러리
+    implementation 'javax.servlet:jstl:1.2'
+
+    implementation 'org.apache.commons:commons-text:1.9'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
-  useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 // eclipse 프로젝트 이름을 설정하기
