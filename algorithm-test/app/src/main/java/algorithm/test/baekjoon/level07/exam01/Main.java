@@ -1,20 +1,28 @@
 package algorithm.test.baekjoon.level07.exam01;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class Main {
   public static void main(String[] args) {
-    String text = "#한글 #Java #한글 #한글 #한글";
 
-    // 정규 표현식을 사용하여 해시 태그 추출 (한글 포함)
-    Pattern pattern = Pattern.compile("#[\\w가-힣]+");
-    Matcher matcher = pattern.matcher(text);
-
-    // 매칭된 해시 태그 출력
-    while (matcher.find()) {
-      String hashtag = matcher.group();
-      System.out.println("Hashtag: " + hashtag);
+    java.util.Scanner sc = new java.util.Scanner(System.in);
+    int n = sc.nextInt();
+    int m = sc.nextInt();
+    int[][] num1 = new int[n][m];
+    int[][] num2 = new int[n][m];
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < m; j++) {
+        num1[i][j] = sc.nextInt();
+      }
+    }
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < m; j++) {
+        num2[i][j] = sc.nextInt();
+      }
+    }
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < m; j++) {
+        System.out.printf("%d ", num1[i][j] + num2[i][j]);
+      }
+      System.out.println();
     }
   }
 }
