@@ -14981,15 +14981,127 @@ Promise = catch() 와 reject 핸들러
 → catch 다음에 fulfill이 있어도 실행된다!
 → '약속4'가 정상으로 이행했기에 fulfill이 실행
 -------------------------------------------------------------------------------------
-→
+const promise = new Promise((resolve, reject) => {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4) {
+      try {
+        // 비동기 함수에서 코드를 실행할 때 
+        // 예외가 발생할 수 있는 코드는 try 블록 안에 둬라!
+        //
+        console.log(xhr.responseText);
+        document.getElementById("#btn").onclick = () => {};
+        
+      } catch(err) {
+        // 예외가 발생했을 때 reject() 를 호출하여
+        // 오류가 났음을 통지하라!
+        reject(err);
+      }
+    }
+  };
+  xhr.open("GET", "http://localhost:3000/hello", true); 
+  xhr.send();
+})
+.catch((reason) => console.log("catched!" + reason));
+
+console.log("끝!");
+
+// executor에서 비동기 작업을 실행하는 중에 오류가 발생했을 때,
+// 명시적으로 reject() 호출하여 오류가 발생했음을 통지해야 한다.
 -------------------------------------------------------------------------------------
-→
+const promise = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('{"title": "test..ok!", "content": "내용입니다!"}');
+  }, 3000);
+})
+.then((text) => {
+  console.log(text)
+  // 핸들러에서 리턴한 값은 
+  // 다음 핸들러에게 그대로 전달된다.
+  return JSON.parse(text); 
+})
+.then((obj) => console.log(obj));
+
+console.log("끝!");
 -------------------------------------------------------------------------------------
-→
+const promise = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('{"title": "test..ok!", "content": "내용입니다!"}');
+  }, 3000);
+})
+.then((text) => {
+  console.log(text)
+  // Promise 객체를 리턴하면,
+  // Promise의 executor를 실행한 후
+  // executor에서 resolve()로 넘겨준 값이
+  // 다음 핸들러에게 전달된다.
+  return new Promise((resolve, reject) => {
+    console.log("Deserialization: ");
+    resolve(JSON.parse(text));
+  }); 
+})
+.then((obj) => console.log(obj));
+
+console.log("끝!");
 -------------------------------------------------------------------------------------
-→
+★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+new Promise((resolve, reject) => {
+  console.log("작업1");
+  resolve("1111");
+})
+.then((result) => new Promise((resolve, reject) => {
+  console.log("작업1에서 넘겨준 결과:", result);
+  console.log("작업2-진행중");
+  window.setTimeout(() => {
+      console.log("작업2-완료!");
+      resolve("2222");
+    },
+    3000
+  );
+}))
+.then((result) => new Promise((resolve, reject) => {
+  console.log("작업2에서 넘겨준 결과:", result);
+  console.log("작업3-진행중");
+  window.setTimeout(() => {
+      console.log("작업3-완료!");
+      resolve("3333");
+    },
+    3000
+  );
+}))
+.then((result) => new Promise((resolve, reject) => {
+  console.log("작업3에서 넘겨준 결과:", result);
+  console.log("작업4-진행중");
+  window.setTimeout(() => {
+      console.log("작업4-완료!");
+      resolve("4444");
+    },
+    3000
+  );
+}));
+
+console.log("끝!");
+★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 -------------------------------------------------------------------------------------
-→
+★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+패치 객체
+var tbody = document.querySelector("tbody");
+
+fetch("http://localhost:3000/boards")
+.then((response) => {
+    return response.json(); 
+})
+.then((arr) => {
+    for (var b of arr) {
+        var tr = document.createElement("tr");
+        tr.innerHTML = "<td>" + b.no + "</td>" + 
+            "<td>" + b.title + "</td>" + 
+            "<td>" + b.writer + "</td>" +
+            "<td>" + b.viewCnt + "</td>";
+        tbody.appendChild(tr);
+    }
+});
+★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------

@@ -20,9 +20,11 @@ var tbody = document.querySelector("tbody");
 
 fetch("http://localhost:3000/boards")
 .then((response) => {
-    return response.json(); 
+    console.log(response.json());
+    return response.json();
 })
 .then((arr) => {
+    console.log(arr);
     for (var b of arr) {
         var tr = document.createElement("tr");
         tr.innerHTML = "<td>" + b.no + "</td>" + 

@@ -18,23 +18,25 @@
 "use strict"
 var tbody = document.querySelector("tbody");
 
-var xhr = new XMLHttpRequest();
-xhr.onreadystatechange = () => {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-        var arr = JSON.parse(xhr.responseText);
-        for (var b of arr) {
-            var tr = document.createElement("tr");
-            tr.innerHTML = "<td>" + b.no + "</td>" + 
-                "<td>" + b.title + "</td>" + 
-                "<td>" + b.writer + "</td>" +
-                "<td>" + b.viewCnt + "</td>";
-            tbody.appendChild(tr);
-        }
-    }
-};
-xhr.open("GET", "http://localhost:3000/boards", true);
-xhr.send();
 
+setTimeout(() => {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            var arr = JSON.parse(xhr.responseText);
+            for (var b of arr) {
+                var tr = document.createElement("tr");
+                tr.innerHTML = "<td>" + b.no + "</td>" +
+                    "<td>" + b.title + "</td>" +
+                    "<td>" + b.writer + "</td>" +
+                    "<td>" + b.viewCnt + "</td>";
+                tbody.appendChild(tr);
+            }
+        }
+    };
+    xhr.open("GET", "http://localhost:3000/boards", true);
+    xhr.send();
+}, 5000);
 
 </script>
 </body>
