@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>비동기작업</title>
+</head>
+<body>
+<h1>Promise - Promise(executor)의 작업 결과 받기 II</h1>
+<script>
+new Promise((resolve, reject) => {
+  resolve("결과!");
+})
+.then((result) => {
+  console.log("1:", result);
+  return "결과1!";  // 리턴 값이 Promise 객체가 아닌 경우 그대로 다음 함수에 파라미터로 전달된다.
+  })
+.then((result) => {
+  console.log("2:", result);
+  return "결과2!";
+})
+.then((result) => {
+  console.log("3:", result);
+  return "결과3!";
+})
+
+console.log("끝!");
+
+</script>
+</body>
+</html>

@@ -9,6 +9,7 @@
 <script>
 const promise = new Promise((resolve, reject) => {
   throw '오류 발생!!!';
+<!--  reject();-->
 })
 .then(() => console.log("fulfilled!"), 
       () => console.log("rejected!"));
