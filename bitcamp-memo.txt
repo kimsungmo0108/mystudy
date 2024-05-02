@@ -15139,11 +15139,48 @@ CSRF(Cross-Site Request Forgery)
 → Referer Url이 Origin 사이트가 아니라서 발생!
 → Referer Url도 추가된다면 어쩔 수 없다!
 -------------------------------------------------------------------------------------
-→
+
+
+
+2024.05.02(목)
 -------------------------------------------------------------------------------------
-→
+AuthController 리팩토링
+@RequestMapping("loginSuccess")
+  public String loginSuccess(
+      HttpSession session,
+      ★ @AuthenticationPrincipal UserDetails userDetails,
+      String saveEmail,
+      HttpServletResponse response
+  ) throws Exception {
+    log.debug("성공했슈!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    log.debug(userDetails);
+    log.debug(saveEmail);
+
+    if (saveEmail != null) {
+      Cookie cookie = new Cookie("email", userDetails.getUsername());
+      cookie.setMaxAge(60 * 60 * 24 * 7);
+      response.addCookie(cookie);
+    } else {
+      Cookie cookie = new Cookie("email", "");
+      cookie.setMaxAge(0);
+      response.addCookie(cookie);
+    }
+
+    Member member = memberService.get(userDetails.getUsername());
+    session.setAttribute("loginUser", member);
+
+    return "redirect:/index.html";
+  }
 -------------------------------------------------------------------------------------
-→
+is-a vs has-a
+
+HybridCar is a Car(상속)
+public class HybridCar extends Car {}
+
+HybridCar has a Car(포함)
+public class HybridCar {
+  Car car;
+}
 -------------------------------------------------------------------------------------
 →
 -------------------------------------------------------------------------------------
