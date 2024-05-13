@@ -192,6 +192,8 @@ Cloud DB
 
 Mysql
 → 자동 Fail-Over
+→ RDBMS(관계형 DBMS)
+→ 시작 10GB, 증가 10GB, 최대 6TB, 최대 30일, 포트 3306, 슬레이브 최대 10대, private subnet, public subnet
 Redis
 MSSQL
 MongoDB
