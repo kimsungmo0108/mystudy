@@ -1256,3 +1256,12 @@ class Solution {
     }
 }
 -----------------------------------------------------------------
+public static String solution(String my_string, String alp) {
+        // alp를 대문자로 변환
+        String upperAlp = alp.toUpperCase();
+        // my_string에서 alp를 대문자로 대체
+        String result = my_string.replaceAll(alp, upperAlp);
+        return result;
+    }
+-----------------------------------------------------------------
+-----------------------------------------------------------------
