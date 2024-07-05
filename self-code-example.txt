@@ -1264,4 +1264,12 @@ public static String solution(String my_string, String alp) {
         return result;
     }
 -----------------------------------------------------------------
+모든 문자를 소문자로 변환 후 a만 대문자로 변환
+
+ public String solution(String myString) {
+        myString = myString.toLowerCase();
+        myString = myString.replace('a', 'A');
+
+        return myString;
+    }
 -----------------------------------------------------------------
