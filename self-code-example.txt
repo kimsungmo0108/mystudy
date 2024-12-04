@@ -1273,3 +1273,13 @@ public static String solution(String my_string, String alp) {
         return myString;
     }
 -----------------------------------------------------------------
+★ 문자 배열 조합 & 정렬 & 문자열로 변환
+String target = String.join("", spell);
+- 문자열 배열을 하나에 문자열로 변환
+char[] targetArray = target.toCharArray();
+- 문자열을 문자 배열로 변환
+Arrays.sort(targetArray);
+- 문자 배열 정렬
+String sortedTarget = new String(targetArray);
+- 문자 배열을 문자열로 변환
+-----------------------------------------------------------------
