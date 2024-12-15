@@ -1283,3 +1283,13 @@ Arrays.sort(targetArray);
 String sortedTarget = new String(targetArray);
 - 문자 배열을 문자열로 변환
 -----------------------------------------------------------------
+★ 문자열을 오른쪽으로 민 횟수 구하기
+class Solution {
+    public int solution(String A, String B) {
+        String tempB = B + B;
+	String tempB = B.repeat(2);
+        return tempB.indexOf(A);
+        // llohellohe / hello
+    }
+}
+-----------------------------------------------------------------
