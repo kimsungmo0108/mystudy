@@ -1293,3 +1293,15 @@ class Solution {
     }
 }
 -----------------------------------------------------------------
+★ MYSQL 머문 일 수 구하기
+SELECT I.ANIMAL_ID, I.NAME
+FROM ANIMAL_INS I
+JOIN ANIMAL_OUTS O ON I.ANIMAL_ID = O.ANIMAL_ID
+ORDER BY TIMESTAMPDIFF(DAY, I.DATETIME, O.DATETIME) DESC
+LIMIT 2;
+
+TIMESTAMPDIFF(단위, 시작시간, 종료시간)
+- 단위(unit): YEAR, MONTH, DAY, HOUR, MINUTE, SECOND 등 사용 가능.
+- 시작시간(datetime1): 기준이 되는 시간.
+- 종료시간(datetime2): 비교할 시간.
+-----------------------------------------------------------------
