@@ -1312,3 +1312,17 @@ FROM ECOLI_DATA e
 WHERE (e.GENOTYPE & 2) = 0  -- 2번 형질이 없는 대장균
   AND ((e.GENOTYPE & 1) > 0 OR (e.GENOTYPE & 4) > 0); -- 또는 3번 형질을 보유
 -----------------------------------------------------------------
+★ 식품분류별 가장 비싼 식품의 정보 조회하기
+- PRODUCT_NAME 컬럼에 값이 GROUP BY 했을 때 PRODUCT_NAME을 올바르게 가져오지 못하는 문제가 생김
+- 서브 쿼리로 해결
+  - 각 CATEGORY에서 가장 비싼 가격의 제품만 가져오기
+
+SELECT F.CATEGORY, F.PRICE AS MAX_PRICE, F.PRODUCT_NAME
+FROM FOOD_PRODUCT F
+WHERE F.CATEGORY IN ('과자', '국', '김치', '식용유')
+AND F.PRICE = (SELECT MAX(PRICE) 
+               FROM FOOD_PRODUCT 
+               WHERE CATEGORY = F.CATEGORY)
+ORDER BY F.PRICE DESC;
+-----------------------------------------------------------------
+-----------------------------------------------------------------
