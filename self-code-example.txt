@@ -1444,3 +1444,20 @@ private int getGCD(int a, int b) {
     return a;
 }
 -----------------------------------------------------------------
+★ 저자 별 카테고리 별 매출액 집계하기
+SELECT 
+    A.AUTHOR_ID,
+    A.AUTHOR_NAME,
+    B.CATEGORY,
+    SUM(BS.SALES * B.PRICE) AS TOTAL_SALES
+FROM BOOK_SALES BS
+JOIN BOOK B ON BS.BOOK_ID = B.BOOK_ID
+JOIN AUTHOR A ON B.AUTHOR_ID = A.AUTHOR_ID
+WHERE SALES_DATE BETWEEN '2022-01-01' AND '2022-01-31'
+GROUP BY A.AUTHOR_ID, A.AUTHOR_NAME, B.CATEGORY
+ORDER BY A.AUTHOR_ID ASC, B.CATEGORY DESC;
+
+WHERE SALES_DATE BETWEEN '2022-01-01' AND '2022-01-31'
+- 2022년 1월 1일부터 2022년 1월 31일까지의 날짜를 포함해서 조회
+- 컬럼명 BETWEEN 최소값 AND 최대값
+-----------------------------------------------------------------
