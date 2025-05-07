@@ -1461,3 +1461,13 @@ WHERE SALES_DATE BETWEEN '2022-01-01' AND '2022-01-31'
 - 2022년 1월 1일부터 2022년 1월 31일까지의 날짜를 포함해서 조회
 - 컬럼명 BETWEEN 최소값 AND 최대값
 -----------------------------------------------------------------
+★ 대장균들의 자식의 수 구하기
+SELECT E.ID, COUNT(C.ID) AS CHILD_COUNT
+FROM ECOLI_DATA E
+LEFT JOIN ECOLI_DATA C ON E.ID = C.PARENT_ID
+GROUP BY E.ID
+ORDER BY E.ID;
+
+- E는 부모 개체 역할, C는 자식 개체 역할을 하는 자기 조인입니다.
+- LEFT JOIN을 사용하여 자식이 없는 경우에도 부모 개체가 출력되도록 합니다.
+-----------------------------------------------------------------
