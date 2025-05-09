@@ -1473,3 +1473,30 @@ ORDER BY E.ID;
 - COUNT(C.ID)를 사용하여 자식 수를 계산합니다. 자식이 없을 경우 NULL이 되어 0으로 집계됩니다.
 - 마지막에 ORDER BY E.ID로 ID 기준 오름차순 정렬합니다.
 -----------------------------------------------------------------
+★ 점프와 순간 이동
+
+-Before-
+class Solution {
+    public int solution(int n) {
+        int battery = 0;
+
+        while (n > 0) {
+            if (n % 2 == 0) {
+                n /= 2; // 순간이동
+            } else {
+                n -= 1; // 점프
+                battery++; // 점프할 때만 건전지 소모
+            }
+        }
+
+        return battery;
+    }
+}
+
+-After-
+class Solution {
+    public int solution(int n) {
+        return Integer.bitCount(n);
+    }
+}
+-----------------------------------------------------------------
