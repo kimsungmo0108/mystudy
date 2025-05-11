@@ -1,5 +1,5 @@
+-------------------------------------------------------------------------------------
 엄진영 강사님
-id : 210 866 3081 pw : 123456
 https://github.com/eomjinyoung
 https://github.com/eomjinyoung/bitcamp-study/tree/main
 token → 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
