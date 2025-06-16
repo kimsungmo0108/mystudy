@@ -132,3 +132,14 @@ DUAL 테이블의 특성
 NULL 관련 함수
 - NVL(표현식1, 표현식2) 오라클 함수 ISNULL(표현식1, 표현식2)
 - SQL Server 함수 NULLIF(표현식1, 표현식2) COALESCE(표현식1, 표현식2)
+
+ORDER BY 문장
+  SELECT 컬럼명
+         [ALIAS명]
+  FROM 테이블명
+  [WHERE 조건식]
+  [GROUP BY 컬럼이나 표현식]
+  [HAVING 그룹조건식]
+  [ORDER BY 컬럼이나 표현식 [ASC 또는 DESC]]
+- ASC(Ascending) : 조회한 데이터를 오름차순으로 정렬한다. (기본 값이므로 생략 가능)
+- DESC(Descending) : 조회한 데이터를 내림차순으로 정렬한다.
