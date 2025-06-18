@@ -152,3 +152,7 @@ GROUP BY 문장
 
 NULL 포함 연산의 결과
 - NULL + 2, 2 + NULL, NULL - 2, 2 - NULL, NULL * 2, 2 * NULL, NULL  / 2, 2 / NULL 의 결과는 모두 NULL이다.
+
+ORDER BY 절 특징
+- 기본적인 정렬 순서는 오름차순(ASC)이다.
+- 숫자형 데이터 타입은 오름차순으로 정렬했을 경우에 가장 작은 값부터 출력된다.
