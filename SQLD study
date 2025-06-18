@@ -149,3 +149,6 @@ GROUP BY 문장
   [WHERE 조건식]
   [GROUP BY 컬럼이나 표현식]
   [HAVING 그룹조건식]
+
+NULL 포함 연산의 결과
+- NULL + 2, 2 + NULL, NULL - 2, 2 - NULL, NULL * 2, 2 * NULL, NULL  / 2, 2 / NULL 의 결과는 모두 NULL이다.
