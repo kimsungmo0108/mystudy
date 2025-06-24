@@ -175,3 +175,10 @@ SELECT 테이블1.컬럼,
 FROM 테이블1, 테이블2
 WHERE 테이블1.컬럼 = 테이블2.컬럼;
 => WHERE 절에 JOIN 조건을 넣는다.
+
+ANSI/ISO SQL 표준
+EQUI JOIN 문장
+SELECT 테이블1.컬럼,
+  테이블2.컬럼 ...
+FROM 테이블1 INNER JOIN 테이블2 ON 테이블1.컬럼 = 테이블2.컬럼;
+=> ON 절에 JOIN 조건을 넣는다.
