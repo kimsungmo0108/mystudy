@@ -187,3 +187,9 @@ FROM 테이블1 INNER JOIN 테이블2 ON 테이블1.컬럼 = 테이블2.컬럼;
 - 두 개 이상의 테이블들을 연결 또는 결합하여 데이터를 출력하는 것을 조인(JOIN)이라고 하며,
   일반적인 경우 행들은 PRIMARY KEY(PK)나 FOREIGN KEY(FK) 값의 연관에 의해 조인이 성립된다.
   하지만 어떤 경우에는 이러한 PK, FK의 관계가 없어도 논리적인 값들의 연관만으로 조인이 성립 된다.
+
+순수 관계 연산자와 SQL 문장 비교
+- SELECT 연산은 WHERE 절로 구현
+- PROJECT 연산은 SELECT 절로 구현
+- (NATURAL) JOIN 연산은 다양한 JOIN 기능으로 구현
+- DICIDE 연산은 현재 사용되지 않음
