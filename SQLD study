@@ -193,3 +193,11 @@ FROM 테이블1 INNER JOIN 테이블2 ON 테이블1.컬럼 = 테이블2.컬럼;
 - PROJECT 연산은 SELECT 절로 구현
 - (NATURAL) JOIN 연산은 다양한 JOIN 기능으로 구현
 - DICIDE 연산은 현재 사용되지 않음
+
+ANSI/ISO SQL에서 표시하는 FROM 절의 JOIN 형태
+- INNER JOIN
+- NATURAL JOIN
+- USING 조건절
+- ON 조건절
+- CROSS JOIN
+- OUTER JOIN(LEFT, RIGTH, FULL)
